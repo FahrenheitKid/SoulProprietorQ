@@ -1,0 +1,24 @@
+
+// adiciona todos os arquivos pra stash
+git add .
+
+// cria um commit
+git commit -m "minha mensagem aqui"
+
+// faz push do commit
+git push
+
+// mostra todas as branches
+git branch
+
+// vai pra master branch
+git checkout master
+
+// vai pra branch selecionada
+git checkout outra-branch
+
+// cria uma branch (a flag -b indica que a branch ta sendo criada)
+git checkout -b nova-branch
+
+// cria branch a partir de outra branch
+git checkout -b nova-branch branch-existente
