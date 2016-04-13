@@ -1,22 +1,43 @@
-<!doctype html> 
-<html lang="en"> 
-<head> 
-	<meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 9</title>
-    <script src="phaser.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
-</head>
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Soul Proprietor</title>
+        <script src="phaser.js"></script>
+    </head>
 <body>
+<script src="GameSCENE.js"></script>
+<script type="text/javascript">
 
-<script src="game2.js"></script>
+    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
-
-
+    function preload() 
+    {
+    
+        game.load.image('background', 'assets/sprites/background.jpg');
+    	
+    }
+    function create() 
+    {
+        
+        //Arcade Physics system
+    	//game.physics.startSystem(Phaser.Physics.ARCADE);
+    
+    	//Background
+    	game.add.sprite(0, 0, 'background');
+    	
+    }
+    function update()
+    {
+        //Collision
+        //game.physics.arcade.overlap(bullets, enemies, collisionHandler, null, this);
+    }
+    
+    function collisionHandler(bullet, enemy)
+    {
+    
+    }
+    
 </script>
-
 </body>
 </html>
