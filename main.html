@@ -3,41 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <title>Soul Proprietor</title>
-        <script src="phaser/build/phaser.min.js"></script>
+        <script src="phaser/phaser.js"></script>
     </head>
 <body>
 <script src="GameSCENE.js"></script>
-<script type="text/javascript">
 
-    var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-
-    function preload() 
-    {
-    
-        game.load.image('background', 'assets/sprites/background.jpg');
-    	
-    }
-    function create() 
-    {
-        
-        //Arcade Physics system
-    	//game.physics.startSystem(Phaser.Physics.ARCADE);
-    
-    	//Background
-    	game.add.sprite(0, 0, 'background');
-    	
-    }
-    function update()
-    {
-        //Collision
-        //game.physics.arcade.overlap(bullets, enemies, collisionHandler, null, this);
-    }
-    
-    function collisionHandler(bullet, enemy)
-    {
-    
-    }
-    
-</script>
 </body>
 </html>
