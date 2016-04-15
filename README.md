@@ -13,7 +13,10 @@ Soul Proprietor Q is a revamp of our first prototype, now using [Phaser](http://
 
 ## ToDo List
 
-- [ ] Try to reuse some of our previsou code
+- [ ] Try to reuse some of our previuos code
+	- [ ] Apartment mechanic
+	- [ ] Tenant class Structure
+	- [ ] Viewport/Drag mechanic
 - [x] Create the "skeleton" of the project
 
 
