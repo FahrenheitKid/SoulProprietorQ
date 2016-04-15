@@ -14,24 +14,24 @@ theGame.prototype = {
 
 	create: function()
 	{
-		
+
 		background = this.game.add.sprite(0, 0, "background");
 		var model = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "model");
 		model.anchor.setTo(0.5, 0.5);
-		var higherButton = this.game.add.button(160, 100, "higher", this.clickedHigher, this);
+		var higherButton = this.game.add.button(160, 100, "tutorial_button", this.clickedHigher, this);
 		higherButton.anchor.setTo(0.5, 0.5);
 
 		model.inputEnabled = true;
-    model.input.enableDrag();
+		model.input.enableDrag();
 
-    model.events.onInputOver.add(this.onOver, this);
-    
-    model.events.onInputOut.add(this.onOut, this);
-    model.events.onDragStart.add(this.onDragStart, this);
+		model.events.onInputOver.add(this.onOver, this);
 
-    model.events.onDragStop.add(this.onDragStop, this);
+		model.events.onInputOut.add(this.onOut, this);
+		model.events.onDragStart.add(this.onDragStart, this);
 
-    dragPosition = new Phaser.Point(model.x, model.y);
+		model.events.onDragStop.add(this.onDragStop, this);
+
+		dragPosition = new Phaser.Point(model.x, model.y);
     color = randomColor({hue: "yellow", luminosity: "light"});
     color = parseInt(color.substr(1), 16);
 
