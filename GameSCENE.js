@@ -29,7 +29,6 @@ function create() {
     model.events.onInputOut.add(onOut, this);
     model.events.onDragStart.add(onDragStart, this);
 
-    
     model.events.onDragStop.add(onDragStop, this);
 
     dragPosition = new Phaser.Point(model.x, model.y);
@@ -42,8 +41,8 @@ function create() {
     //bmd.fill(0, 0, 0, 1);
 
     bmd.addToWorld();
-
     // debugzin
+    // oi
     text = game.make.text(0, 0, color, { font: "bold 32px Arial", fill: "#ff0044" });
     text.anchor.set(0.5);
 
