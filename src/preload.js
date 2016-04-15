@@ -3,7 +3,7 @@ var preload = function(game){};
 preload.prototype = {
 	preload: function()
 	{
-		var loadingBar = this.add.sprite(160, 240, "loading");
+		var loadingBar = this.add.sprite(this.game.width / 2, this.game.height / 2, "loading");
 		loadingBar.anchor.setTo(0.5, 0.5);
 		this.load.setPreloadSprite(loadingBar);
 		this.game.load.image("model", "assets/sprites/char00.png");
