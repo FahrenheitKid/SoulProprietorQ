@@ -10,7 +10,7 @@ preload.prototype = {
 		loadingBar.anchor.setTo(0.5, 0.5);
 		this.load.setPreloadSprite(loadingBar);
 		this.game.load.image("model", "assets/sprites/char00.png");
-		this.game.load.image("gametitle", "assets/sprites/soulproprietor.png");
+		this.game.load.image("gametitle", "assets/sprites/SoulProprietor.png");
 		this.game.load.image("gameover_title", "assets/sprites/gameover.png");
 		this.game.load.image("background", "assets/sprites/background.jpg");
 		this.game.load.image("background_menu", "assets/sprites/backgroundMenu.jpg");
