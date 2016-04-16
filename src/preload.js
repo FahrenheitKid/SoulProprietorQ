@@ -3,6 +3,9 @@ var preload = function(game){};
 preload.prototype = {
 	preload: function()
 	{
+
+		
+
 		var loadingBar = this.add.sprite(this.game.width / 2, this.game.height / 2, "loading");
 		loadingBar.anchor.setTo(0.5, 0.5);
 		this.load.setPreloadSprite(loadingBar);
@@ -15,7 +18,10 @@ preload.prototype = {
 		this.game.load.image("play", "assets/play.png");
 		this.game.load.image("higher", "assets/higher.png");
 
-
+		this.game.load.spritesheet('city', 'assets/sprites/city_sheet.png', 500, 708);
+		this.game.load.spritesheet('city_dusk', 'assets/sprites/cityDusk_sheet.png', 500, 708);
+		this.game.load.spritesheet('ghost', 'assets/sprites/ghost_sheet.png', 50, 50);
+		
 		this.game.load.image("ap", "assets/sprites/wall.png");
 		this.game.load.image("apProprietor", "assets/sprites/walla.png");
 		this.game.load.image("apTrans", "assets/sprites/wallb.png");
@@ -29,6 +35,7 @@ preload.prototype = {
 		this.game.load.image("try_again_button", "assets/sprites/buttonTryAgain.png");
 		this.game.load.image("menu_button", "assets/sprites/buttonMenu.png");
 
+		this.game.load.image("options_button", "assets/sprites/buttonOptions.png");
 		this.game.load.image("pause_button", "assets/sprites/pause.png");
 		this.game.load.image("showSets_button", "assets/sprites/set.png");
 
@@ -36,7 +43,7 @@ preload.prototype = {
 		this.game.load.image("stressBar1", "assets/sprites/stressBar01.png");
 		this.game.load.image("stressBar2", "assets/sprites/stressBar02.png");
 		this.game.load.image("stressBar3", "assets/sprites/stressBar03.png");
-
+/*
 		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
 
@@ -85,6 +92,7 @@ preload.prototype = {
 
 		this.game.load.image("bosskid", "assets/sprites/bosskid.png");
 		this.game.load.image("bosskid_set", "assets/sprites/bosskid_set.png");
+	*/
 	},
 	create: function()
 	{

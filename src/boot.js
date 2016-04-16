@@ -13,6 +13,7 @@ boot.prototype = {
 		//this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		//this.scale.pageAlignHorizontally = true;
 		//this.scale.setScreenSize();
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.state.start("Preload");
 	}
 };
