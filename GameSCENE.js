@@ -36,7 +36,7 @@ function create() {
     color = parseInt(color.substr(1), 16);
 
     bmd = game.add.bitmapData(game.width, game.height);
-
+    
     //  Black and opaque
     //bmd.fill(0, 0, 0, 1);
 

@@ -2,24 +2,34 @@ var gameTitle = function(game){
 
 	ghost = null;
 	gameTitle = null;
+
+	player = null;
 };
 
 gameTitle.prototype = {
 
-	init: function(test)
+	init: function(pl)
 	{
 		this.game.world.setBounds(0, 0, 1280, 708);
+		player = pl;
 
 	},
 
 	create: function()
 	{
+		player = {
 
+		score: 0,
+		money: 100,
+		cash: 0
+
+
+		};
 
 		var background = this.game.add.sprite(0, 0, "background_menu");
 
 		var city = this.game.add.tileSprite(0, 0, 1280, 708, 'city');
-
+		
 		city.animations.add('walk');
 
 		city.animations.play('walk', 10, true);
@@ -60,7 +70,7 @@ gameTitle.prototype = {
 	{
 
 
-		this.game.state.start("TheGame");
+		this.game.state.start("TheGame", true, false, player);
 	},
 
 	  onOver: function(sprite, pointer)

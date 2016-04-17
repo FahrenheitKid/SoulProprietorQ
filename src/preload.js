@@ -43,7 +43,10 @@ preload.prototype = {
 		this.game.load.image("stressBar1", "assets/sprites/stressBar01.png");
 		this.game.load.image("stressBar2", "assets/sprites/stressBar02.png");
 		this.game.load.image("stressBar3", "assets/sprites/stressBar03.png");
-/*
+
+		this.game.load.spritesheet("soldier_sheet", "assets/sprites/soldier_sheet.png", 210, 274);
+		this.game.load.image("soldier", "assets/sprites/soldier.png");
+/*		
 		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
 
