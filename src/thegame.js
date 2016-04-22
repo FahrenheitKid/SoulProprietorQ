@@ -17,9 +17,16 @@ var theGame = function(game){
 	player = null;
 	mouseWheel = null;
 
+	firstClick = null;
 	toScale = 1.0;
 
-	
+	cam_deadzone = new Phaser.Rectangle(50, 50, 1200, 600);
+	dragged_tenant = null;
+	tempxx = null;
+	temyy = null;
+
+	scalable_sprites = null;
+
 
 };
 
@@ -31,7 +38,7 @@ theGame.prototype = {
 
 		// carrega o player do outro State
 		player = pl;
-   	this.game.world.setBounds(0, 0, 4450, 3750);
+   	//this.game.world.setBounds(0, 0, 4450, 3750);
 
 	},
 
@@ -39,8 +46,8 @@ theGame.prototype = {
 	{
 
 		//Changing the world width
-
-		this.game.camera.setPosition(0, 3750);
+		
+		
 
 		//  Modify the world and camera bounds
 		// this.game.world.setBounds(-1000, -1000, 2000, 2000);
@@ -53,9 +60,16 @@ theGame.prototype = {
 		city.animations.play('run', 10, true);
 		city.fixedToCamera = true;
 
+		this.game.world.setBounds(0, 0, (4 * 445), (5 * 375));
+
+
+		this.game.camera.setPosition(0, 5 * 375);
+
 		ap = this.game.add.sprite(250, this.game.world.height - 375, "ap");
 		//ap.width = 445;
 		//ap.height = 375;
+
+		//this.game.world.setBounds(0, 0, 800, 800);
 		//model = this.game.add.sprite(ap.x + 500, ap.y, "model");
 		//model.anchor.setTo(0.5, 0.5);
 		var higherButton = this.game.add.button(150, 100, "options_button", this.clickedHigher, this);
@@ -77,6 +91,12 @@ theGame.prototype = {
 		var tenten = new Tenant(0,0, 'SOLDIER',2);
 		this.initTenant(tenten);
 
+		scalable_sprites = this.game.add.group();
+
+		scalable_sprites.add(ap);
+		scalable_sprites.add(tenten.sprite);
+		//scalable_sprites.add(tenten.sprite);
+		//scalable_sprites.add(ap);
 		//tenten.sprite = this.game.add.sprite( 472, 3510, "model");
 		//var apple = new Apple(7);
 
@@ -109,6 +129,8 @@ theGame.prototype = {
         align: "center"
     });
 
+    text.setText("startou "  + " ten x,y " + tempxx + "," + tempyy);
+
   text.fixedToCamera = true;
 
 
@@ -139,6 +161,9 @@ theGame.prototype = {
 
 		this.game.input.mouse.mouseWheelCallback = mouseWheel;
 
+		this.game.camera.deadzone = cam_deadzone;
+		
+
 	},
 
 	update: function() {
@@ -150,22 +175,89 @@ theGame.prototype = {
 
 			if (this.game.origDragPoint)
 			{
-				text.setText("entrou drag point: " + this.game.origDragPoint);
+
+				//text.setText("mp " + this.game.origDragPoint + " ten x,y " + dragged_tenant.x + "," + dragged_tenant.y);
 				// move the camera by the amount the mouse has moved since last update		
-				this.game.camera.x += this.game.origDragPoint.x - this.game.input.activePointer.position.x;
-				this.game.camera.y += this.game.origDragPoint.y - this.game.input.activePointer.position.y;
+				//this.game.camera.x += this.game.origDragPoint.x - this.game.input.activePointer.position.x;
+				//this.game.camera.y += this.game.origDragPoint.y - this.game.input.activePointer.position.y;
 			}
 			// set new drag origin to current position	
 			this.game.origDragPoint = this.game.input.activePointer.position.clone();
 		}
 		else
 		{
+			if(dragged_tenant !== null)
+			{
+				var cami = this.game.camera;
+				var pointer = this.game.input.activePointer;
+				var pointerX = pointer.worldX;
+				var pointerY = pointer.worldY;
+				var inside = false;
+				var ap_visible = false;
+
+				//Phaser.Rectangle.containsPoint(cam_deadzone, this.game.input.activePointer.position);
+
+					inside = cam_deadzone.contains(pointer.position.x, pointer.position.y);
+					//ap_visible = cami.view.contains(ap.bottom, ap.right);
+					//ap_visible = cami.view.contains(ap.top, ap.left);
+
+				//text.setText("pointer x: " + pointerX + "pointer y:" + pointerY + inside);
+				text.setText("mp "  + " ten x,y " + dragged_tenant.x + "," + dragged_tenant.y + "size" + scalable_sprites.length);
+				dragged_tenant.x = pointerX;
+				dragged_tenant.y = pointerY;
+
+				
+					//this.game.camera.focusOnXY(pointerX,pointerY);
+					if(inside === false && ap.inCamera)
+					{
+						//this.game.camera.follow(dragged_tenant, Phaser.Camera.FOLLOW_LOCKON, 0.000001, 0.000001);
+
+						if(cami.view.centerX < pointerX) cami.x+= 20;
+				else cami.x--;
+
+				if(cami.view.centerY < pointerY) cami.y+= 20;
+				else cami.y--;
+					}
+					else
+					{
+						this.game.camera.unfollow();
+					}
+
+
+
+
+			}
+
+			var cami = this.game.camera;
+				var pointer = this.game.input.activePointer;
+				var pointerX = pointer.worldX;
+				var pointerY = pointer.worldY;
+				var inside = false;
+				var ap_visible = false;
+
+				//Phaser.Rectangle.containsPoint(cam_deadzone, this.game.input.activePointer.position);
+
+					inside = cam_deadzone.contains(pointer.position.x, pointer.position.y);
+					if(inside === false && ap.inCamera)
+					{
+						//this.game.camera.follow(dragged_tenant, Phaser.Camera.FOLLOW_LOCKON, 0.000001, 0.000001);
+
+						if(cami.view.centerX < pointerX) cami.x+= 20;
+				else cami.x--;
+
+				if(cami.view.centerY < pointerY) cami.y+= 20;
+				else cami.y--;
+					}
+
 			this.game.origDragPoint = null;
 		}
 
 		// scale o ap de acordo com mouseWheel
-		ap.scale.x = toScale;
-		ap.scale.y = toScale;
+		//ap.scale.x = toScale;
+		//ap.scale.y = toScale;
+		
+		scalable_sprites.scale.x = toScale;
+		scalable_sprites.scale.y = toScale;
 
 	},
 
@@ -239,7 +331,14 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
 				// msm q ap so que com width e heights do sprite
 				//this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
 				//this.sprite = game.add.sprite( 472, 3510, "model");
-				t.sprite = this.game.add.sprite((t.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300, this.game.world.height - (t.room_y * apheight) - (24 + sprite_height), "soldier_sheet");
+
+				
+				tempxx = (t.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+				tempyy = this.game.world.height - (t.room_y * apheight) - (24 + sprite_height);
+				tempyy = ap.y;
+
+				//text.setText("startou "  + " ten x,y " + tempx + "," + tempy);
+				t.sprite = this.game.add.sprite((t.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300, ap.y , "soldier_sheet");
 				
 				t.sprite.animations.add('idle');
 				t.sprite.animations.play('idle', 5, true);
@@ -288,7 +387,13 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
  	// test if the pointer is down over the sprite		
 		if (sprite.input.pointerDown(this.game.input.activePointer.id))
 		{
+
+			firstClick = this.game.input.activePointer.position;
 			drag_tenant = true;
+
+			dragged_tenant = sprite;
+
+			//this.game.camera.focusOnXY(pointer.x, pointer.y);
 		}
 		else
 		{
@@ -321,6 +426,7 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
 
         if (!Phaser.Rectangle.containsRect(sprite, ap))
         {
+        	//this.camera.follow(sprite);
         	text.setText("entrou dropzone: " + dragPosition.x);
             this.game.add.tween(sprite).to(
             {
@@ -328,8 +434,11 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
                 y: ap.y + ap.height /2
             }, 500, "Back.easeOut", true, 100);
         }
-     
+
+
+     this.camera.focusOn(sprite);
      drag_tenant = false;
+     dragged_tenant = null;
  },
 
 	clickedHigher: function()
@@ -343,5 +452,9 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
 	{
 		//var test = "olgaatgwtwqytwerytewra";
 		//game.debug.text(test, 20, 500);
+
+		//camdea = new Phaser.Rectangle(50, 50, 1200, 600);
+		this.game.context.fillStyle = 'rgba(255,0,0,0.1)';
+    	this.game.context.fillRect( cam_deadzone.x,  cam_deadzone.y,  cam_deadzone.width,  cam_deadzone.height);
 	}
 };
