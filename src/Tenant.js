@@ -102,19 +102,3 @@ Boss.prototype.annoy = function(roomx, roomy){
  
  // vou ittirar algum tenant
 };
-
-function CreateTenants(game, posx, posy)
-{
-  var tenants = game.add.group();
-  
-  var tnt;
-  tnt = game.add.sprite((445 * posx) + 225.5, game.world.height - 187.5 - (375 * posy), "soldier_sheet");
-  tnt.name = "Proprietor";
-  tnt.id = 1;
-  tnt.roomx = posx;
-  tnt.roomy = posy;
-  tnt.anchor.setTo(0.5, 0.5);
-  tenants.create(tnt);
-  
-  return tenants;
-}

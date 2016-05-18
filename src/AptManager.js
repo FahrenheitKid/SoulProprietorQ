@@ -1,70 +1,58 @@
 /*global Phaser*/
 
-var AptManager = function(game)
+var AptManager = function(game, sizex, sizey)
 {
-this.room_clicked;
-this.room_clicked_id;
-this.tenant_clicked_id;
-this.room_clicked_x;
-this.room_clicked_y;
-this.aps = game.add.group();
-//this.aps.enableBody = true;
-
-//this.aps.physicsBodyType = Phaser.Physics.ARCADE;
-this.tenants_group = game.add.group();
-
+    this.room_clicked;
+    this.room_clicked_x;
+    this.room_clicked_y;
+    
+    this.tenant_clicked_id;
+    
+    this.apts_sizex = sizex;
+    this.apts_sizey = sizey;
+    //group of sprites
+    this.apts = game.add.group();
+    this.apts_matrix = [];
+    
+    //group of sprites
+    this.pTenants = game.add.group();
 }
 
-
-AptManager.prototype.CreateApt = function(game, sizex, sizey, size_x_init, size_y_init)
+AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 {
     this.room_clicked = false;
     this.room_clicked_x = 0;
     this.room_clicked_y = 0;
-    //array to return
     
-    for(var i = 0; i < sizex; i++)
+    for(var i = 0; i < this.apts_sizex; i++)
     {
-        for(var j = 0; j < sizey; j++)
+        for(var j = 0; j < this.apts_sizey; j++)
         {
             //ap width 445;
 		    //ap height 375;
-		    
             var ap = game.add.sprite(445 * i, game.world.height - 375 - (375 * j), 'ap');
-           
-            //ap.events.onInputDown.add(onInputDown, this);
-			//ap.tint = 0xffff66;
-			this.aps.create(ap);
-			
-			//add object to group
-            
-            
-        }
-    
-        this.aps.forEach(function(ap)
-        {
-            //ap.id = 0;
+            ap.posx = i;
+            ap.posy = j;
             ap.inputEnabled = true;
 			ap.events.onInputDown.add(onInputDown, this);
-        },this); 
+			
+			//add object to group
+			this.apts.create(ap);
+			//start apartment matrix ids
+			this.apts_matrix.push(0);
+        }
+        
         //aps.forEach(function(ap){},this);
     }
     
     function onInputDown(ap, pointer)
-{
-    console.log("jiji");
-    if(ap.id == 0)
     {
-        
         this.room_clicked_x = ap.posx;
         this.room_clicked_y = ap.posy;
-        this.room_clicked_id = ap.id;
         
         if(ap.tint == 0xffffff)
         {
-            console.log("jojo");
             ap.tint = 0xFFFF66;
-            ap.x = 1000;
             this.room_clicked = true;
         }
         else if(ap.tint == 0xFFFF66)
@@ -74,10 +62,11 @@ AptManager.prototype.CreateApt = function(game, sizex, sizey, size_x_init, size_
         }
     }
 }
-    //return aps;
-}
 
-AptManager.prototype.AddTenant = function(tenant_id, tenant_type, roomx, roomy)
+AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, roomy)
 {
-    
+    var tnt = game.add.sprite((445 * roomx) + 225.5, game.world.height - 187.5 - (375 * roomy), 'soldier_sheet');
+    tnt.anchor.setTo(0.5, 0.5);
+    this.pTenants.create(tnt);
+    this.apts_matrix[roomx * this.apts_sizey + roomy] = tenant_id;
 }
