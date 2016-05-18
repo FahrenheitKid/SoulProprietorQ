@@ -1,15 +1,14 @@
 // Define the Tenant constructor
 var Tenant = function(roomx, roomy, type, idd) {
   
-
-
   this.name = "";
   this.room_x = roomx; // posição do quarto
   this.room_y = roomy;
 
   this.price = 0;
   this.income = 0;
-  this.behavior = { // true, false or void
+  this.behavior = 
+  { // true, false or void
     upleft: 'VOID',
     up: 'VOID',
     upright: 'VOID',
@@ -18,7 +17,6 @@ var Tenant = function(roomx, roomy, type, idd) {
     down: 'VOID',
     downleft: 'VOID',
     left: 'VOID',
-
   };
 
   this.neighbors = {
@@ -103,4 +101,20 @@ Boss.prototype.sayHello = function(){
 Boss.prototype.annoy = function(roomx, roomy){
  
  // vou ittirar algum tenant
-}; 
+};
+
+function CreateTenants(game, posx, posy)
+{
+  var tenants = game.add.group();
+  
+  var tnt;
+  tnt = game.add.sprite((445 * posx) + 225.5, game.world.height - 187.5 - (375 * posy), "soldier_sheet");
+  tnt.name = "Proprietor";
+  tnt.id = 1;
+  tnt.roomx = posx;
+  tnt.roomy = posy;
+  tnt.anchor.setTo(0.5, 0.5);
+  tenants.create(tnt);
+  
+  return tenants;
+}

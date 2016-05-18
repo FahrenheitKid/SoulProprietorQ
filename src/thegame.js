@@ -222,10 +222,6 @@ theGame.prototype = {
 					{
 						this.game.camera.unfollow();
 					}
-
-
-
-
 			}
 
 			var cami = this.game.camera;
@@ -264,8 +260,6 @@ theGame.prototype = {
 
 initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos etc
 {
-
-
 		apwidth = this.game.cache.getImage("ap").width;
 		apheight = this.game.cache.getImage("ap").height;
 		switch (t.type)
@@ -360,25 +354,16 @@ initTenant: function(t) //inicia o tenant carregando sprite, pondo nos grupos et
 				
 
 				break;
-
 		}
-
-		
-		
 },
   onOver: function(sprite, pointer)
  {
-
     sprite.tint = color;
-
-    
  },
 
  onOut: function(sprite, pointer)
  {
-
     sprite.tint = 0xffffff;
-
  },
 
  onDragStart: function(sprite, pointer)
