@@ -65,8 +65,17 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 
 AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, roomy)
 {
+    /*
     var tnt = game.add.sprite((445 * roomx) + 225.5, game.world.height - 187.5 - (375 * roomy), 'soldier_sheet');
     tnt.anchor.setTo(0.5, 0.5);
     this.pTenants.create(tnt);
     this.apts_matrix[roomx * this.apts_sizey + roomy] = tenant_id;
+    */
+
+    var tnt = new Tenant(roomx,roomy, tenant_type, tenant_id);
+    tnt.init(game, tenant_type);
+    this.pTenants.create(tnt);
+
+    this.apts_matrix[roomx * this.apts_sizey + roomy] = tenant_id;
+
 }

@@ -29,7 +29,7 @@ GameSCENE.prototype = {
 		//set initial size
         pAptManager.CreateApt(this.game, 0, 0);
         //add tenant to manager game/id/type/roomx/roomy
-        pAptManager.AddTenant(this.game, 1, "proprietor", 2, 1);
+        pAptManager.AddTenant(this.game, 1, 'SOLDIER', 0, 0);
 	},
 	
 	update: function()
@@ -39,7 +39,7 @@ GameSCENE.prototype = {
 	
 	render: function()
 	{
-		this.game.debug.text("Debug", 30, 30);
+		this.game.debug.text("tenant " + pAptManager.pTenants.children[0].price, 30, 30);
 		this.game.debug.text("Room Clicked " + pAptManager.room_clicked_x + " " + pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check Tenant " + pAptManager.apts_matrix[4], 30, 70);
 		//this.game.debug(aps.children[0], 30, 70);
