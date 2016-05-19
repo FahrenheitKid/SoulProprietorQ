@@ -29,7 +29,7 @@ GameSCENE.prototype = {
 		//set initial size
         pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        pAptManager.AddTenant(this.game, 2, "proprietor", 0, 0);
+        pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
 	},
 	
 	update: function()

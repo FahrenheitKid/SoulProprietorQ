@@ -67,7 +67,65 @@ Tenant.prototype.sayHello = function(){
   // emite som?
 };
 
+Tenant.prototype.init = function(game, type)
+{
 
+ console.log("jojoojojojo");
+  apwidth = game.cache.getImage("ap").width;
+  apheight = game.cache.getImage("ap").height;
+  switch (type)
+  {
+    case 'SOLDIER':
+
+      this.type = type;
+      sprite_width = game.cache.getImage("soldier").width;
+      sprite_height = game.cache.getImage("soldier").height;
+      this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'FALSE';
+      this.behavior.upright = 'FALSE';
+      this.behavior.right = 'VOID';
+      this.behavior.downright = 'VOID';
+      this.behavior.down = 'VOID';
+      this.behavior.downleft = 'VOID';
+      this.behavior.left = 'VOID';
+
+      this.price = 30;
+      this.income = 75;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+
+
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      //tempyy = ap.y;
+
+
+      //text.setText("startou "  + " ten x,y " + tempx + "," + tempy);
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "soldier_sheet");
+
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+
+      this.sprite.inputEnabled = true;
+
+      this.sprite.input.enableDrag();
+/*
+
+      ///t.sprite.events.onInputOver.add(this.onOver, this);
+
+      //t.sprite.events.onInputOut.add(this.onOut, this);
+      //t.sprite.events.onDragStart.add(this.onDragStart, this);
+
+     //t.sprite.events.onDragStop.add(this.onDragStop, this);
+
+      game.physics.arcade.enable(t);
+*/
+
+      break;
+  }
+};
 
 
 
