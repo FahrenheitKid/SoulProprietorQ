@@ -33,6 +33,7 @@ GameSCENE.prototype = {
         pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
         pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
+        pAptManager.AddTenant(this.game, 2, 'MODEL', 0, 1);
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 

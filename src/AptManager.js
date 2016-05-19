@@ -105,7 +105,7 @@ AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, r
     */
 
     var tnt = new Tenant(roomx,roomy, tenant_type, tenant_id);
-    tnt.init(game, tenant_type);
+    tnt.init(game);
     this.pTenants.create(tnt);
 
     this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
