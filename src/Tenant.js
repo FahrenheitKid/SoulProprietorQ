@@ -1,5 +1,5 @@
 // Define the Tenant constructor
-var Tenant = function(roomx, roomy, typee, idd) {
+var Tenant = function(game, roomx, roomy, typee, idd) {
   
   this.name = "";
   this.room_x = roomx; // posição do quarto
@@ -53,7 +53,11 @@ var Tenant = function(roomx, roomy, typee, idd) {
 
   this.selected_color = randomColor({hue: "blue", luminosity: "light"});
   
-
+this.game_reference = game;
+this.firstClick = null;
+this.drag_tenant = false;
+this.dragPosition = new Phaser.Point(0, 0);
+this.ownAp_reference;
 
 };
 
@@ -72,6 +76,7 @@ Tenant.prototype.sayHello = function(){
 Tenant.prototype.init = function(game)
 {
 
+//this.ownAp_reference = ap_sprite;
 //this.type = type;
 /*
 this.selected_color = randomColor(
@@ -202,13 +207,43 @@ Tenant.prototype.onOut = function(sprite, pointer)
 }
 Tenant.prototype.onDragStart = function(sprite, pointer)
 {
-  
+  if (sprite.input.pointerDown(this.game_reference.input.activePointer.id))
+		{
+
+			this.firstClick = this.game.input.activePointer.position;
+			this.drag_tenant = true;
+
+			//dragged_tenant = sprite;
+
+			//this.game.camera.focusOnXY(pointer.x, pointer.y);
+		}
+		else
+		{
+			//
+		}
+
+  this.dragPosition.set(sprite.x, sprite.y);
   
 }
 Tenant.prototype.onDragStop = function(sprite, pointer)
 {
-  
-  
+  /*
+  var ap = this.ownAp_reference;
+   if (!Phaser.Rectangle.containsRect(sprite, ap))
+        {
+        	//this.camera.follow(sprite);
+        	//text.setText("entrou dropzone: " + dragPosition.x);
+            this.game_reference.add.tween(sprite).to(
+            {
+                x: ap.x + ap.width /2,
+                y: ap.y + ap.height /2
+            }, 500, "Back.easeOut", true, 100);
+        }
+
+
+     this.camera.focusOn(sprite);
+     this.drag_tenant = false;
+  */
 }
 // Define the Boss constructor
 
