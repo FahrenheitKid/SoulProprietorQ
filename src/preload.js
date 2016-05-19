@@ -22,9 +22,10 @@ preload.prototype = {
 		this.game.load.spritesheet('city_dusk', 'assets/sprites/cityDusk_sheet.png', 500, 708);
 		this.game.load.spritesheet('ghost', 'assets/sprites/ghost_sheet.png', 50, 50);
 		
+		this.game.load.image("ground", "assets/sprites/ground.png");
 		this.game.load.image("ap", "assets/sprites/wall.png");
-		this.game.load.image("apProprietor", "assets/sprites/walla.png");
 		this.game.load.image("apTrans", "assets/sprites/wallb.png");
+		this.game.load.image("apProprietor", "assets/sprites/walla.png");
 		this.game.load.image("apSelected", "assets/sprites/selected.png");
 
 		//this.game.load.image("backgroundMenu", "assets/sprites/backgroundMenu.jpg");

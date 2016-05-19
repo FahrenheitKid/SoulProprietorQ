@@ -25,11 +25,11 @@ GameSCENE.prototype = {
 		background.fixedToCamera = true;
 		
 		//create apartments manager game/sizex/sizey
-		pAptManager = new AptManager(this.game, 3, 2);
+		pAptManager = new AptManager(this.game, 5, 5);
 		//set initial size
-        pAptManager.CreateApt(this.game, 0, 0);
+        pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        pAptManager.AddTenant(this.game, 1, "proprietor", 2, 1);
+        pAptManager.AddTenant(this.game, 2, "proprietor", 0, 0);
 	},
 	
 	update: function()
@@ -40,8 +40,9 @@ GameSCENE.prototype = {
 	render: function()
 	{
 		this.game.debug.text("Debug", 30, 30);
-		this.game.debug.text("Room Clicked " + pAptManager.room_clicked_x + " " + pAptManager.room_clicked_y, 30, 50);
-		this.game.debug.text("Check Tenant " + pAptManager.apts_matrix[4], 30, 70);
+		this.game.debug.text("Room clicked " + pAptManager.room_clicked_x + " " + pAptManager.room_clicked_y, 30, 50);
+		this.game.debug.text("Check tenant room 0 0: " + pAptManager.apts_matrix[0], 30, 70);
+		this.game.debug.text("Apt group size: " + pAptManager.apts.children.length, 30, 90);
 		//this.game.debug(aps.children[0], 30, 70);
 	}
 };
