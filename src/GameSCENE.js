@@ -6,11 +6,11 @@
 //ap height 375;
 var GameSCENE = function(game)
 {
-	var color = randomColor({hue: "yellow", luminosity: "light"});
-	var background;
-	var pAptManager;
-	var key;
-	var test;
+	this.color = randomColor({hue: "yellow", luminosity: "light"});
+	this.background = null;
+	this.pAptManager = null;
+	this.key = null;
+	this.test = null;
 }
 
 GameSCENE.prototype = {
@@ -28,12 +28,12 @@ GameSCENE.prototype = {
 		this.background.fixedToCamera = true;
 		
 		//create apartments manager game/sizex/sizey
-		pAptManager = new AptManager(this.game, 5, 5);
+		this.pAptManager = new AptManager(this.game, 5, 5);
 		//set initial size
-        pAptManager.CreateApt(this.game, 2, 2);
+        this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
-        pAptManager.AddTenant(this.game, 2, 'MODEL', 0, 1);
+        this.pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
+        this.pAptManager.AddTenant(this.game, 2, 'MODEL', 0, 1);
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
@@ -59,9 +59,9 @@ GameSCENE.prototype = {
 	{
 	
 		this.game.debug.text("Debug ", 30, 30);
-		this.game.debug.text("Room clicked " + pAptManager.room_clicked_x + " " + pAptManager.room_clicked_y, 30, 50);
-		this.game.debug.text("Check tenant room 0 0: " + pAptManager.apts_matrix[0], 30, 70);
-		this.game.debug.text("Apt group size: " + pAptManager.apts.children.length, 30, 90);
+		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
+		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
+		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
 		//this.game.debug(aps.children[0], 30, 70);
 	},
 	
