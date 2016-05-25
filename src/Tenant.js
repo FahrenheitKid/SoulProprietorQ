@@ -1,6 +1,7 @@
 // Define the Tenant constructor
 var Tenant = function(game, roomx, roomy, typee, idd) {
   
+ // Phaser.Sprite.call(this, game, roomx, roomy, 'SOLDIER');
   this.name = "";
   this.room_x = roomx; // posição do quarto
   this.room_y = roomy;
@@ -57,9 +58,10 @@ this.game_reference = game;
 this.firstClick = null;
 this.drag_tenant = false;
 this.dragPosition = new Phaser.Point(0, 0);
-this.ownAp_reference;
+this.ownAp_reference = null;
 
 };
+
 
 // Add a couple of methods to Tenant.prototype
 Tenant.prototype.idle = function(){
@@ -73,10 +75,10 @@ Tenant.prototype.sayHello = function(){
   // emite som?
 };
 
-Tenant.prototype.init = function(game)
+Tenant.prototype.init = function(game, ap_sprite)
 {
-
-//this.ownAp_reference = ap_sprite;
+this.ownAp_reference = null;
+this.ownAp_reference = ap_sprite;
 //this.type = type;
 /*
 this.selected_color = randomColor(
@@ -227,7 +229,7 @@ Tenant.prototype.onDragStart = function(sprite, pointer)
 }
 Tenant.prototype.onDragStop = function(sprite, pointer)
 {
-  /*
+  
   var ap = this.ownAp_reference;
    if (!Phaser.Rectangle.containsRect(sprite, ap))
         {
@@ -243,8 +245,11 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
 
      this.camera.focusOn(sprite);
      this.drag_tenant = false;
-  */
+  
 }
+
+
+
 // Define the Boss constructor
 
 function Boss(roomx, roomy, type, id, game) {

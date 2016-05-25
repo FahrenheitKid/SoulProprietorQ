@@ -11,6 +11,7 @@ var GameSCENE = function(game)
 	this.pAptManager = null;
 	this.key = null;
 	this.test = null;
+	this.rendertest = false;
 }
 
 GameSCENE.prototype = {
@@ -58,18 +59,24 @@ GameSCENE.prototype = {
 	render: function()
 	{
 	
-		this.game.debug.text("Debug ", 30, 30);
+		if(this.rendertest == false)
+		{
+		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[0].ownAp_reference.width, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
 		//this.game.debug(aps.children[0], 30, 70);
+		}
+		
 	},
 	
 	gofull: function() 
 	{
 
 		 //this.test = true;
-		 
+		 //this.pAptManager.apts.children[1].posx = 5;
+		// this.pAptManager.CreateApt(this.game, 2, 2);
+		 this.rendertest = true;
 	    if (this.game.scale.isFullScreen)
 	    {
 	        this.game.scale.stopFullScreen();

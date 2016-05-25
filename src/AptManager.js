@@ -16,6 +16,7 @@ var AptManager = function(game, sizex, sizey)
     
     //group of sprites
     this.pTenants = game.add.group();
+    this.tenants_matrix = [];
 }
 
 AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
@@ -32,27 +33,39 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 		    //ap height 375;
 		    if(i < size_y_init && j < size_x_init)
 		    {
-                var ap = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
-                ap.posx = j;
-                ap.posy = i;
-                ap.inputEnabled = true;
-    			ap.events.onInputDown.add(onInputDown, this);
+                var ap;
+                this.apts.create(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
+                var ap_ref = this.apts.getTop();
+               // ap_ref = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
+                ap_ref.posx = i;
+                
+                ap_ref.posx = j;
+                ap_ref.posy = i;
+                ap_ref.inputEnabled = true;
+    			ap_ref.events.onInputDown.add(onInputDown, this);
+    			
+    			
     			
     			//add object to group
-    			this.apts.create(ap);
+    			
     			//start apartment matrix ids
     			this.apts_matrix.push(1);
 		    }
 		    else
 		    {
-		        var ap = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'apTrans');
-                ap.posx = j;
-                ap.posy = i;
-                ap.inputEnabled = true;
-    			ap.events.onInputDown.add(onInputDown, this);
-    			
+		        
+		        var ap;
+                this.apts.create(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'apTrans');
+                var ap_ref = this.apts.getTop();
+                
+		       // ap_ref = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'apTrans');
+                ap_ref.posx = j;
+                ap_ref.posy = i;
+                ap_ref.inputEnabled = true;
+    			ap_ref.events.onInputDown.add(onInputDown, this);
+    		//	this.apts.getChildAt(0).posx = j;
     			//add object to group
-    			this.apts.create(ap);
+    			//this.apts.create(ap);
     			//start apartment matrix ids
     			this.apts_matrix.push(0);
 		    }
@@ -103,11 +116,20 @@ AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, r
     this.pTenants.create(tnt);
     this.apts_matrix[roomx * this.apts_sizey + roomy] = tenant_id;
     */
+    var tnt;
+    
+     tnt = new Tenant(game,roomx,roomy, tenant_type, tenant_id);
+    var spriteref;
+    for(var i = 0; i < this.apts.length; i++)
+    {
+        
+        if(this.apts.getChildAt(i).posx == roomx && this.apts.getChildAt(i).posy == roomy)
+        spriteref = this.apts.getChildAt(i);
+    }
+    tnt.init(game, spriteref);
+   //this.pTenants.add.existing(tnt);
+   this.tenants_matrix.push(tnt);
 
-    var tnt = new Tenant(game,roomx,roomy, tenant_type, tenant_id);
-    tnt.init(game);
-    this.pTenants.create(tnt);
-
-    this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
+    //this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
 
 }
