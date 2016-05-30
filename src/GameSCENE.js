@@ -23,7 +23,7 @@ GameSCENE.prototype = {
 		this.game.camera.setPosition(0, 5 * 375);
 
 		//background sprite
-		this.background = this.game.add.tileSprite(0, 0, 1280, 708, 'city_dusk');
+		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
 	    this.background.animations.play('run', 10, true);
 		this.background.fixedToCamera = true;
@@ -45,10 +45,10 @@ GameSCENE.prototype = {
 	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 	    
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
-	    var playButton = this.game.add.button(30, 100, "start_button", this.gofull, this);
+	    var fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
 		//playButton.anchor.setTo(0.5, 0.5);
 		//playButton.onInputOver.add(this.onOver, this);
-		playButton.fixedToCamera = true;
+		fullscreenButton.fixedToCamera = true;
 	},
 	
 	update: function()
