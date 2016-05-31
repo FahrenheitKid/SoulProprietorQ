@@ -33,45 +33,33 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 		    //ap height 375;
 		    if(i < size_y_init && j < size_x_init)
 		    {
-                var ap;
+                //add object to group
                 this.apts.create(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
+                //modify
                 var ap_ref = this.apts.getTop();
-               // ap_ref = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
-                ap_ref.posx = i;
-                
                 ap_ref.posx = j;
                 ap_ref.posy = i;
                 ap_ref.inputEnabled = true;
     			ap_ref.events.onInputDown.add(onInputDown, this);
-    			
-    			
-    			
-    			//add object to group
     			
     			//start apartment matrix ids
     			this.apts_matrix.push(1);
 		    }
 		    else
 		    {
-		        
-		        var ap;
+		        //add object to group
                 this.apts.create(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'apTrans');
+                //modify
                 var ap_ref = this.apts.getTop();
-                
-		       // ap_ref = game.add.sprite(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'apTrans');
                 ap_ref.posx = j;
                 ap_ref.posy = i;
                 ap_ref.inputEnabled = true;
     			ap_ref.events.onInputDown.add(onInputDown, this);
-    		//	this.apts.getChildAt(0).posx = j;
-    			//add object to group
-    			//this.apts.create(ap);
+    			
     			//start apartment matrix ids
     			this.apts_matrix.push(0);
 		    }
         }
-        
-        //aps.forEach(function(ap){},this);
     }
     
     function onInputDown(ap, pointer)
@@ -95,14 +83,18 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
         else if(this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] == 0)
         {
             //add new ap to group and update matrix
-            var newAp = game.add.sprite(445 * ap.posx + 50, game.world.height - 375 - (375 * ap.posy) - 30, 'ap');
+            this.apts.create(445 * ap.posx + 50, game.world.height - 375 - (375 * ap.posy) - 30, 'ap');
+            var newAp = this.apts.getTop();
             newAp.posx = ap.posx;
             newAp.posy = ap.posy;
             newAp.inputEnabled = true;
 			newAp.events.onInputDown.add(onInputDown, this);
+			//send to first layer
+			newAp.sendToBack();
+			//move above background
+			newAp.moveUp();
 			
 			ap.destroy();
-			this.apts.create(newAp);
 			this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] = 1;
         }
     }

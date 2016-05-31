@@ -46,8 +46,6 @@ GameSCENE.prototype = {
 	    
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
 	    var fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
-		//playButton.anchor.setTo(0.5, 0.5);
-		//playButton.onInputOver.add(this.onOver, this);
 		fullscreenButton.fixedToCamera = true;
 	},
 	
