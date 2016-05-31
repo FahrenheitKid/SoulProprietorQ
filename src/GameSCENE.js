@@ -13,12 +13,23 @@ var GameSCENE = function(game)
 	this.test = null;
 	this.rendertest = false;
 	this.player = null;
-}
+
+	this.music =
+	{
+		normal: null,
+		danger: null,
+	};
+
+
+};
 
 GameSCENE.prototype = {
     
     create: function()
 	{
+		this.initMusic(this.game);
+		this.music.normal.play();
+		//this.music.menu.play(true);
 		this.test = false;
 		this.game.world.setBounds(0, 0, (4 * 445), (5 * 375));
 		this.game.camera.setPosition(0, 5 * 375);
@@ -33,6 +44,7 @@ GameSCENE.prototype = {
 		
 		//create apartments manager game/sizex/sizey
 		this.pAptManager = new AptManager(this.game, 5, 5);
+		this.pAptManager.init(this.game,this.player);
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
@@ -60,9 +72,9 @@ GameSCENE.prototype = {
 	render: function()
 	{
 	
-		if(this.rendertest == false)
+		if(this.rendertest === false)
 		{
-		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[0].player_reference.money, 30, 30);
+		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[0].stress, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
@@ -88,5 +100,13 @@ GameSCENE.prototype = {
 	    {
 	        this.game.scale.startFullScreen(false);
 		}
+	},
+
+	initMusic: function(game)
+	{
+
+		this.music.normal = game.add.audio("hanging");
+		this.music.normal.loop = true;
+		this.music.normal.volume = 0.65;
 	}
 };

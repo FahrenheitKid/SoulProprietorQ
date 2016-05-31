@@ -2,11 +2,11 @@
 
 var AptManager = function(game, sizex, sizey)
 {
-    this.room_clicked;
-    this.room_clicked_x;
-    this.room_clicked_y;
+    this.room_clicked = null;
+    this.room_clicked_x = null;
+    this.room_clicked_y = null;
     
-    this.tenant_clicked_id;
+    this.tenant_clicked_id = null;
     
     this.apts_sizex = sizex;
     this.apts_sizey = sizey;
@@ -17,7 +17,58 @@ var AptManager = function(game, sizex, sizey)
     //group of sprites
     this.pTenants = game.add.group();
     this.tenants_matrix = [];
-}
+    this.player_reference = null;
+    
+};
+
+
+AptManager.prototype.init = function(game, play)
+{
+    this.player_reference = play;
+    game.time.events.loop(Phaser.Timer.SECOND, this.doDamage, this);
+
+};
+
+AptManager.prototype.doDamage = function()
+{
+
+    for(var i = 0; i < this.tenants_matrix.length; i++)
+    {
+        var tnt = this.tenants_matrix[i];
+
+        tnt.doDamageHeal(tnt.damage_force, tnt.heal_force);
+        //tnt.sprite.tint = "black";
+    }
+
+    this.takeDamage();
+
+};
+
+AptManager.prototype.takeDamage = function()
+{
+
+    for(var i = 0; i < this.tenants_matrix.length; i++)
+    {
+        var tnt = this.tenants_matrix[i];
+        tnt.stress+= tnt.damage;
+        tnt.damage = 0;
+        //tnt.sprite.tint = "black";
+    }
+
+};
+
+AptManager.prototype.getIncome = function()
+{
+
+    var amount = 0;
+    for(var i = 0; i < this.tenants_matrix.length; i++)
+    {
+        var tnt = this.tenants_matrix[i];
+        amount+= tnt.income;
+        //tnt.sprite.tint = "black";
+    }
+
+};
 
 AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 {

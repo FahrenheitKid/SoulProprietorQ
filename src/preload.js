@@ -18,6 +18,8 @@ preload.prototype = {
 		this.game.load.image("play", "assets/play.png");
 		this.game.load.image("higher", "assets/higher.png");
 
+		this.game.load.audio("hanging", "assets/music/hanging.mp3");
+
 		this.game.load.spritesheet('city', 'assets/sprites/city_sheet.png', 500, 708);
 		this.game.load.spritesheet('city_dusk', 'assets/sprites/cityDusk_sheet.png', 500, 708);
 		this.game.load.spritesheet('ghost', 'assets/sprites/ghost_sheet.png', 50, 50);

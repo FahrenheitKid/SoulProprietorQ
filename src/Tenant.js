@@ -23,14 +23,14 @@ var Tenant = function(game, roomx, roomy, typee, idd) {
   this.neighbors = {
 
 
-    upleft : { roomx: this.room_x - 1, roomy: this.room_y + 1, id: null},
-   up: { roomx: this.room_x, roomy: this.room_y + 1, id: null},
-   upright: { roomx: this.room_x + 1, roomy: this.room_y + 1, id: null},
-   right: { roomx: this.room_x + 1, roomy: this.room_y, id: null},
-   downright: { roomx: this.room_x + 1, roomy: this.room_y - 1, id: null},
-   down: { roomx:  this.room_x, roomy: this.room_y - 1, id: null},
-   downleft: { roomx: this.room_x - 1, roomy: this.room_y - 1, id: null},
-   left: { roomx: this.room_x - 1, roomy: this.room_y, id: null},
+    upleft : { roomx: this.room_x - 1, roomy: this.room_y + 1, tenant: null, id: null},
+   up: { roomx: this.room_x, roomy: this.room_y + 1, tenant: null, id: null},
+   upright: { roomx: this.room_x + 1, roomy: this.room_y + 1, tenant: null, id: null},
+   right: { roomx: this.room_x + 1, roomy: this.room_y, tenant: null, id: null},
+   downright: { roomx: this.room_x + 1, roomy: this.room_y - 1, tenant: null, id: null},
+   down: { roomx:  this.room_x, roomy: this.room_y - 1, tenant: null, id: null},
+   downleft: { roomx: this.room_x - 1, roomy: this.room_y - 1, tenant: null, id: null},
+   left: { roomx: this.room_x - 1, roomy: this.room_y, tenant: null, id: null},
 
 
   };
@@ -63,6 +63,8 @@ this.aptManager_reference = null;
 this.player_reference = null;
 this.stressBar = null;
 
+this.damage_force = 0;
+this.heal_force = 0;
 
 this.rainbow = new Rainbow();
 
@@ -129,9 +131,12 @@ this.selected_color = randomColor(
 
   //passa pelo switch das setas
   this.initBehavior(game,ap_sprite);
+
+  this.damage_force = 3;
+  this.heal_force = 2;
   
   
-      
+
 
 };
 
@@ -141,6 +146,17 @@ Tenant.prototype.update = function(game)
 this.stressBarColor = "0x" + this.rainbow.colourAt(this.stress);
 this.stressBar.tint = this.stressBarColor;
 
+
+if(this.stress >=100){
+            this.stress = 100;
+
+          this.sprite.tint = "black";
+        } 
+       // tnt.kill();
+
+       if(this.stress <= 0) this.stress = 0;
+
+this.updateNeighbors();
 
 
 };
@@ -219,6 +235,8 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
 
 
                   this.player_reference.money = afford;
+                  this.room_x = app.posx;
+                  this.room_y = app.posy;
                   app.tenant = this;
                   this.ownAp_reference = app;
                   ap.tenant = null;
@@ -245,8 +263,12 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
 
                   ap.tenant = app.tenant;
                   app.tenant.ownAp_reference = ap;
+                  app.tenant.room_x = ap.posx;
+                  app.tenant.room_y = ap.posy;
 
                   this.ownAp_reference = app;
+                  this.room_x = app.posx;
+                  this.room_y = app.posy;
                   app.tenant = this;
 
                     
@@ -310,7 +332,7 @@ apwidth = game.cache.getImage("ap").width;
 
       this.price = 30;
       this.income = 75;
-      this.stress = 0;
+      this.stress = 50;
       // msm q ap so que com width e heights do sprite
       //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
       //this.sprite = game.add.sprite( 472, 3510, "model");
@@ -694,6 +716,282 @@ var parent = this.sprite;
   this.arrowsVisible(false);
 };
 
+Tenant.prototype.updateNeighbors = function()
+{
+
+     this.neighbors = {
+
+
+    upleft : { roomx: this.room_x - 1, roomy: this.room_y + 1, tenant: null, id: null},
+   up: { roomx: this.room_x, roomy: this.room_y + 1, tenant: null, id: null},
+   upright: { roomx: this.room_x + 1, roomy: this.room_y + 1, tenant: null, id: null},
+   right: { roomx: this.room_x + 1, roomy: this.room_y, tenant: null, id: null},
+   downright: { roomx: this.room_x + 1, roomy: this.room_y - 1, tenant: null, id: null},
+   down: { roomx:  this.room_x, roomy: this.room_y - 1, tenant: null, id: null},
+   downleft: { roomx: this.room_x - 1, roomy: this.room_y - 1, tenant: null, id: null},
+   left: { roomx: this.room_x - 1, roomy: this.room_y, tenant: null, id: null},
+
+
+  };
+
+
+  for (var i = 0; i < this.aptManager_reference.apts.children.length; i++)
+  {
+
+    var tnt = this.aptManager_reference.apts.children[i];
+
+    var nei = this.neighbors;
+    if (nei.upleft.roomx == tnt.posx && nei.upleft.roomy == tnt.posy)
+    {
+      nei.upleft.tenant = tnt.tenant;
+    }
+
+    if (nei.up.roomx == tnt.posx && nei.up.roomy == tnt.posy)
+    {
+      nei.up.tenant = tnt.tenant;
+    }
+
+    if (nei.upright.roomx == tnt.posx && nei.upright.roomy == tnt.posy)
+    {
+      nei.upright.tenant = tnt.tenant;
+    }
+
+    if (nei.right.roomx == tnt.posx && nei.right.roomy == tnt.posy)
+    {
+      nei.right.tenant = tnt.tenant;
+    }
+
+    if (nei.downright.roomx == tnt.posx && nei.downright.roomy == tnt.posy)
+    {
+      nei.downright.tenant = tnt.tenant;
+    }
+
+    if (nei.down.roomx == tnt.posx && nei.down.roomy == tnt.posy)
+    {
+      nei.down.tenant = tnt.tenant;
+    }
+
+    if (nei.downleft.roomx == tnt.posx && nei.downleft.roomy == tnt.posy)
+    {
+      nei.downleft.tenant = tnt.tenant;
+    }
+
+    if (nei.left.roomx == tnt.posx && nei.left.roomy == tnt.posy)
+    {
+      nei.left.tenant = tnt.tenant;
+    }
+
+  }
+
+};
+Tenant.prototype.doDamageHeal = function(dmg, heal)
+{
+
+    var nei = this.neighbors;
+
+  if (nei.left.tenant !== null && nei.left.tenant != 'aptrans')
+  {
+    switch (this.behavior.left)
+    {
+
+
+      case 'TRUE':
+
+        nei.left.tenant.damage -= heal;
+        break;
+
+      case 'FALSE':
+        nei.left.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+
+      default:
+
+        break;
+
+    }
+  }
+
+
+  if (nei.downleft.tenant !== null && nei.downleft.tenant != 'aptrans')
+  {
+    switch (this.behavior.downleft)
+    {
+
+      case 'TRUE':
+
+        nei.downleft.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+        nei.downleft.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+      
+      default:
+
+        break;
+
+    }
+  }
+
+  
+  if (nei.upleft.tenant !== null && nei.upleft.tenant != 'aptrans')
+  {
+    switch (this.behavior.upleft)
+    {
+
+      case 'TRUE':
+        nei.upleft.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+
+        nei.upleft.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+ 
+      default:
+
+        break;
+
+    }
+  }
+
+  if (nei.right.tenant !== null && nei.right.tenant != 'aptrans')
+  {
+    switch (this.behavior.right)
+    {
+
+      case 'TRUE':
+
+        nei.right.tenant.damage -= heal;
+        break;
+
+      case 'FALSE':
+        nei.right.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+ 
+      default:
+
+        break;
+
+    }
+  }
+
+  if (nei.upright.tenant !== null && nei.upright.tenant != 'aptrans')
+  {
+    switch (this.behavior.upright)
+    {
+
+      case 'TRUE':
+        nei.upright.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+
+        nei.upright.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+
+      default:
+
+        break;
+
+    }
+  }
+
+  if (nei.downright.tenant !== null && nei.downright.tenant != 'aptrans')
+  {
+    switch (this.behavior.downright)
+    {
+
+      case 'TRUE':
+        nei.downright.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+
+        nei.downright.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+
+      default:
+
+        break;
+
+    }
+  }
+
+  if (nei.up.tenant !== null && nei.up.tenant != 'aptrans')
+  {
+    switch (this.behavior.up)
+    {
+
+      case 'TRUE':
+        nei.up.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+
+        nei.up.tenant.damage += dmg;
+
+        break;
+
+      case 'VOID':
+
+      default:
+
+        break;
+
+    }
+  }
+
+  if (nei.down.tenant !== null && nei.down.tenant != 'aptrans')
+  {
+    switch (this.behavior.down)
+    {
+
+      case 'TRUE':
+
+        nei.down.tenant.damage -= heal;
+
+        break;
+
+      case 'FALSE':
+        nei.down.tenant.damage += dmg;
+
+        break;
+      case 'VOID':
+
+      default:
+
+        break;
+
+    }
+  }
+
+  
+
+};
 // Define the Boss constructor
 
 function Boss(roomx, roomy, type, id, game) {
