@@ -24,7 +24,7 @@ GameSCENE.prototype = {
 		this.game.camera.setPosition(0, 5 * 375);
 
 		this.player = new Player(this.game);
-		this.player.init(this.game);
+		this.player.init(this.game, 100);
 		//background sprite
 		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
@@ -62,7 +62,7 @@ GameSCENE.prototype = {
 	
 		if(this.rendertest == false)
 		{
-		this.game.debug.text("Debug " + this.pAptManager.apts.children[0].posx, 30, 30);
+		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[0].player_reference.money, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);

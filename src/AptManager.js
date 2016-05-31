@@ -54,7 +54,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                 var ap_ref = this.apts.getTop();
                 ap_ref.posx = j;
                 ap_ref.posy = i;
-                ap_ref.tenant = null;
+                ap_ref.tenant = 'aptrans';
                 ap_ref.inputEnabled = true;
     			ap_ref.events.onInputDown.add(onInputDown, this);
     			
@@ -66,7 +66,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
     
     function onInputDown(ap, pointer)
     {
-        if(this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] == 1)
+        if(ap.tenant === null)
         {
             this.room_clicked_x = ap.posx;
             this.room_clicked_y = ap.posy;
@@ -82,9 +82,12 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                 this.room_clicked = false;
             }
         }
-        else if(this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] == 0)
+        else if(ap.tenant == 'aptrans')
         {
             //add new ap to group and update matrix
+
+            /*
+            //hold aqui
             this.apts.create(445 * ap.posx + 50, game.world.height - 375 - (375 * ap.posy) - 30, 'ap');
             var newAp = this.apts.getTop();
             newAp.posx = ap.posx;
@@ -99,6 +102,10 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 			
 			ap.destroy();
 			this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] = 1;
+            */
+
+            ap.loadTexture('ap');
+            ap.tenant = null;
         }
     }
 };

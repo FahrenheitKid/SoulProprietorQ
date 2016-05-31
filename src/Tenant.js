@@ -141,6 +141,8 @@ Tenant.prototype.update = function(game)
 this.stressBarColor = "0x" + this.rainbow.colourAt(this.stress);
 this.stressBar.tint = this.stressBarColor;
 
+
+
 };
 
 Tenant.prototype.onOver = function(sprite, pointer)
@@ -188,17 +190,25 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
 {
   
   var ap = this.ownAp_reference;
-
+  var movecost = 10;
+  //caso n esteja no proprio ap
    if (!Phaser.Rectangle.containsRect(sprite, ap))
         {
         	//this.camera.follow(sprite);
         	//text.setText("entrou dropzone: " + dragPosition.x);
 
-          this.aptManager_reference.apts.forEach(function(app)
+          for(var i = 0; i < this.aptManager_reference.apts.children.length; i++)
           {
+            var app = this.aptManager_reference.apts.children[i];
+            var afford = this.player_reference.money - movecost;
+
+
+              //faz overlap com todos os aps
               if(Phaser.Rectangle.containsRect(sprite,app))
               {
-                if(app.tenant === null)
+
+                // caso ap esteja vago e tenha dinheiro para mover, mova
+                if(app.tenant === null && afford >= 0)
                 {
 
                   this.game_reference.add.tween(sprite).to(
@@ -207,16 +217,59 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
                 y: app.y + app.height /2
             }, 500, "Back.easeOut", true, 100);
 
+
+                  this.player_reference.money = afford;
+                  app.tenant = this;
+                  this.ownAp_reference = app;
+                  ap.tenant = null;
                 }
-              }
+                else
+                {
+                  // caso ap esteja ocupado e tenha dinheiro para mover, de swap nos tenants
+                  if(app.tenant !== null && app.tenant != 'aptrans' && afford >= 0)
+                {
+                  this.player_reference.money = afford;
 
-          });
+                  this.game_reference.add.tween(sprite).to(
+                  {
+                x: app.x + app.width /2,
+                y: app.y + app.height /2
+                  }, 500, "Back.easeOut", true, 100);
 
-            this.game_reference.add.tween(sprite).to(
-            {
+                  this.game_reference.add.tween(app.tenant.sprite).to(
+                  {
                 x: ap.x + ap.width /2,
                 y: ap.y + ap.height /2
-            }, 500, "Back.easeOut", true, 100);
+                  }, 500, "Back.easeOut", true, 100);
+
+
+                  ap.tenant = app.tenant;
+                  app.tenant.ownAp_reference = ap;
+
+                  this.ownAp_reference = app;
+                  app.tenant = this;
+
+                    
+
+                 }      // caso aptrans ou sem dinheiro
+                 else if(app.tenant === null || app.tenant == 'aptrans' || afford < 0)
+                {
+                  this.game_reference.add.tween(sprite).to(
+                  {
+                x: ap.x + ap.width /2,
+                y: ap.y + ap.height /2
+                  }, 500, "Back.easeOut", true, 100);
+
+
+                 }
+
+                }
+                
+              }
+
+          }
+
+            
         }
 
 
