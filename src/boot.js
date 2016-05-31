@@ -17,3 +17,9 @@ boot.prototype = {
 		this.game.state.start("Preload");
 	}
 };
+
+
+function fixColor(color)
+{
+	color = parseInt(color.substr(1), 16);
+}

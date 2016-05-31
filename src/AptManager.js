@@ -98,7 +98,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 			this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] = 1;
         }
     }
-}
+};
 
 AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, roomy)
 {
@@ -124,4 +124,15 @@ AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, r
 
     //this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
 
-}
+};
+
+
+AptManager.prototype.update = function(game)
+{
+
+    for(var i = 0; i < this.tenants_matrix.length; i++)
+    {
+
+        this.tenants_matrix[i].update(game);
+    }
+};

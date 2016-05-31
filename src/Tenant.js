@@ -38,7 +38,7 @@ var Tenant = function(game, roomx, roomy, typee, idd) {
   
   this.type = typee;
   
-  this.stress = 70; // 100
+  this.stress = 30; // 100
   // x = (room x * ap width + ap width /2 - stress bar width / 2 | y = Iw2DGetSurfaceHeight() - (room_y * g_pResources->getAp()->GetHeight()) - (4 + stressBar->GetImage()->GetHeight());
   //this.stressBar = game.add.sprite((room_x * 445) + (445 / 2) - (455 / 2), game.world.height - (room_y * 375) - (4 + 15), "stressBar1");
 
@@ -59,6 +59,16 @@ this.firstClick = null;
 this.drag_tenant = false;
 this.dragPosition = new Phaser.Point(0, 0);
 this.ownAp_reference = null;
+this.stressBar = null;
+
+
+this.rainbow = new Rainbow();
+
+this.rainbow.setSpectrum('#AEF731','#F9EF27','#FF3F72');
+
+this.stressBarColor = "0x" + this.rainbow.colourAt(this.stress);
+
+
 
 };
 
@@ -101,11 +111,23 @@ this.selected_color = randomColor(
 
 };
 
+Tenant.prototype.update = function(game)
+{
+
+this.stressBarColor = "0x" + this.rainbow.colourAt(this.stress);
+this.stressBar.tint = this.stressBarColor;
+
+};
 
 Tenant.prototype.onOver = function(sprite, pointer)
 {
   sprite.tint = this.selected_color;
   this.arrowsVisible(true);
+
+  if(this.stress <= 100)
+  {
+    this.stress += 10;
+  }
   
 };
 Tenant.prototype.onOut = function(sprite, pointer)
@@ -160,6 +182,15 @@ Tenant.prototype.initType = function(game, ap_sprite)
 
 apwidth = game.cache.getImage("ap").width;
   apheight = game.cache.getImage("ap").height;
+  var barheight = game.cache.getImage("stressBarWhite").height;
+
+
+  this.stressBar = game.add.sprite(ap_sprite.x , ap_sprite.y + apheight - barheight *2.1, "stressBarWhite");
+  var stressColor = randomColor({hue: 'green'});
+  stressColor = parseInt(stressColor.substr(1), 16);
+  stressColor = "0x" + this.rainbow.colourAt(this.stress);
+  this.stressBar.tint = this.stressBarColor;
+
   switch (this.type)
   {
     case 'SOLDIER':
@@ -178,6 +209,7 @@ apwidth = game.cache.getImage("ap").width;
 
       this.price = 30;
       this.income = 75;
+      this.stress = 0;
       // msm q ap so que com width e heights do sprite
       //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
       //this.sprite = game.add.sprite( 472, 3510, "model");
@@ -289,6 +321,8 @@ Tenant.prototype.arrowsVisible = function(bool)
     }
   }
 };
+
+
 
 Tenant.prototype.initBehavior = function(game, ap_sprite)
 {
