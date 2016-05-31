@@ -89,13 +89,82 @@ this.selected_color = randomColor(
 		this.selected_color = parseInt(this.selected_color.substr(1), 16);
 		
  console.log("jojoojojojo");
-  apwidth = game.cache.getImage("ap").width;
+  
+  // passa pelo switch dos type
+  this.initType(game,ap_sprite);
+
+  //passa pelo switch das setas
+  this.initBehavior(game,ap_sprite);
+  
+  
+      
+
+};
+
+
+Tenant.prototype.onOver = function(sprite, pointer)
+{
+  sprite.tint = this.selected_color;
+  this.arrowsVisible(true);
+  
+};
+Tenant.prototype.onOut = function(sprite, pointer)
+{
+  sprite.tint = 0xffffff;
+  this.arrowsVisible(false);
+  
+};
+Tenant.prototype.onDragStart = function(sprite, pointer)
+{
+  if (sprite.input.pointerDown(this.game_reference.input.activePointer.id))
+		{
+
+			this.firstClick = this.game.input.activePointer.position;
+			this.drag_tenant = true;
+
+			//dragged_tenant = sprite;
+
+			//this.game.camera.focusOnXY(pointer.x, pointer.y);
+		}
+		else
+		{
+			//
+		}
+
+  this.dragPosition.set(sprite.x, sprite.y);
+  
+};
+Tenant.prototype.onDragStop = function(sprite, pointer)
+{
+  
+  var ap = this.ownAp_reference;
+   if (!Phaser.Rectangle.containsRect(sprite, ap))
+        {
+        	//this.camera.follow(sprite);
+        	//text.setText("entrou dropzone: " + dragPosition.x);
+            this.game_reference.add.tween(sprite).to(
+            {
+                x: ap.x + ap.width /2,
+                y: ap.y + ap.height /2
+            }, 500, "Back.easeOut", true, 100);
+        }
+
+
+     this.camera.focusOn(sprite);
+     this.drag_tenant = false;
+  
+};
+
+Tenant.prototype.initType = function(game, ap_sprite)
+{
+
+apwidth = game.cache.getImage("ap").width;
   apheight = game.cache.getImage("ap").height;
   switch (this.type)
   {
     case 'SOLDIER':
 
-     // this.type = type;
+      // this.type = type;
       sprite_width = game.cache.getImage("soldier").width;
       sprite_height = game.cache.getImage("soldier").height;
       this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
@@ -121,7 +190,7 @@ this.selected_color = randomColor(
 
       //text.setText("startou "  + " ten x,y " + tempx + "," + tempy);
       this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "soldier_sheet");
-
+       
       this.sprite.animations.add('idle');
       this.sprite.animations.play('idle', 5, true);
       this.sprite.anchor.setTo(0.5, 0.5);
@@ -130,22 +199,24 @@ this.selected_color = randomColor(
 
       this.sprite.input.enableDrag();
 
-
       this.sprite.events.onInputOver.add(this.onOver, this);
 
       this.sprite.events.onInputOut.add(this.onOut, this);
       this.sprite.events.onDragStart.add(this.onDragStart, this);
 
-     this.sprite.events.onDragStop.add(this.onDragStop, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+
+     
+      
 
       game.physics.arcade.enable(this);
 
 
       break;
-      
-      case 'MODEL':
 
-     // this.type = type;
+    case 'MODEL':
+
+      // this.type = type;
       sprite_width = game.cache.getImage("model").width;
       sprite_height = game.cache.getImage("model").height;
       this.behavior.upleft = 'VOID'; // VOID = 0, TRUE = +hp, FALSE = -hp
@@ -186,69 +257,306 @@ this.selected_color = randomColor(
       this.sprite.events.onInputOut.add(this.onOut, this);
       this.sprite.events.onDragStart.add(this.onDragStart, this);
 
-     this.sprite.events.onDragStop.add(this.onDragStop, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
 
       game.physics.arcade.enable(this);
 
 
       break;
+
+
   }
-  
+
 };
 
-
-Tenant.prototype.onOver = function(sprite, pointer)
+Tenant.prototype.arrowsVisible = function(bool)
 {
-  sprite.tint = this.selected_color;
-  
-}
-Tenant.prototype.onOut = function(sprite, pointer)
+
+  if (bool === true)
+  {
+    for (var i = 0; i < this.sprite.children.length; i++)
+    {
+
+      this.sprite.getChildAt(i).visible = true;
+    }
+  }
+  else if (bool === false)
+  {
+    for (var i = 0; i < this.sprite.children.length; i++)
+    {
+
+      this.sprite.getChildAt(i).visible = false;
+    }
+  }
+};
+
+Tenant.prototype.initBehavior = function(game, ap_sprite)
 {
-  sprite.tint = 0xffffff;
+
+var parent = this.sprite;
+
+  var arrows_offset = {
+
+    left: { x: -parent.width - 10, y: 0},
+    leftup: { x: -parent.width - 10, y: -parent.height / 2},
+    leftdown: { x: -parent.width - 10, y: parent.height / 2},
+    right: { x: +parent.width + 10, y: 0},
+    rightup: { x: parent.width + 10, y: -parent.height / 2},
+    rightdown: { x: parent.width + 10, y: parent.height / 2},
+    up: { x: 0, y: (-parent.height - 10) / 1.3 },
+    down: { x: 0, y: (parent.height + 10) / 1.3 },
+
+  };
+
+
+  var child;
+  //this.sprite.addChild(child);
+  switch (this.behavior.left)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.left.x, arrows_offset.left.y, "left_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.left.x, arrows_offset.left.y, "left_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
   
-}
-Tenant.prototype.onDragStart = function(sprite, pointer)
-{
-  if (sprite.input.pointerDown(this.game_reference.input.activePointer.id))
-		{
 
-			this.firstClick = this.game.input.activePointer.position;
-			this.drag_tenant = true;
+  switch (this.behavior.downleft)
+  {
 
-			//dragged_tenant = sprite;
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.leftdown.x, arrows_offset.leftdown.y, "leftdown_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
 
-			//this.game.camera.focusOnXY(pointer.x, pointer.y);
-		}
-		else
-		{
-			//
-		}
+      break;
 
-  this.dragPosition.set(sprite.x, sprite.y);
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.leftdown.x, arrows_offset.leftdown.y, "leftdown_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.upleft)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.leftup.x, arrows_offset.leftup.y, "leftup_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.leftup.x, arrows_offset.leftup.y, "leftup_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.right)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.right.x, arrows_offset.right.y, "right_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.right.x, arrows_offset.right.y, "right_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.upright)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.rightup.x, arrows_offset.rightup.y, "rightup_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.rightup.x, arrows_offset.rightup.y, "rightup_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.downright)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.rightdown.x, arrows_offset.rightdown.y, "rightdown_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.rightdown.x, arrows_offset.rightdown.y, "rightdown_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.up)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.up.x, arrows_offset.up.y, "up_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.up.x, arrows_offset.up.y, "up_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
+  switch (this.behavior.down)
+  {
+
+    case 'TRUE':
+      child = game.add.sprite(arrows_offset.down.x, arrows_offset.down.y, "down_arrow_green");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      parent.addChild(child);
+
+      break;
+
+    case 'FALSE':
+     child = game.add.sprite(arrows_offset.down.x, arrows_offset.down.y, "down_arrow_red");
+      child.scale.set(0.5, 0.5);
+      child.anchor.set(0.5,0.5);
+      child.animations.add('idle');
+      child.animations.play('idle', 5, true);
+      //child.visible = false;
+      parent.addChild(child);
+
+      break;
+
+    case 'VOID':
+    default:
+
+      break;
+
+  }
+
   
-}
-Tenant.prototype.onDragStop = function(sprite, pointer)
-{
-  
-  var ap = this.ownAp_reference;
-   if (!Phaser.Rectangle.containsRect(sprite, ap))
-        {
-        	//this.camera.follow(sprite);
-        	//text.setText("entrou dropzone: " + dragPosition.x);
-            this.game_reference.add.tween(sprite).to(
-            {
-                x: ap.x + ap.width /2,
-                y: ap.y + ap.height /2
-            }, 500, "Back.easeOut", true, 100);
-        }
-
-
-     this.camera.focusOn(sprite);
-     this.drag_tenant = false;
-  
-}
-
-
+  this.arrowsVisible(false);
+};
 
 // Define the Boss constructor
 

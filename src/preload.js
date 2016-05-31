@@ -45,6 +45,25 @@ preload.prototype = {
 
 		this.game.load.spritesheet("soldier_sheet", "assets/sprites/soldier_sheet.png", 210, 274);
 		this.game.load.image("soldier", "assets/sprites/soldier.png");
+
+		//setas tem 3 frames cada
+		this.game.load.spritesheet("left_arrow_green","assets/sprites/left_arrow_green_sheet.png", 200, 200);
+		this.game.load.spritesheet("leftup_arrow_green","assets/sprites/leftup_arrow_green_sheet.png", 284, 284);
+		this.game.load.spritesheet("leftdown_arrow_green","assets/sprites/leftdown_arrow_green_sheet.png", 284, 284);
+		this.game.load.spritesheet("right_arrow_green","assets/sprites/right_arrow_green_sheet.png", 200, 200);
+		this.game.load.spritesheet("rightup_arrow_green","assets/sprites/rightup_arrow_green_sheet.png", 284, 284);
+		this.game.load.spritesheet("rightdown_arrow_green","assets/sprites/rightdown_arrow_green_sheet.png", 284, 284);
+		this.game.load.spritesheet("up_arrow_green","assets/sprites/up_arrow_green_sheet.png", 200, 200);
+		this.game.load.spritesheet("down_arrow_green","assets/sprites/down_arrow_green_sheet.png", 200, 200);
+
+		this.game.load.spritesheet("left_arrow_red","assets/sprites/left_arrow_red_sheet.png", 200, 200);
+		this.game.load.spritesheet("leftup_arrow_red","assets/sprites/leftup_arrow_red_sheet.png", 284, 284);
+		this.game.load.spritesheet("leftdown_arrow_red","assets/sprites/leftdown_arrow_red_sheet.png", 284, 284);
+		this.game.load.spritesheet("right_arrow_red","assets/sprites/right_arrow_red_sheet.png", 200, 200);
+		this.game.load.spritesheet("rightup_arrow_red","assets/sprites/rightup_arrow_red_sheet.png", 284, 284);
+		this.game.load.spritesheet("rightdown_arrow_red","assets/sprites/rightdown_arrow_red_sheet.png", 284, 284);
+		this.game.load.spritesheet("up_arrow_red","assets/sprites/up_arrow_red_sheet.png", 200, 200);
+		this.game.load.spritesheet("down_arrow_red","assets/sprites/down_arrow_red_sheet.png", 200, 200);
 /*		
 		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");

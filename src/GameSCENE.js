@@ -34,7 +34,7 @@ GameSCENE.prototype = {
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
         this.pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
-        this.pAptManager.AddTenant(this.game, 2, 'MODEL', 0, 1);
+        this.pAptManager.AddTenant(this.game, 2, 'MODEL', 1, 0);
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
@@ -59,11 +59,12 @@ GameSCENE.prototype = {
 	
 		if(this.rendertest == false)
 		{
-		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[0].ownAp_reference.width, 30, 30);
+		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[1].sprite.children.x, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
 		//this.game.debug(aps.children[0], 30, 70);
+		this.game.debug.geom(this.pAptManager.tenants_matrix[0].sprite.getBounds());
 		}
 		
 	},
