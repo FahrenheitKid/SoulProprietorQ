@@ -12,7 +12,7 @@ var AptManager = function(game, sizex, sizey)
     this.apts_sizey = sizey;
     //group of sprites
     this.apts = game.add.group();
-    this.apts_matrix = [];
+    this.apts_matrix = []; // ids
     
     //group of sprites
     this.pTenants = game.add.group();
@@ -39,6 +39,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                 var ap_ref = this.apts.getTop();
                 ap_ref.posx = j;
                 ap_ref.posy = i;
+                ap_ref.tenant = null;
                 ap_ref.inputEnabled = true;
     			ap_ref.events.onInputDown.add(onInputDown, this);
     			
@@ -53,11 +54,12 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                 var ap_ref = this.apts.getTop();
                 ap_ref.posx = j;
                 ap_ref.posy = i;
+                ap_ref.tenant = null;
                 ap_ref.inputEnabled = true;
     			ap_ref.events.onInputDown.add(onInputDown, this);
     			
     			//start apartment matrix ids
-    			this.apts_matrix.push(0);
+    			this.apts_matrix.push(null);
 		    }
         }
     }
@@ -87,6 +89,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
             var newAp = this.apts.getTop();
             newAp.posx = ap.posx;
             newAp.posy = ap.posy;
+            ap_ref.tenant = null;
             newAp.inputEnabled = true;
 			newAp.events.onInputDown.add(onInputDown, this);
 			//send to first layer
@@ -100,7 +103,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
     }
 };
 
-AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, roomy)
+AptManager.prototype.AddTenant = function(game, playerr, tenant_id, tenant_type, roomx, roomy)
 {
     /*
     var tnt = game.add.sprite((445 * roomx) + 225.5, game.world.height - 187.5 - (375 * roomy), 'soldier_sheet');
@@ -118,11 +121,19 @@ AptManager.prototype.AddTenant = function(game, tenant_id, tenant_type, roomx, r
         if(this.apts.getChildAt(i).posx == roomx && this.apts.getChildAt(i).posy == roomy)
         spriteref = this.apts.getChildAt(i);
     }
-    tnt.init(game, spriteref);
+    tnt.init(game, spriteref, playerr, this);
+
+    this.apts.forEach(function(ap)
+    {
+        if(ap.posx == roomx && ap.posy == roomy)
+        {
+            ap.tenant = tnt;
+        }  
+    });
    //this.pTenants.add.existing(tnt);
    this.tenants_matrix.push(tnt);
 
-    //this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
+    this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
 
 };
 

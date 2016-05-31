@@ -12,6 +12,7 @@ var GameSCENE = function(game)
 	this.key = null;
 	this.test = null;
 	this.rendertest = false;
+	this.player = null;
 }
 
 GameSCENE.prototype = {
@@ -22,6 +23,8 @@ GameSCENE.prototype = {
 		this.game.world.setBounds(0, 0, (4 * 445), (5 * 375));
 		this.game.camera.setPosition(0, 5 * 375);
 
+		this.player = new Player(this.game);
+		this.player.init(this.game);
 		//background sprite
 		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
@@ -33,8 +36,8 @@ GameSCENE.prototype = {
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        this.pAptManager.AddTenant(this.game, 2, 'SOLDIER', 0, 0);
-        this.pAptManager.AddTenant(this.game, 2, 'MODEL', 1, 0);
+        this.pAptManager.AddTenant(this.game, this.player, 2, 'SOLDIER', 0, 0);
+        this.pAptManager.AddTenant(this.game, this.player, 2, 'MODEL', 1, 0);
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 
@@ -59,7 +62,7 @@ GameSCENE.prototype = {
 	
 		if(this.rendertest == false)
 		{
-		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix[1].sprite.x, 30, 30);
+		this.game.debug.text("Debug " + this.pAptManager.apts.children[0].posx, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);

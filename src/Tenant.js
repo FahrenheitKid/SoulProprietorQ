@@ -59,6 +59,8 @@ this.firstClick = null;
 this.drag_tenant = false;
 this.dragPosition = new Phaser.Point(0, 0);
 this.ownAp_reference = null;
+this.aptManager_reference = null;
+this.player_reference = null;
 this.stressBar = null;
 
 
@@ -105,10 +107,12 @@ Tenant.prototype.say = function(event){
   // emite som?
 };
 
-Tenant.prototype.init = function(game, ap_sprite)
+Tenant.prototype.init = function(game, ap_sprite, player, aptManager)
 {
 this.ownAp_reference = null;
 this.ownAp_reference = ap_sprite;
+this.player_reference = player;
+this.aptManager_reference = aptManager;
 //this.type = type;
 /*
 this.selected_color = randomColor(
@@ -184,10 +188,30 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
 {
   
   var ap = this.ownAp_reference;
+
    if (!Phaser.Rectangle.containsRect(sprite, ap))
         {
         	//this.camera.follow(sprite);
         	//text.setText("entrou dropzone: " + dragPosition.x);
+
+          this.aptManager_reference.apts.forEach(function(app)
+          {
+              if(Phaser.Rectangle.containsRect(sprite,app))
+              {
+                if(app.tenant === null)
+                {
+
+                  this.game_reference.add.tween(sprite).to(
+            {
+                x: app.x + app.width /2,
+                y: app.y + app.height /2
+            }, 500, "Back.easeOut", true, 100);
+
+                }
+              }
+
+          });
+
             this.game_reference.add.tween(sprite).to(
             {
                 x: ap.x + ap.width /2,
