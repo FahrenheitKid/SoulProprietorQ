@@ -69,6 +69,11 @@ this.rainbow.setSpectrum('#AEF731','#F9EF27','#FF3F72');
 this.stressBarColor = "0x" + this.rainbow.colourAt(this.stress);
 
 
+this.quotes = {
+
+  pickup: [],
+};
+
 
 };
 
@@ -80,8 +85,23 @@ Tenant.prototype.idle = function(){
   // animacao idle
 };
 
-Tenant.prototype.sayHello = function(){
+Tenant.prototype.say = function(event){
   
+  var chance = new Chance(Math.random);
+
+  switch(event)
+  {
+    default:
+    case 'pickup':
+
+    this.quotes.pickup[chance.integer({min:0, max: this.quotes.pickup.length - 1})].play();
+
+    break;
+    
+
+
+
+  }
   // emite som?
 };
 
@@ -138,6 +158,10 @@ Tenant.prototype.onOut = function(sprite, pointer)
 };
 Tenant.prototype.onDragStart = function(sprite, pointer)
 {
+
+  
+    this.say('pickup');
+  
   if (sprite.input.pointerDown(this.game_reference.input.activePointer.id))
 		{
 
@@ -238,7 +262,8 @@ apwidth = game.cache.getImage("ap").width;
 
       this.sprite.events.onDragStop.add(this.onDragStop, this);
 
-     
+     this.quotes.pickup.push(game.add.audio("soldier_quote_pickup01"));
+     this.quotes.pickup.push(game.add.audio("soldier_quote_pickup02"));
       
 
       game.physics.arcade.enable(this);

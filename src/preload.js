@@ -46,6 +46,8 @@ preload.prototype = {
 
 		this.game.load.spritesheet("soldier_sheet", "assets/sprites/soldier_sheet.png", 210, 274);
 		this.game.load.image("soldier", "assets/sprites/soldier.png");
+		this.game.load.audio("soldier_quote_pickup01", "assets/sounds/soldier_quote01.mp3");
+		this.game.load.audio("soldier_quote_pickup02", "assets/sounds/soldier_quote02.mp3");
 
 		//setas tem 3 frames cada
 		this.game.load.spritesheet("left_arrow_green","assets/sprites/left_arrow_green_sheet.png", 200, 200);
