@@ -23,3 +23,13 @@ function fixColor(color)
 {
 	color = parseInt(color.substr(1), 16);
 }
+
+function arraymove(arr, fromIndex, toIndex) {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
+
+function deleteProperties(objectToClean) {
+  for (var x in objectToClean) if (objectToClean.hasOwnProperty(x)) delete objectToClean[x];
+}

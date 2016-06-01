@@ -119,6 +119,7 @@ Tenant.prototype.update = function(game)
   {
     this.stress = 100;
     this.sprite.tint = "black";
+    //this.destroy();
   } 
   // tnt.kill();
   if(this.stress <= 0) this.stress = 0;
@@ -185,6 +186,9 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
             y: app.y + app.height /2
           }, 500, "Back.easeOut", true, 100);
           
+          this.stressBar.x = app.x;
+          this.stressBar.y = app.y + app.height - this.stressBar.height;
+          
           this.player_reference.money = afford;
           this.room_x = app.posx;
           this.room_y = app.posy;
@@ -204,12 +208,17 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
             y: app.y + app.height /2
             }, 500, "Back.easeOut", true, 100);
             
+            this.stressBar.x = app.x;
+          this.stressBar.y = app.y + app.height - this.stressBar.height;
+            
             this.game_reference.add.tween(app.tenant.sprite).to(
             {
             x: ap.x + ap.width /2,
             y: ap.y + ap.height /2
             }, 500, "Back.easeOut", true, 100);
             
+            app.tenant.stressBar.x = ap.x;
+            app.tenant.stressBar.y = ap.y + ap.height - ap.tenant.stressBar.height;
             ap.tenant = app.tenant;
             app.tenant.ownAp_reference = ap;
             app.tenant.room_x = ap.posx;
@@ -776,6 +785,38 @@ Tenant.prototype.doDamageHeal = function(dmg, heal)
           break;
     }
   }
+};
+
+Tenant.prototype.destroy = function()
+{
+   var manager = this.aptManager_reference;
+   
+   
+   for(var i = 0; i < manager.apts.children.length; i++)
+   {
+       var ap = manager.apts.children[i];
+       if(ap.tenant == this)
+       {
+           ap.tenant = null;
+       }
+   }
+    
+    for(var i = 0; i < manager.tenants_matrix.length; i++)
+   {
+       var tnt = manager.tenants_matrix[i];
+       
+       if(tnt == this)
+       {
+           this.sprite.destroy();
+           this.stressBar.destroy();
+           
+           //arraymove(manager.tenants_matrix,i,0);
+          // manager.tenants_matrix.shift();
+           //deleteProperties(this);
+       }
+       
+   }
+   
 };
 
 // Define the Boss constructor

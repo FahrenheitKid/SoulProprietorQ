@@ -180,4 +180,17 @@ AptManager.prototype.update = function(game)
     {
         this.tenants_matrix[i].update(game);
     }
+    
+    for (var i = 0; i < this.tenants_matrix.length; i++) 
+    {
+        if(this.tenants_matrix[i].stress >= 100)
+        {
+           // deleteProperties(this.tenants_matrix[i]);
+           this.tenants_matrix[i].destroy();
+            this.tenants_matrix[i] = {};
+            arraymove(this.tenants_matrix,i,0);
+            this.tenants_matrix.shift();
+            
+        }
+    }
 };
