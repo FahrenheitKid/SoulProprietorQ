@@ -14,7 +14,12 @@ var GameSCENE = function(game)
 	this.test = null;
 	this.rendertest = false;
 	this.player = null;
-	
+	this.addButtons = [];
+	this.tenantMenuOn = false;
+	this.fullscreenButton = null;
+	this.tenantMenuButton = null;
+	this.tenantMenuBg = null;
+
 	this.music =
 	{
 		normal: null,
@@ -26,6 +31,8 @@ GameSCENE.prototype = {
     
     create: function()
 	{
+		var tenantMenuBg_width = this.game.cache.getImage("tenantMenu_bg").width;
+  		var tenantMenuBg_height = this.game.cache.getImage("tenantMenu_bg").height;
 		this.initMusic(this.game);
 		this.music.normal.play();
 		//this.music.menu.play(true);
@@ -35,6 +42,9 @@ GameSCENE.prototype = {
 
 		this.player = new Player(this.game);
 		this.player.init(this.game, 100);
+
+		
+	     //var teste = this.game.add.sprite(100,100, "tenantMenu_Bg");
 		//background sprite
 		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
@@ -56,8 +66,17 @@ GameSCENE.prototype = {
 	    // Maintain aspect ratio
 	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
-	    var fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
-		fullscreenButton.fixedToCamera = true;
+	     this.fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
+	     this.tenantMenuButton = this.game.add.button(30, 30, "tenantMenu_button" ,this.toggleTenantMenu ,this);
+	     //this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
+
+	    
+	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_Bg");
+	     //this.tenantMenuBg.fixedToCamera = true;
+
+	     //this.tenantMenuBg = 
+		this.fullscreenButton.fixedToCamera = true;
+		this.tenantMenuButton.fixedToCamera = true; 
 	},
 	
 	update: function()
@@ -69,7 +88,7 @@ GameSCENE.prototype = {
 	{
 		if(this.rendertest === false)
 		{
-		this.game.debug.text("Debug " + this.pAptManager.tenants_matrix.length, 30, 30);
+		this.game.debug.text("Debug " + this.tenantMenuBg.x, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
@@ -88,6 +107,36 @@ GameSCENE.prototype = {
 	    {
 	        this.game.scale.startFullScreen(false);
 		}
+	},
+
+	toggleTenantMenu: function()
+	{
+
+			if(this.tenantMenuOn === false)
+			{
+					this.tenantMenuOn = true;
+					this.game.add.tween(this.tenantMenuBg).to(
+          {
+            x: 0,
+           // y: 0
+          }, 500, "Back.easeOut", true, 100);
+
+			}
+
+			else
+			{
+
+				this.game.add.tween(this.tenantMenuBg).to(
+          {
+            x: 0,
+           // y: 0
+          }, 500, "Back.easeOut", true, 100);
+
+
+					this.tenantMenuOn = false;
+			}
+
+
 	},
 
 	initMusic: function(game)

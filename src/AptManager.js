@@ -187,6 +187,7 @@ AptManager.prototype.update = function(game)
         {
            // deleteProperties(this.tenants_matrix[i]);
            this.tenants_matrix[i].destroy();
+           deleteProperties(this.tenants_matrix[i]);
             this.tenants_matrix[i] = {};
             arraymove(this.tenants_matrix,i,0);
             this.tenants_matrix.shift();

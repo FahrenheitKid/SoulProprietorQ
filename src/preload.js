@@ -39,6 +39,10 @@ preload.prototype = {
 		this.game.load.image("options_button", "assets/sprites/buttonOptions.png");
 		this.game.load.image("pause_button", "assets/sprites/pause.png");
 		this.game.load.image("showSets_button", "assets/sprites/set.png");
+		this.game.load.image("tenantMenu_bg", "assets/sprites/tenantMenu_bg.png");
+		this.game.load.image("tenantMenu_button", "assets/sprites/tenantMenu_button.png");
+
+
 
 		this.game.load.image("stressBar0", "assets/sprites/stressBar01.png");
 		this.game.load.image("stressBar1", "assets/sprites/stressBar01.png");
@@ -69,10 +73,10 @@ preload.prototype = {
 		this.game.load.spritesheet("rightdown_arrow_red","assets/sprites/rightdown_arrow_red_sheet.png", 284, 284);
 		this.game.load.spritesheet("up_arrow_red","assets/sprites/up_arrow_red_sheet.png", 200, 200);
 		this.game.load.spritesheet("down_arrow_red","assets/sprites/down_arrow_red_sheet.png", 200, 200);
-/*		
+		
 		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
-
+/*
 		this.game.load.image("model", "assets/sprites/char00.png");
 		this.game.load.image("model_set", "assets/sprites/model_set.png");
 		this.game.load.image("model_selected", "assets/sprites/char00selected.png");

@@ -55,6 +55,7 @@ var Tenant = function(game, roomx, roomy, typee, idd)
   this.stressBar = null;
   this.damage_force = 0;
   this.heal_force = 0;
+  this.icon = null;
   
   this.rainbow = new Rainbow();
   
@@ -131,10 +132,7 @@ Tenant.prototype.onOver = function(sprite, pointer)
   sprite.tint = this.selected_color;
   this.arrowsVisible(true);
 
-  if(this.stress <= 100)
-  {
-    this.stress += 10;
-  }
+  
 };
 
 Tenant.prototype.onOut = function(sprite, pointer)
@@ -809,6 +807,9 @@ Tenant.prototype.destroy = function()
        {
            this.sprite.destroy();
            this.stressBar.destroy();
+           this.damage_force = 0;
+           this.heal_force = 0;
+           this.income = 0;
            
            //arraymove(manager.tenants_matrix,i,0);
           // manager.tenants_matrix.shift();
