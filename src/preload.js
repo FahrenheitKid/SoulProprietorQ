@@ -41,7 +41,9 @@ preload.prototype = {
 		this.game.load.image("showSets_button", "assets/sprites/set.png");
 		this.game.load.image("tenantMenu_bg", "assets/sprites/tenantMenuBg.png");
 		this.game.load.image("tenantMenu_button", "assets/sprites/tenantMenu_button.png");
-
+		this.game.load.image("tenantMenu_button", "assets/sprites/tenantMenu_button.png");
+		this.game.load.image("tenantCard", "assets/sprites/tenant_card.png");
+		this.game.load.spritesheet("coin", "assets/sprites/coin.png", 48, 68);
 
 
 		this.game.load.image("stressBar0", "assets/sprites/stressBar01.png");

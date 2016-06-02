@@ -19,7 +19,8 @@ var GameSCENE = function(game)
 	this.fullscreenButton = null;
 	this.tenantMenuButton = null;
 	this.tenantMenuBg = null;
-
+	this.shopTypes = ['MODEL', 'SOLDIER'];
+	this.coin = null;
 	this.music =
 	{
 		normal: null,
@@ -73,6 +74,16 @@ GameSCENE.prototype = {
 	     this.tenantMenuButton.anchor.setTo(0.5,0.5);
 	     //this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
 
+	     this.coin = this.game.add.sprite(1200,30, "coin");
+	     this.coin.fixedToCamera = true;
+	     this.coin.animations.add('idle');
+	     this.coin.animations.play('idle',30,false);
+	     this.coin.events.onAnimationComplete.add(function () 
+	     	{	
+	     		 this.game.time.events.add(Phaser.Timer.SECOND * 3, function() {this.coin.animations.play('idle',30,false);}, this);
+	     		console.log('animation complete');
+	     	}, this);
+
 	    
 	     //this.tenantMenuBg.fixedToCamera = true;
 
@@ -113,13 +124,19 @@ GameSCENE.prototype = {
 
 	toggleTenantMenu: function()
 	{
+		this.tweenTenantMenu();
+			
 
-			var tweenA = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1.5, y: 1.5 }, 250, "Linear", true, 0);
+
+	},
+
+	tweenTenantMenu: function()
+	{
+		var tweenA = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1.5, y: 1.5 }, 250, "Linear", true, 0);
 			var tweenB = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1, y: 1 }, 250, "Linear", true, 100);
 
 			tweenA.chain(tweenB);
-			//tweenA.yoyo(true, 0);
-			tweenA.start();
+						tweenA.start();
 
 			if(this.tenantMenuOn === false)
 			{
@@ -137,6 +154,7 @@ GameSCENE.prototype = {
 
 			
 
+
 			}
 			else
 			{
@@ -152,7 +170,6 @@ GameSCENE.prototype = {
 					this.tenantMenuButton.tint = 0xffffff;
 					this.tenantMenuOn = false;
 			}
-
 
 	},
 
