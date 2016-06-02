@@ -34,7 +34,7 @@ preload.prototype = {
 		this.game.load.image("tutorial_button", "assets/sprites/buttonTutorial.png");
 		this.game.load.image("try_again_button", "assets/sprites/buttonTryAgain.png");
 		this.game.load.image("menu_button", "assets/sprites/buttonMenu.png");
-		this.game.load.image("fullscreen_button", "assets/sprites/button_fullscreen.png");
+		this.game.load.image("fullscreen_button", "assets/sprites/button_fullscreen2.png");
 
 		this.game.load.image("options_button", "assets/sprites/buttonOptions.png");
 		this.game.load.image("pause_button", "assets/sprites/pause.png");

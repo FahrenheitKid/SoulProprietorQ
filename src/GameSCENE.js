@@ -21,6 +21,7 @@ var GameSCENE = function(game)
 	this.tenantMenuBg = null;
 	this.shopTypes = ['MODEL', 'SOLDIER'];
 	this.coin = null;
+	this.moneyText = null;
 	this.music =
 	{
 		normal: null,
@@ -32,6 +33,11 @@ GameSCENE.prototype = {
     
     create: function()
 	{
+
+		var style = { font: "45px Arial", fill: "#ffffff", align: "center" };
+
+    	
+
 		var tenantMenuBg_width = this.game.cache.getImage("tenantMenu_bg").width;
   		var tenantMenuBg_height = this.game.cache.getImage("tenantMenu_bg").height;
 		this.initMusic(this.game);
@@ -43,6 +49,9 @@ GameSCENE.prototype = {
 
 		this.player = new Player(this.game);
 		this.player.init(this.game, 100);
+
+		
+
 
 		
 	     //var teste = this.game.add.sprite(100,100, "tenantMenu_Bg");
@@ -69,32 +78,64 @@ GameSCENE.prototype = {
 	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_bg");
 	    
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
-	     this.fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
-	     this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button" ,this.toggleTenantMenu ,this);
-	     this.tenantMenuButton.anchor.setTo(0.5,0.5);
-	     //this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
+	    /*
+	     this.fullscreenButton = this.game.add.button(1440 - 32 - 10, 10 + 32 + 16, "fullscreen_button", this.gofull, this);
+	     this.fullscreenButton.anchor.setTo(0.5,0.5);
+	     this.fullscreenButton.fixedToCamera = true;
 
-	     this.coin = this.game.add.sprite(1200,30, "coin");
-	     this.coin.fixedToCamera = true;
-	     this.coin.animations.add('idle');
-	     this.coin.animations.play('idle',30,false);
-	     this.coin.events.onAnimationComplete.add(function () 
-	     	{	
-	     		 this.game.time.events.add(Phaser.Timer.SECOND * 3, function() {this.coin.animations.play('idle',30,false);}, this);
-	     		console.log('animation complete');
-	     	}, this);
+	     //this.fullscreenButton.events.onInputOver.add(this.basicButtonOver(this.fullscreenButton),this);
 
-	    
-	     //this.tenantMenuBg.fixedToCamera = true;
 
-	     //this.tenantMenuBg = 
-		this.fullscreenButton.fixedToCamera = true;
-		this.tenantMenuButton.fixedToCamera = true; 
+		this.fullscreenButton.events.onInputOver.add(function()
+		{
+			this.basicButtonOver(this.fullscreenButton);
+
+		}, this);
+
+		this.fullscreenButton.events.onInputOut.add(function()
+		{
+			this.basicButtonOut(this.fullscreenButton);
+
+		}, this);
+
+*/
+		this.createButton(this.fullscreenButton, "fullscreen_button", 1440 - 32 - 30, 10 + 32 + 16, this.gofull, 0.5, 0.5, true,true);
+		//this.createButton(this.tenantMenuButton, "tenantMenu_button", 60, 60, this.toggleTenantMenu, 0.5, 0.5, false,false);
+		
+		this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button", this.toggleTenantMenu, this);
+		this.tenantMenuButton.anchor.setTo(0.5, 0.5);
+		this.tenantMenuButton.fixedToCamera = true;
+
+		//this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
+
+		this.coin = this.game.add.sprite(1150, 30, "coin");
+		this.coin.fixedToCamera = true;
+		this.coin.animations.add('idle');
+		this.coin.animations.play('idle', 30, false);
+		this.coin.events.onAnimationComplete.add(function()
+		{
+			this.game.time.events.add(Phaser.Timer.SECOND * 3, function()
+			{
+				this.coin.animations.play('idle', 30, false);
+			}, this);
+			console.log('animation complete');
+		}, this);
+
+
+		this.moneyText = this.game.add.text(48 + 20, 0 + 10, "", style);
+		//this.moneyText.fixedToCamera = true;
+		this.coin.addChild(this.moneyText);
+		//this.tenantMenuBg.fixedToCamera = true;
+
+		//this.tenantMenuBg = 
+		//this.fullscreenButton.fixedToCamera = true;
+		
 	},
 	
 	update: function()
 	{
 	 	this.pAptManager.update(this.game);
+	 	this.moneyText.setText("x " + this.player.money);
 	},
 	
 	render: function()
@@ -130,6 +171,58 @@ GameSCENE.prototype = {
 
 	},
 
+	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut)
+	{
+		 button_variable = this.game.add.button(x, y, sprite_key,click_func, this);
+	     button_variable.anchor.setTo(anchorx,anchory);
+	     button_variable.fixedToCamera = true;
+
+	     //this.fullscreenButton.events.onInputOver.add(this.basicButtonOver(this.fullscreenButton),this);
+
+
+		if (setBasicOver === true)
+		{
+			button_variable.events.onInputOver.add(function()
+			{
+				this.basicButtonOver(button_variable);
+
+			}, this);
+		}
+
+		if (setBasicOut === true)
+		{
+			button_variable.events.onInputOut.add(function()
+			{
+				this.basicButtonOut(button_variable);
+
+			}, this);
+
+		}
+
+	},
+
+	basicButtonOver: function(button)
+	{
+
+		var tweenA = this.game.add.tween(button.scale).to({ x: 1.5, y: 1.5 }, 250, "Circ", true, 0);
+			
+
+			
+						tweenA.start();
+
+	},
+
+	basicButtonOut: function(button)
+	{
+
+		
+			var tweenB = this.game.add.tween(button.scale).to({ x: 1, y: 1 }, 250, "Circ", true, 100);
+
+			
+						tweenB.start();
+
+	},
+
 	tweenTenantMenu: function()
 	{
 		var tweenA = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1.5, y: 1.5 }, 250, "Linear", true, 0);
@@ -141,6 +234,7 @@ GameSCENE.prototype = {
 			if(this.tenantMenuOn === false)
 			{
 					this.tenantMenuOn = true;
+					//tweenTint(this.tenantMenuButton, 0xFFFFFF, 0x000000, 250);
 					this.tenantMenuButton.tint ='black';
 					//tweenA.start();
 					//this.game.add.tween(this.tenantMenuButton.scale).to({ x: 2, y: 2 }, 500, "Back.easeOut", true, 500);
