@@ -160,7 +160,7 @@ AptManager.prototype.AddTenant = function(game, playerr, tenant_id, tenant_type,
         if (this.apts.getChildAt(i).posx == roomx && this.apts.getChildAt(i).posy == roomy)
             spriteref = this.apts.getChildAt(i);
     }
-    tnt.init(game, spriteref, playerr, this);
+    tnt.init(game, spriteref, playerr, this, false);
 
     this.apts.forEach(function(ap) 
     {

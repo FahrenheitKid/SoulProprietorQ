@@ -89,7 +89,7 @@ Tenant.prototype.say = function(event)
   // emite som?
 };
 
-Tenant.prototype.init = function(game, ap_sprite, player, aptManager)
+Tenant.prototype.init = function(game, ap_sprite, player, aptManager, onlyVisual)
 {
   this.ownAp_reference = null;
   this.ownAp_reference = ap_sprite;
@@ -109,6 +109,16 @@ Tenant.prototype.init = function(game, ap_sprite, player, aptManager)
   this.initBehavior(game,ap_sprite);
   this.damage_force = 3;
   this.heal_force = 2;
+  
+  if(onlyVisual === true)
+  {
+    this.damage_force = 3;
+    this.heal_force = 2;
+    this.price = 0;
+    this.stressBar.visible = false;
+    
+  }
+  
 };
 
 Tenant.prototype.update = function(game)

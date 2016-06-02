@@ -247,13 +247,76 @@ GameSCENE.prototype = {
           }, 500, "Circ", true, 100);
 
 			
+			for(var i = 0; i < this.shopTypes.length; i++)
+			{
+				
+				if(this.shopTypes[i] == 'MODEL')
+				{
+					var button;
+					button = this.game.add.button(0,227, "tenantCardTest",function(){}, this);
+					
+					
+					
+					var color = randomColor({hue: "green", luminosity: "light"});
+					button.tint = parseInt(color.substr(1), 16);
+				
+					
+					
+					
+					var buttonTenant = new Tenant(this.game, 0,0, 'MODEL', 0);
+					buttonTenant.init(this.game, this.pAptManager.apts.children[0],this.player,this.pAptManager, true);
+					buttonTenant.sprite.x = button.x + 485 + 200;
+					buttonTenant.sprite.y = 0 + button.y / 2;
+					buttonTenant.arrowsVisible(true);
+					button.addChild(buttonTenant.sprite);
+					
+					button.children[0].visible = false;
+					
+					
+					button.events.onInputOver.add(function(){
+						
+						button.children[0].visible = true;
+						//var buttonTenant = this.game.add
+						
+					}, this);
+					
+					
+					
+					button.events.onInputOut.add(function(){
+						
+						button.children[0].visible = false;
+						//var buttonTenant = this.game.add
+						
+					}, this);
+					
+						button.events.onInputDown.add(function(){
+						
+						this.hideTenantMenu();
+						
+						//button.children[0].x = this.game.input.x;
+						//button.children[0].y = this.game.input.y;
+						
+					}, this)
+	    			//button.anchor.setTo(0.5,0.5);
+					this.tenantMenuBg.addChild(button);
+					
+				}
+			}
 
 
 			}
 			else
 			{
+				this.hideTenantMenu();
+				
+			}
 
-				this.game.add.tween(this.tenantMenuBg).to(
+	},
+	
+	
+	hideTenantMenu:  function()
+	{
+		this.game.add.tween(this.tenantMenuBg).to(
           {
             x:  0 - this.tenantMenuBg.width,
            // y: 0
@@ -263,10 +326,10 @@ GameSCENE.prototype = {
 				
 					this.tenantMenuButton.tint = 0xffffff;
 					this.tenantMenuOn = false;
-			}
-
+		
 	},
-
+	
+	
 	initMusic: function(game)
 	{
 		this.music.normal = game.add.audio("hanging");
