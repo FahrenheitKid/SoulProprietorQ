@@ -20,6 +20,7 @@ var GameSCENE = function(game)
 	this.tenantMenuButton = null;
 	this.tenantMenuBg = null;
 	this.shopTypes = ['MODEL', 'SOLDIER'];
+	this.shopButtonsList = [];
 	this.coin = null;
 	this.moneyText = null;
 	this.music =
@@ -77,34 +78,17 @@ GameSCENE.prototype = {
 	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_bg");
 	    
+	    this.tenantMenuBg.scale.x = 0.5;
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
-	    /*
-	     this.fullscreenButton = this.game.add.button(1440 - 32 - 10, 10 + 32 + 16, "fullscreen_button", this.gofull, this);
-	     this.fullscreenButton.anchor.setTo(0.5,0.5);
-	     this.fullscreenButton.fixedToCamera = true;
-
-	     //this.fullscreenButton.events.onInputOver.add(this.basicButtonOver(this.fullscreenButton),this);
-
-
-		this.fullscreenButton.events.onInputOver.add(function()
-		{
-			this.basicButtonOver(this.fullscreenButton);
-
-		}, this);
-
-		this.fullscreenButton.events.onInputOut.add(function()
-		{
-			this.basicButtonOut(this.fullscreenButton);
-
-		}, this);
-
-*/
+	    
 		this.createButton(this.fullscreenButton, "fullscreen_button", 1440 - 32 - 30, 10 + 32 + 16, this.gofull, 0.5, 0.5, true,true);
 		//this.createButton(this.tenantMenuButton, "tenantMenu_button", 60, 60, this.toggleTenantMenu, 0.5, 0.5, false,false);
 		
 		this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button", this.toggleTenantMenu, this);
 		this.tenantMenuButton.anchor.setTo(0.5, 0.5);
 		this.tenantMenuButton.fixedToCamera = true;
+		
+		this.initShop();
 
 		//this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
 
@@ -247,7 +231,38 @@ GameSCENE.prototype = {
           }, 500, "Circ", true, 100);
 
 			
-			for(var i = 0; i < this.shopTypes.length; i++)
+			
+			
+
+			}
+			else
+			{
+				
+				this.hideTenantMenu();
+				
+			}
+
+	},
+	
+	
+	hideTenantMenu:  function()
+	{
+		this.game.add.tween(this.tenantMenuBg).to(
+          {
+            x:  0 - this.tenantMenuBg.width,
+           // y: 0
+          }, 500, "Circ", true, 100);
+
+				
+				
+					this.tenantMenuButton.tint = 0xffffff;
+					this.tenantMenuOn = false;
+		
+	},
+	
+	initShop: function()
+	{
+		for(var i = 0; i < this.shopTypes.length; i++)
 			{
 				
 				if(this.shopTypes[i] == 'MODEL')
@@ -267,6 +282,9 @@ GameSCENE.prototype = {
 					buttonTenant.init(this.game, this.pAptManager.apts.children[0],this.player,this.pAptManager, true);
 					buttonTenant.sprite.x = button.x + 485 + 200;
 					buttonTenant.sprite.y = 0 + button.y / 2;
+					
+					var init_x = button.x + 485 + 200;
+					var init_y = 0 + button.y / 2;
 					buttonTenant.arrowsVisible(true);
 					button.addChild(buttonTenant.sprite);
 					
@@ -293,42 +311,29 @@ GameSCENE.prototype = {
 						
 						this.hideTenantMenu();
 						
-						//button.children[0].x = this.game.input.x;
-						//button.children[0].y = this.game.input.y;
+						//button.removeChildAt(0);
+						//buttonTenant.sprite.x = this.game.input.x;
+						//buttonTenant.sprite.y = this.game.input.y;
 						
 					}, this)
 	    			//button.anchor.setTo(0.5,0.5);
-					this.tenantMenuBg.addChild(button);
 					
+					
+					this.shopButtonsList.push(button);
 				}
+				
 			}
-
-
-			}
-			else
+			
+			for(var i = 0; i < this.shopButtonsList.length; i++)
 			{
-				this.hideTenantMenu();
-				
+				var hold = this.shopButtonsList[i];
+				hold.scale.y = this.tenantMenuBg.scale.x;
+				this.tenantMenuBg.addChild(hold);
 			}
-
-	},
-	
-	
-	hideTenantMenu:  function()
-	{
-		this.game.add.tween(this.tenantMenuBg).to(
-          {
-            x:  0 - this.tenantMenuBg.width,
-           // y: 0
-          }, 500, "Circ", true, 100);
-
-				
-				
-					this.tenantMenuButton.tint = 0xffffff;
-					this.tenantMenuOn = false;
+			
+			
 		
 	},
-	
 	
 	initMusic: function(game)
 	{
