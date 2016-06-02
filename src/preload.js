@@ -39,7 +39,7 @@ preload.prototype = {
 		this.game.load.image("options_button", "assets/sprites/buttonOptions.png");
 		this.game.load.image("pause_button", "assets/sprites/pause.png");
 		this.game.load.image("showSets_button", "assets/sprites/set.png");
-		this.game.load.image("tenantMenu_bg", "assets/sprites/tenantMenu_bg.png");
+		this.game.load.image("tenantMenu_bg", "assets/sprites/tenantMenuBg.png");
 		this.game.load.image("tenantMenu_button", "assets/sprites/tenantMenu_button.png");
 
 

@@ -65,13 +65,15 @@ GameSCENE.prototype = {
 	    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
 	    // Maintain aspect ratio
 	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_bg");
+	    
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
 	     this.fullscreenButton = this.game.add.button(1350, 10, "fullscreen_button", this.gofull, this);
-	     this.tenantMenuButton = this.game.add.button(30, 30, "tenantMenu_button" ,this.toggleTenantMenu ,this);
+	     this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button" ,this.toggleTenantMenu ,this);
+	     this.tenantMenuButton.anchor.setTo(0.5,0.5);
 	     //this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
 
 	    
-	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_Bg");
 	     //this.tenantMenuBg.fixedToCamera = true;
 
 	     //this.tenantMenuBg = 
@@ -112,27 +114,42 @@ GameSCENE.prototype = {
 	toggleTenantMenu: function()
 	{
 
+			var tweenA = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1.5, y: 1.5 }, 250, "Linear", true, 0);
+			var tweenB = this.game.add.tween(this.tenantMenuButton.scale).to({ x: 1, y: 1 }, 250, "Linear", true, 100);
+
+			tweenA.chain(tweenB);
+			//tweenA.yoyo(true, 0);
+			tweenA.start();
+
 			if(this.tenantMenuOn === false)
 			{
 					this.tenantMenuOn = true;
+					this.tenantMenuButton.tint ='black';
+					//tweenA.start();
+					//this.game.add.tween(this.tenantMenuButton.scale).to({ x: 2, y: 2 }, 500, "Back.easeOut", true, 500);
+					//tweenA.start();
+					//this.tenantMenuButton.moveUp();
 					this.game.add.tween(this.tenantMenuBg).to(
           {
             x: 0,
            // y: 0
-          }, 500, "Back.easeOut", true, 100);
+          }, 500, "Circ", true, 100);
+
+			
 
 			}
-
 			else
 			{
 
 				this.game.add.tween(this.tenantMenuBg).to(
           {
-            x: 0,
+            x:  0 - this.tenantMenuBg.width,
            // y: 0
-          }, 500, "Back.easeOut", true, 100);
+          }, 500, "Circ", true, 100);
 
-
+				
+				
+					this.tenantMenuButton.tint = 0xffffff;
 					this.tenantMenuOn = false;
 			}
 
