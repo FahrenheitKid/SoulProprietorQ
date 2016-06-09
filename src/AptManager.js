@@ -58,7 +58,9 @@ AptManager.prototype.getIncome = function()
         //tnt.sprite.tint = "black";
     }
     
-    this.player_reference.money += amount;
+    //this.player_reference.money += amount;
+    //this.player_reference.changeMoney(amount);
+    return amount;
     //.player_reference.money = amount;
 };
 

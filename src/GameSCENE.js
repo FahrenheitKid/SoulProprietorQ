@@ -131,8 +131,10 @@ GameSCENE.prototype = {
 		
 		this.incomeTimer = this.game.time.create(false);
 		
-		this.incomeTimer.loop(this.monthTimerSeconds, function(){
-			this.pAptManager.getIncome();
+		this.incomeTimer.loop(this.monthTimerSeconds * this.timerScale, function(){
+			//this.player.changeMoney(this,this.pAptManager.getIncome(),this.moneyText);
+			this.player.money+= this.pAptManager.getIncome();
+			this.sweetValueTextChange(this.moneyText,this.pAptManager.getIncome(),true);
 			
 		}, this);
 		
@@ -403,5 +405,36 @@ GameSCENE.prototype = {
 		this.music.normal = game.add.audio("hanging");
 		this.music.normal.loop = true;
 		this.music.normal.volume = 0.65;
+	},
+	
+	sweetValueTextChange: function(text, value, plus_or_minus)
+	{
+		 var style = { font: "45px Tahoma", fill: "#ffffff", align: "center" };
+		var sweetText = this.game.add.text(0, 0, "65958916", style);
+		//sweetText.fixedToCamera = true;
+		this.moneyText.addChild(sweetText);
+		var tweenvalue = 100;
+    
+    if(plus_or_minus)
+    {
+    sweetText.setText("+" + value);
+    style.fill = "#0be57d";
+    sweetText.setStyle(style);
+    tweenvalue = 100;
+    }
+    else
+    {
+    sweetText.setText("-" + value);
+    style.fill = "#ff014e";
+    sweetText.setStyle(style);
+    tweenvalue = -100;
+    }
+    
+    	var tweenA = this.game.add.tween(sweetText).to({ y: sweetText.y + tweenvalue, alpha: 0}, 7000, "Circ", true, 0);
+			
+
+			
+						tweenA.start();
+		
 	}
 };
