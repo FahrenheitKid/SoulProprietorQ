@@ -57,6 +57,9 @@ AptManager.prototype.getIncome = function()
         amount += tnt.income;
         //tnt.sprite.tint = "black";
     }
+    
+    this.player_reference.money += amount;
+    //.player_reference.money = amount;
 };
 
 AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init) 
@@ -195,3 +198,4 @@ AptManager.prototype.update = function(game)
         }
     }
 };
+

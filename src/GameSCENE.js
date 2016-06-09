@@ -23,6 +23,18 @@ var GameSCENE = function(game)
 	this.shopButtonsList = [];
 	this.coin = null;
 	this.moneyText = null;
+	this.yearText = null;
+	this.monthText = null;
+	this.dayText = null;
+	this.dayTimer = null;
+	this.dayTimerSeconds = null;
+	this.monthTimerSeconds = null;
+	this.incomeTimer = null;
+	
+	this.dayCount = 0;
+	this.monthCount = 0;
+	this.yearCount = 0;
+	this.timerScale = 1.0;
 	this.music =
 	{
 		normal: null,
@@ -107,6 +119,56 @@ GameSCENE.prototype = {
 
 
 		this.moneyText = this.game.add.text(48 + 20, 0 + 10, "", style);
+		
+		this.yearText = this.game.add.text(500, 0 + 10, "Y: ", style);
+		this.monthText = this.game.add.text(100, 0 + 0, "M: ", style);
+		this.dayText = this.game.add.text(100, 0 + 0, "D: ", style);
+		
+		
+		this.dayTimer = this.game.time.create(false);
+		this.monthTimerSeconds = Phaser.Timer.SECOND * 20;
+		this.dayTimerSeconds = this.monthTimerSeconds / 30;
+		
+		this.incomeTimer = this.game.time.create(false);
+		
+		this.incomeTimer.loop(this.monthTimerSeconds, function(){
+			this.pAptManager.getIncome();
+			
+		}, this);
+		
+		this.incomeTimer.start();
+		
+    	this.dayTimer.loop(this.dayTimerSeconds * this.timerScale, function(){
+    			
+    			if(this.dayCount > 29)
+    			{
+    				this.dayCount = 0;
+    				this.monthCount++;
+    				
+    				if(this.monthCount > 11)
+    				{
+    					this.monthCount = 0;
+    					this.yearCount++;
+    					
+    					
+    				}
+    			}
+    			
+    			this.dayCount++;
+    			this.dayText.setText("D: " + this.dayCount);
+    			this.monthText.setText("M: " + this.monthCount);
+    			this.yearText.setText("Y: " + this.yearCount);
+    			
+    		
+    	}, this);
+    	this.dayTimer.start();
+		
+		this.yearText.fixedToCamera = true;
+		//this.monthText.fixedToCamera = true;
+		//this.dayText.fixedToCamera = true;
+		
+		this.yearText.addChild(this.monthText);
+		this.monthText.addChild(this.dayText);
 		//this.moneyText.fixedToCamera = true;
 		this.coin.addChild(this.moneyText);
 		//this.tenantMenuBg.fixedToCamera = true;
@@ -119,6 +181,7 @@ GameSCENE.prototype = {
 	update: function()
 	{
 	 	this.pAptManager.update(this.game);
+	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
 	 	this.moneyText.setText("x " + this.player.money);
 	},
 	
