@@ -110,15 +110,26 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 
     function onInputDown(ap, pointer) 
     {
-        if (ap.tenant === null) {
+        if (ap.tenant === null)
+        {
             this.room_clicked_x = ap.posx;
             this.room_clicked_y = ap.posy;
 
-            if (ap.tint == 0xffffff) {
+            if (ap.tint == 0xffffff) 
+            {
+                //untinta diferente apt
+                for(var i = 0; i < this.apts.children.length; i++)
+                {
+                    if(this.apts.children[i].tint == 0xFFFF66)
+                    {
+                        this.apts.children[i].tint = 0xffffff;
+                    }
+                }
                 ap.tint = 0xFFFF66;
                 this.room_clicked = true;
             }
-            else if (ap.tint == 0xFFFF66) {
+            else if (ap.tint == 0xFFFF66) 
+            {
                 ap.tint = 0xffffff;
                 this.room_clicked = false;
             }
