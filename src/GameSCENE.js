@@ -83,7 +83,7 @@ GameSCENE.prototype = {
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        this.pAptManager.AddTenant(this.game, this.player, 2, 'SOLDIER', 0, 0);
+        this.pAptManager.AddTenant(this.game, this.player, 2, 'SOLDIER', 0, 1);
         this.pAptManager.AddTenant(this.game, this.player, 2, 'MODEL', 1, 1);
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
@@ -191,7 +191,10 @@ GameSCENE.prototype = {
 	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
 	 	this.moneyText.setText("x " + this.player.money);
 
+		if(this.pAptManager.apts.children[0].tenant !== null)
+	 	this.varToTest = this.pAptManager.apts.children[0].tenant.type;
 	 	this.tenantToAddCollision(this.tenantToAdd);
+
 	 	
 	},
 	
@@ -467,6 +470,8 @@ GameSCENE.prototype = {
 
 	tenantToAddCollision: function(tenant)
 	{
+
+
 		if(tenant !== null)
 	 	{
 	 		if(this.game.input.activePointer.isDown)
@@ -479,12 +484,56 @@ GameSCENE.prototype = {
 	 		else
 	 		{
 	 			
+	 			
+
+				for (var i = 0; i < this.pAptManager.apts.children.length; i++)
+				{
+					var app = this.pAptManager.apts.children[i];
+					var afford = this.player.money - tenant.price;
+					//faz overlap com todos os aps
+
+					this.game.physics.arcade.enable(app);
+					this.game.physics.arcade.enable(tenant.sprite);
+
+
+					
+
+					
+					
+
+					if (app.getBounds().contains(this.game.input.activePointer.x, this.game.input.activePointer.y))
+					{
+							
+						// caso ap esteja vago e tenha dinheiro para mover, mova
+						if (app.tenant === null && afford >= 0)
+						{
+							
+							this.pAptManager.AddTenant(this.game,this.player,2,tenant.type,app.posx, app.posy);
+							
+
+							//this.player_reference.money = afford;
+							//this.room_x = app.posx;
+							//this.room_y = app.posy;
+							//app.tenant = this;
+							//this.ownAp_reference = app;
+
+							
+							
+						}
+					}
+				}
+
+				//if(tenant.sprite)
+
+	 			
 	 			tenant.sprite.visible = false;
 	 			tenant.sprite.destroy();
 	 			tenant.stressBar.destroy();
 	 			//this.tenantToAdd.sprite.parent.destroy();
 	 			tenant = null;
 	 			this.tenantToAdd = null;
+	 				
+	 		
 
 
 	 			

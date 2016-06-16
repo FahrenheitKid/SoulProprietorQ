@@ -116,7 +116,7 @@ Tenant.prototype.init = function(game, ap_sprite, player, aptManager, onlyVisual
   {
     this.damage_force = 0;
     this.heal_force = 0;
-    this.price = 0;
+    //this.price = 0;
     this.stressBar.visible = false;
 
     
