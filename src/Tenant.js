@@ -67,6 +67,7 @@ var Tenant = function(game, roomx, roomy, typee, idd)
   {
     pickup: [],
   };
+  this.onlyVisual = false;
 };
 
 // Add a couple of methods to Tenant.prototype
@@ -95,6 +96,7 @@ Tenant.prototype.init = function(game, ap_sprite, player, aptManager, onlyVisual
   this.ownAp_reference = ap_sprite;
   this.player_reference = player;
   this.aptManager_reference = aptManager;
+  this.onlyVisual = onlyVisual;
   //this.type = type;
   /*
   this.selected_color = randomColor(
@@ -112,10 +114,11 @@ Tenant.prototype.init = function(game, ap_sprite, player, aptManager, onlyVisual
   
   if(onlyVisual === true)
   {
-    this.damage_force = 3;
-    this.heal_force = 2;
+    this.damage_force = 0;
+    this.heal_force = 0;
     this.price = 0;
     this.stressBar.visible = false;
+
     
   }
   
@@ -174,7 +177,7 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
   var ap = this.ownAp_reference;
   var movecost = 10;
   //caso n esteja no proprio ap
-  if (!Phaser.Rectangle.containsRect(sprite, ap))
+  if (!Phaser.Rectangle.containsRect(sprite, ap) && this.onlyVisual === false)
   {
     //this.camera.follow(sprite);
     //text.setText("entrou dropzone: " + dragPosition.x);

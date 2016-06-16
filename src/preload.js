@@ -17,6 +17,7 @@ preload.prototype = {
 		this.game.load.image("background_gameover", "assets/sprites/backgroundGameOver.jpg");
 		this.game.load.image("play", "assets/play.png");
 		this.game.load.image("higher", "assets/higher.png");
+		this.game.load.image("emptyPixel", "assets/sprites/emptyPixel.png");
 
 		this.game.load.audio("hanging", "assets/music/hanging.mp3");
 

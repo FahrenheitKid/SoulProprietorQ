@@ -40,6 +40,9 @@ var GameSCENE = function(game)
 		normal: null,
 		danger: null,
 	};
+	this.varToTest = null;
+	this.tenantToAdd = null;
+	this.tenantToAddParent = null;
 };
 
 GameSCENE.prototype = {
@@ -177,6 +180,8 @@ GameSCENE.prototype = {
 
 		//this.tenantMenuBg = 
 		//this.fullscreenButton.fixedToCamera = true;
+
+				
 		
 	},
 	
@@ -185,13 +190,16 @@ GameSCENE.prototype = {
 	 	this.pAptManager.update(this.game);
 	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
 	 	this.moneyText.setText("x " + this.player.money);
+
+	 	this.tenantToAddCollision(this.tenantToAdd);
+	 	
 	},
 	
 	render: function()
 	{
 		if(this.rendertest === false)
 		{
-		this.game.debug.text("Debug " + this.tenantMenuBg.x, 30, 30);
+		this.game.debug.text("Debug " + this.varToTest, 30, 30);
 		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
 		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
 		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
@@ -376,9 +384,28 @@ GameSCENE.prototype = {
 						
 						this.hideTenantMenu();
 						
+					var tenantToAdd = new Tenant(this.game, 0,0, 'MODEL', 0);
+					tenantToAdd.init(this.game, this.pAptManager.apts.children[0],this.player,this.pAptManager, true);
+					tenantToAdd.sprite.x = 0;
+					tenantToAdd.sprite.y = 0 ;
+					//tenantToAdd.fixedToCamera = true;
+					tenantToAdd.arrowsVisible(true);
+					//this.game.world.bringToTop(tenantToAdd.sprite);
+					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
+					
+					//this.coin.addChild(buttonTenant.sprite);
+					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
+					holdpixel.fixedToCamera = true;
+					holdpixel.addChild(tenantToAdd.sprite);
+					//tenantToAdd.sprite.scale.x = 0.5;
+					//tenantToAdd.sprite.scale.y = 0.5;
+					
+					this.tenantToAdd = tenantToAdd;
+					this.tenantToAddParent = holdpixel;
+					this.varToTest = this.tenantToAddParent.x;
 						//button.removeChildAt(0);
-						//buttonTenant.sprite.x = this.game.input.x;
-						//buttonTenant.sprite.y = this.game.input.y;
+						//holdpixel.sprite.x = this.game.input.x;
+						//holdpixel.sprite.y = this.game.input.y;
 						
 					}, this)
 	    			//button.anchor.setTo(0.5,0.5);
@@ -436,5 +463,32 @@ GameSCENE.prototype = {
 			
 						tweenA.start();
 		
+	},
+
+	tenantToAddCollision: function(tenant)
+	{
+		if(tenant !== null)
+	 	{
+	 		if(this.game.input.activePointer.isDown)
+	 		{
+	 			//this.tenantToAdd.sprite.x = this.game.input.x;
+	 			//this.tenantToAdd.sprite.y = this.game.input.y;
+	 			tenant.sprite.x = this.game.input.activePointer.x;
+	 			tenant.sprite.y = this.game.input.activePointer.y;
+	 		}
+	 		else
+	 		{
+	 			
+	 			tenant.sprite.visible = false;
+	 			tenant.sprite.destroy();
+	 			tenant.stressBar.destroy();
+	 			//this.tenantToAdd.sprite.parent.destroy();
+	 			tenant = null;
+	 			this.tenantToAdd = null;
+
+
+	 			
+	 		}
+	 	}
 	}
 };
