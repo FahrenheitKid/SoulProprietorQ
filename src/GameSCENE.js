@@ -43,6 +43,7 @@ var GameSCENE = function(game)
 	this.varToTest = null;
 	this.tenantToAdd = null;
 	this.tenantToAddParent = null;
+	this.buttonFontStyle = null;
 };
 
 GameSCENE.prototype = {
@@ -52,7 +53,7 @@ GameSCENE.prototype = {
 
 		var style = { font: "45px Arial", fill: "#ffffff", align: "center" };
 
-    	
+    	this.buttonFontStyle = { font: "70px Helvetica", fill: "#000000", align: "center" };
 
 		var tenantMenuBg_width = this.game.cache.getImage("tenantMenu_bg").width;
   		var tenantMenuBg_height = this.game.cache.getImage("tenantMenu_bg").height;
@@ -344,9 +345,23 @@ GameSCENE.prototype = {
 				if(this.shopTypes[i] == 'MODEL')
 				{
 					var button;
-					button = this.game.add.button(0,227, "tenantCardTest",function(){}, this);
+					button = this.game.add.button(0,227, "model_card",function(){}, this);
+					var char_icon = this.game.add.sprite(27,75,"model_icon");
+
 					
-					
+
+					var coin = this.game.add.sprite(button.width - 50, 5, "coin");
+		//coin.fixedToCamera = true;
+		coin.animations.add('idle');
+		coin.animations.play('idle', 30, false);
+		coin.events.onAnimationComplete.add(function()
+		{
+			this.game.time.events.add(Phaser.Timer.SECOND * 3, function()
+			{
+				coin.animations.play('idle', 30, false);
+			}, this);
+			//console.log('animation complete');
+		}, this);
 					
 					var color = randomColor({hue: "green", luminosity: "light"});
 					button.tint = parseInt(color.substr(1), 16);
@@ -363,7 +378,9 @@ GameSCENE.prototype = {
 					var init_y = 0 + button.y / 2;
 					buttonTenant.arrowsVisible(true);
 					button.addChild(buttonTenant.sprite);
-					
+					button.addChild(char_icon);
+					button.addChild(coin);
+
 					button.children[0].visible = false;
 					
 					
@@ -400,8 +417,8 @@ GameSCENE.prototype = {
 					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
 					holdpixel.fixedToCamera = true;
 					holdpixel.addChild(tenantToAdd.sprite);
-					//tenantToAdd.sprite.scale.x = 0.5;
-					//tenantToAdd.sprite.scale.y = 0.5;
+					tenantToAdd.sprite.scale.x = 0.5;
+					tenantToAdd.sprite.scale.y = 0.5;
 					
 					this.tenantToAdd = tenantToAdd;
 					this.tenantToAddParent = holdpixel;

@@ -10,6 +10,8 @@ preload.prototype = {
 		loadingBar.anchor.setTo(0.5, 0.5);
 		this.load.setPreloadSprite(loadingBar);
 		this.game.load.image("model", "assets/sprites/char00.png");
+		this.game.load.image("model_icon", "assets/sprites/model_icon.png");
+		this.game.load.image("model_card", "assets/sprites/model_card.png");
 		this.game.load.image("gametitle", "assets/sprites/SoulProprietor.png");
 		this.game.load.image("gameover_title", "assets/sprites/gameover.png");
 		this.game.load.image("background", "assets/sprites/background.jpg");
@@ -18,6 +20,9 @@ preload.prototype = {
 		this.game.load.image("play", "assets/play.png");
 		this.game.load.image("higher", "assets/higher.png");
 		this.game.load.image("emptyPixel", "assets/sprites/emptyPixel.png");
+
+		//this.game.load.bitmapFont("green_screen_font", "assets/fonts/greenScreen.png", "/assets/fonts/greenScreen.xml");
+		this.game.load.bitmapFont("monaco_font", "assets/fonts/Monaco.png", "/assets/fonts/Monaco.xml");
 
 		this.game.load.audio("hanging", "assets/music/hanging.mp3");
 
@@ -58,7 +63,8 @@ preload.prototype = {
 		this.game.load.image("soldier", "assets/sprites/soldier.png");
 		this.game.load.audio("soldier_quote_pickup01", "assets/sounds/soldier_quote01.mp3");
 		this.game.load.audio("soldier_quote_pickup02", "assets/sounds/soldier_quote02.mp3");
-
+		this.game.load.image("soldier_icon", "assets/sprites/soldier_icon.png");
+		this.game.load.image("soldier_card", "assets/sprites/soldier_card.png");
 		//setas tem 3 frames cada
 		this.game.load.spritesheet("left_arrow_green","assets/sprites/left_arrow_green_sheet.png", 200, 200);
 		this.game.load.spritesheet("leftup_arrow_green","assets/sprites/leftup_arrow_green_sheet.png", 284, 284);

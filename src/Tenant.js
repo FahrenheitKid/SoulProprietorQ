@@ -275,6 +275,12 @@ Tenant.prototype.initType = function(game, ap_sprite)
       // this.type = type;
       sprite_width = game.cache.getImage("soldier").width;
       sprite_height = game.cache.getImage("soldier").height;
+      //each 2 false +15 no custo, each 2 true + 25
+      //each 1 false + 7 no custo, each 1 true + 13
+
+      //each 2 false +9 no income each 2 true + 10
+      //each 1 false + 5 no income, each 1 true + 4
+      
       this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
       this.behavior.up = 'FALSE';
       this.behavior.upright = 'FALSE';
@@ -284,8 +290,8 @@ Tenant.prototype.initType = function(game, ap_sprite)
       this.behavior.downleft = 'VOID';
       this.behavior.left = 'VOID';
       
-      this.price = 30;
-      this.income = 75;
+      this.price = 22;
+      this.income = 16;
       this.stress = 50;
       // msm q ap so que com width e heights do sprite
       //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
@@ -325,8 +331,8 @@ Tenant.prototype.initType = function(game, ap_sprite)
       this.behavior.downleft = 'VOID';
       this.behavior.left = 'TRUE';
       
-      this.price = 30;
-      this.income = 75;
+      this.price = 32;
+      this.income = 15;
       // msm q ap so que com width e heights do sprite
       //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
       //this.sprite = game.add.sprite( 472, 3510, "model");
