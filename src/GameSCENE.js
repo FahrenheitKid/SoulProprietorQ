@@ -192,10 +192,25 @@ GameSCENE.prototype = {
 	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
 	 	this.moneyText.setText("x " + this.player.money);
 
-		if(this.pAptManager.apts.children[0].tenant !== null)
-	 	this.varToTest = this.pAptManager.apts.children[0].tenant.type;
+		
 	 	this.tenantToAddCollision(this.tenantToAdd);
 
+	 	if(this.game.input.activePointer.x >= 1300)
+	 	{
+	 		this.game.camera.x+=15;
+	 	}
+	 	else if(this.game.input.activePointer.x <= 100)
+	 	{
+	 		this.game.camera.x-=15;
+	 	}
+	 	else if(this.game.input.activePointer.y <= 100)
+	 	{
+	 		this.game.camera.y-=15;
+	 	}
+	 	else if(this.game.input.activePointer.y >= 800)
+	 	{
+	 		this.game.camera.y+=15;
+	 	}
 	 	
 	},
 	
@@ -422,10 +437,12 @@ GameSCENE.prototype = {
 				{
 					var app = this.pAptManager.apts.children[i];
 					var afford = this.player.money - tenant.price;
+					var cost = Math.abs(tenant.price);
+					cost = 30;
 					//faz overlap com todos os aps
 
-					this.game.physics.arcade.enable(app);
-					this.game.physics.arcade.enable(tenant.sprite);
+					//this.game.physics.arcade.enable(app);
+					//this.game.physics.arcade.enable(tenant.sprite);
 
 
 					
@@ -442,7 +459,7 @@ GameSCENE.prototype = {
 							
 							this.pAptManager.AddTenant(this.game,this.player,2,tenant.type,app.posx, app.posy);
 							
-
+							this.sweetValueTextChange(this.moneyText,cost,false);
 							this.player.money = afford;
 							//this.room_x = app.posx;
 							//this.room_y = app.posy;
@@ -572,7 +589,7 @@ GameSCENE.prototype = {
 
 						this.tenantToAdd = tenantToAdd;
 						this.tenantToAddParent = holdpixel;
-						this.varToTest = this.tenantToAddParent.x;
+						this.varToTest = this.tenantToAdd.price;
 						//button.removeChildAt(0);
 						//holdpixel.sprite.x = this.game.input.x;
 						//holdpixel.sprite.y = this.game.input.y;
@@ -658,7 +675,7 @@ GameSCENE.prototype = {
 
 						this.tenantToAdd = tenantToAdd;
 						this.tenantToAddParent = holdpixel;
-						this.varToTest = this.tenantToAddParent.x;
+						this.varToTest = this.tenantToAdd.price;
 						//button.removeChildAt(0);
 						//holdpixel.sprite.x = this.game.input.x;
 						//holdpixel.sprite.y = this.game.input.y;

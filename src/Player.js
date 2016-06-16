@@ -4,12 +4,14 @@ var Player = function(game)
 {
     this.score = 0;
     this.money = 100;
+    this.game_reference = game;
 };
 
 Player.prototype.init = function(game, money)
 {
     
     this.money = money;
+    this.game_reference = game;
 };
 
 Player.prototype.changeMoney = function(game,value, text)
@@ -22,14 +24,14 @@ Player.prototype.changeMoney = function(game,value, text)
     this.money += value;
     after = this.money;
     
-    var sweetText = game.add.text(text.x, text.y + 100, "", style);
+    var sweetText = this.game_reference.add.text(text.x, text.y + 100, "", style);
     
     if(before > after)
     sweetText.setText("+");
     else
     sweetText.setText("-");
     
-    	var tweenA = game.add.tween(sweetText).to({ y: text.y - 100 }, 250, "Linear", true, 0);
+    	var tweenA = this.game_reference.add.tween(sweetText).to({ y: text.y - 100 }, 250, "Linear", true, 0);
 			
 
 			

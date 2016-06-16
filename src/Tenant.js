@@ -201,6 +201,8 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
           this.stressBar.y = app.y + app.height - this.stressBar.height;
           
           this.player_reference.money = afford;
+          //this.player_reference.changeMoney(this.player_reference.game_reference, -afford, this.player_reference.th)
+          //this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
           this.room_x = app.posx;
           this.room_y = app.posy;
           app.tenant = this;
@@ -213,6 +215,7 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
           if(app.tenant !== null && app.tenant != 'aptrans' && afford >= 0)
           {
             this.player_reference.money = afford;
+            // this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
             this.game_reference.add.tween(sprite).to(
             {
             x: app.x + app.width /2,

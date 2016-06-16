@@ -212,3 +212,14 @@ AptManager.prototype.update = function(game)
     }
 };
 
+AptManager.prototype.getTenant = function(roomx, roomy)
+{
+     for (var i = 0; i < this.tenants_matrix.length; i++) 
+    {
+        if(this.tenants_matrix[i].room_x == roomx &&
+        this.tenants_matrix[i].room_y == roomy)
+        return this.tenants_matrix[i];
+    }
+    
+};
+
