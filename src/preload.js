@@ -25,6 +25,8 @@ preload.prototype = {
 		this.game.load.bitmapFont("monaco_font", "assets/fonts/Monaco.png", "/assets/fonts/Monaco.xml");
 
 		this.game.load.audio("hanging", "assets/music/hanging.mp3");
+		this.game.load.audio("tenant_onOver", "assets/sounds/mouse_over2.wav");
+		this.game.load.audio("tenant_goHome", "assets/sounds/bass_deny2.wav");
 
 		this.game.load.spritesheet('city', 'assets/sprites/city_sheet.png', 500, 708);
 		this.game.load.spritesheet('city_dusk', 'assets/sprites/cityDusk_sheet.png', 500, 708);
@@ -35,6 +37,7 @@ preload.prototype = {
 		this.game.load.image("apTrans", "assets/sprites/wallb.png");
 		this.game.load.image("apProprietor", "assets/sprites/walla.png");
 		this.game.load.image("apSelected", "assets/sprites/selected.png");
+		this.game.load.spritesheet("apExplosion", "assets/sprites/ap_explosion_sheet.png",128,80);
 
 		this.game.load.image("start_button", "assets/sprites/buttonStart.png");
 		this.game.load.image("tutorial_button", "assets/sprites/buttonTutorial.png");
@@ -88,6 +91,7 @@ preload.prototype = {
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
 
 		this.game.load.image("bosskid", "assets/sprites/bosskid.png");
+		this.game.load.audio("bossComing", "assets/sounds/bossComing.mp3");
 /*
 		this.game.load.image("model", "assets/sprites/char00.png");
 		this.game.load.image("model_set", "assets/sprites/model_set.png");

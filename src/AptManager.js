@@ -1,6 +1,6 @@
 /*global Phaser*/
 /*global Tenant*/
-var AptManager = function(game, sizex, sizey) 
+var AptManager = function(game, sizex, sizey, gameScene_ref) 
 {
     this.room_clicked = null;
     this.room_clicked_x = null;
@@ -19,6 +19,7 @@ var AptManager = function(game, sizex, sizey)
     this.pTenants = game.add.group();
     this.tenants_matrix = [];
     this.player_reference = null;
+    this.gameScene_reference = gameScene_ref;
 };
 
 
@@ -169,7 +170,7 @@ AptManager.prototype.addTenant = function(game, playerr, tenant_id, tenant_type,
     this.pTenants.create(tnt);
     this.apts_matrix[roomx * this.apts_sizey + roomy] = tenant_id;
     */
-    var tnt = new Tenant(game, roomx, roomy, tenant_type, tenant_id);
+    var tnt = new Tenant(game, roomx, roomy, tenant_type, tenant_id, this.gameScene_reference);
     var spriteref;
     for (var i = 0; i < this.apts.length; i++) 
     {

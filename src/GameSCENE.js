@@ -51,42 +51,133 @@ var GameSCENE = function(game)
 		GORILLA: null,
 	};
 
+	this.bossSfx = {
+
+		BOSSKID: null,
+	};
+
+	this.tenantSfx = {
+		onOver: null,
+		goHome: null,
+	};
 };
 
 GameSCENE.prototype = {
     
+
+
     create: function()
 	{
-
 		var style = { font: "45px Arial", fill: "#ffffff", align: "center" };
+		this.defaultInit();
+		
 
-    	this.buttonFontStyle = { font: "70px Helvetica", fill: "#000000", align: "center" };
+		this.buttonFontStyle = {
+			font: "70px Helvetica",
+			fill: "#000000",
+			align: "center"
+		};
 
 		var tenantMenuBg_width = this.game.cache.getImage("tenantMenu_bg").width;
-  		var tenantMenuBg_height = this.game.cache.getImage("tenantMenu_bg").height;
-		this.initMusic(this.game);
+		var tenantMenuBg_height = this.game.cache.getImage("tenantMenu_bg").height;
+
+
+		this.initDayTimers();
+		//this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+		// Keep original size
+		// game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
+		// Maintain aspect ratio
+
+		this.initShop();
+
+		
+
+
+		this.startBossSpawning("BOSSKID", 5);
+		//this.bossTimers.BOSSKID.events[0].delay = 5000;
+		
+		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
+
+		
+	},
+	
+	update: function()
+	{
+	 	this.pAptManager.update(this.game);
+	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
+	 	this.moneyText.setText("x " + this.player.money);
+
+		
+	 	this.tenantToAddCollision(this.tenantToAdd);
+
+	 	this.moveCameraOnEdges();
+	 	
+	},
+	
+	render: function()
+	{
+		if(this.rendertest === false)
+		{
+		this.game.debug.text("Debug " + this.varToTest, 30, 30);
+		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
+		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
+		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
+		//this.game.debug.geom(this.pAptManager.tenants_matrix[0].sprite.getBounds());
+		}
+	},
+	
+	gofull: function() 
+	{
+		this.rendertest = true;
+	    if (this.game.scale.isFullScreen)
+	    {
+	        this.game.scale.stopFullScreen();
+	    }
+	    else
+	    {
+	        this.game.scale.startFullScreen(false);
+		}
+	},
+
+
+	playTenantSfx: function(soundkey)
+	{
+
+		switch(soundkey)
+		{
+			case "onOver":
+			this.tenantSfx.onOver.play();
+			break;
+			case "goHome":
+			this.tenantSfx.goHome.play();
+			break;
+
+		}
+	},
+	  defaultInit: function()
+    {
+
+    	var style = { font: "45px Arial", fill: "#ffffff", align: "center" };
+    	var itself = this;
+    	this.initMusic(this.game);
 		this.music.normal.play();
-		//this.music.menu.play(true);
-		this.test = false;
+		
 		this.game.world.setBounds(0, 0, (4 * 445), (5 * 375));
 		this.game.camera.setPosition(0, 5 * 375);
 
 		this.player = new Player(this.game);
 		this.player.init(this.game, 100);
 
-		
+		this.tenantSfx.onOver = this.game.add.audio("tenant_onOver");
+		this.tenantSfx.goHome = this.game.add.audio("tenant_goHome");
 
-
-		
-	     //var teste = this.game.add.sprite(100,100, "tenantMenu_Bg");
-		//background sprite
 		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
 	    this.background.animations.play('run', 10, true);
 		this.background.fixedToCamera = true;
-		
+
 		//create apartments manager game/sizex/sizey
-		this.pAptManager = new AptManager(this.game, 5, 5);
+		this.pAptManager = new AptManager(this.game, 5, 5, itself);
 		this.pAptManager.init(this.game,this.player);
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
@@ -95,14 +186,9 @@ GameSCENE.prototype = {
         this.pAptManager.addTenant(this.game, this.player, 2, 'MODEL', 1, 1);
          //this.pAptManager.addTenant(this.game, this.player, 2, 'BOSSKID', 0, 0);
 
-         
-        
-        
-        //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-	    // Keep original size
-	    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
-	    // Maintain aspect ratio
-	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+         this.bossSfx.BOSSKID = this.game.add.audio("bossComing");
+
+          this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 	     this.tenantMenuBg = this.game.add.sprite(0, 0, "tenantMenu_bg");
 	     this.tenantMenuBg.x -= this.tenantMenuBg.width;
 	    //this.tenantMenuBg.fixedToCamera = true;
@@ -119,11 +205,6 @@ GameSCENE.prototype = {
 		this.tenantMenuButton.anchor.setTo(0.5, 0.5);
 		this.tenantMenuButton.fixedToCamera = true;
 
-		
-		this.initShop();
-
-		//this.tenantMenuButton = this.game.add.button(0 , this.game.world.height - 200, "proprietor" ,this.toggleTenantMenu ,this);
-
 		this.coin = this.game.add.sprite(1150, 30, "coin");
 		this.coin.fixedToCamera = true;
 		this.coin.animations.add('idle');
@@ -134,24 +215,26 @@ GameSCENE.prototype = {
 			{
 				this.coin.animations.play('idle', 30, false);
 			}, this);
-			console.log('animation complete');
+			//console.log('animation complete');
 		}, this);
 
-
 		this.moneyText = this.game.add.text(48 + 20, 0 + 10, "", style);
-		
-		this.yearText = this.game.add.text(500, 0 + 10, "Y: ", style);
+
+		this.coin.addChild(this.moneyText);
+
+    },
+
+    initDayTimers: function() // inicializa os textos e timers dos dias
+    {
+    	var style = { font: "45px Arial", fill: "#ffffff", align: "center" };
+
+    	this.yearText = this.game.add.text(500, 0 + 10, "Y: ", style);
 		this.monthText = this.game.add.text(100, 0 + 0, "M: ", style);
 		this.dayText = this.game.add.text(100, 0 + 0, "D: ", style);
-		
-		
+
 		this.dayTimer = this.game.time.create(false);
 		this.monthTimerSeconds = Phaser.Timer.SECOND * 20;
 		this.dayTimerSeconds = this.monthTimerSeconds / 30;
-		
-
-		
-
 		this.incomeTimer = this.createLoopTimer(this.monthTimerSeconds * this.timerScale,function(){
 			//this.player.changeMoney(this,this.pAptManager.getIncome(),this.moneyText);
 			this.player.money+= this.pAptManager.getIncome();
@@ -195,75 +278,11 @@ GameSCENE.prototype = {
 		
 		this.yearText.addChild(this.monthText);
 		this.monthText.addChild(this.dayText);
-		//this.moneyText.fixedToCamera = true;
-		this.coin.addChild(this.moneyText);
-		//this.tenantMenuBg.fixedToCamera = true;
 
-		//this.tenantMenuBg = 
-		//this.fullscreenButton.fixedToCamera = true;
-
-		this.startBossSpawning("BOSSKID", 5);
-		//this.bossTimers.BOSSKID.events[0].delay = 5000;
-		
+    },
 
 
-		
-	},
-	
-	update: function()
-	{
-	 	this.pAptManager.update(this.game);
-	 //	if(this.dayCount % 30 == 0) this.pAptManager.getIncome();
-	 	this.moneyText.setText("x " + this.player.money);
-
-		
-	 	this.tenantToAddCollision(this.tenantToAdd);
-
-	 	if(this.game.input.activePointer.x >= 1300)
-	 	{
-	 		this.game.camera.x+=15;
-	 	}
-	 	else if(this.game.input.activePointer.x <= 100)
-	 	{
-	 		this.game.camera.x-=15;
-	 	}
-	 	else if(this.game.input.activePointer.y <= 100)
-	 	{
-	 		this.game.camera.y-=15;
-	 	}
-	 	else if(this.game.input.activePointer.y >= 800)
-	 	{
-	 		this.game.camera.y+=15;
-	 	}
-	 	
-	},
-	
-	render: function()
-	{
-		if(this.rendertest === false)
-		{
-		this.game.debug.text("Debug " + this.varToTest, 30, 30);
-		this.game.debug.text("Room clicked " + this.pAptManager.room_clicked_x + " " + this.pAptManager.room_clicked_y, 30, 50);
-		this.game.debug.text("Check tenant room 0 0: " + this.pAptManager.apts_matrix[0], 30, 70);
-		this.game.debug.text("Apt group size: " + this.pAptManager.apts.children.length, 30, 90);
-		//this.game.debug.geom(this.pAptManager.tenants_matrix[0].sprite.getBounds());
-		}
-	},
-	
-	gofull: function() 
-	{
-		this.rendertest = true;
-	    if (this.game.scale.isFullScreen)
-	    {
-	        this.game.scale.stopFullScreen();
-	    }
-	    else
-	    {
-	        this.game.scale.startFullScreen(false);
-		}
-	},
-
-	toggleTenantMenu: function()
+	toggleTenantMenu: function() 
 	{
 		//this.game.world.bringToTop(this.tenantMenu_Bg);
 		//this.game.world.bringToTop(this.tenantMenuButton);
@@ -273,7 +292,29 @@ GameSCENE.prototype = {
 
 	},
 
-	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut)
+	moveCameraOnEdges: function()
+	{
+
+		if(this.game.input.activePointer.x >= 1350)
+	 	{
+	 		this.game.camera.x+=15;
+	 	}
+	 	if(this.game.input.activePointer.x <= 50)
+	 	{
+	 		this.game.camera.x-=15;
+	 	}
+	 	if(this.game.input.activePointer.y <= 50)
+	 	{
+	 		this.game.camera.y-=15;
+	 	}
+	 	if(this.game.input.activePointer.y >= 850)
+	 	{
+	 		this.game.camera.y+=15;
+	 	}
+
+	},
+
+	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut) // função para criar botões mais rápido
 	{
 		 button_variable = this.game.add.button(x, y, sprite_key,click_func, this);
 	     button_variable.anchor.setTo(anchorx,anchory);
@@ -378,7 +419,7 @@ GameSCENE.prototype = {
 		
 	},
 	
-	initShop: function()
+	initShop: function() // inicizaliza a shop baseado no array shopTypes contendo os tenants que estarão a venda
 	{
 		for(var i = 0; i < this.shopTypes.length; i++)
 			{
@@ -405,10 +446,10 @@ GameSCENE.prototype = {
 	{
 		this.music.normal = game.add.audio("hanging");
 		this.music.normal.loop = true;
-		this.music.normal.volume = 0.65;
+		this.music.normal.volume = 0.25;
 	},
 	
-	sweetValueTextChange: function(text, value, plus_or_minus)
+	sweetValueTextChange: function(text, value, plus_or_minus) // juiciness pra mudança de money na tela
 	{
 		 var style = { font: "45px Tahoma", fill: "#ffffff", align: "center" };
 		var sweetText = this.game.add.text(0, 0, "65958916", style);
@@ -439,7 +480,7 @@ GameSCENE.prototype = {
 		
 	},
 
-	tenantToAddCollision: function(tenant)
+	tenantToAddCollision: function(tenant) // mecanica para checar se o novo tenant a ser adicionado está num ap válido
 	{
 
 
@@ -523,13 +564,13 @@ GameSCENE.prototype = {
 	startBossSpawning: function(boss_type, timeratio) // every how much seconds
 		{
 
-			//timeratio*= Phaser.Time.SECOND;
-			var chance = new Chance(Math.random);
-			var tnt_index = 0;
-			var rooms= {
-				x: this.pAptManager.tenants_matrix[tnt_index].room_x,
-				y: this.pAptManager.tenants_matrix[tnt_index].room_y
-			};
+		//timeratio*= Phaser.Time.SECOND;
+		var chance = new Chance(Math.random);
+		var tnt_index = 0;
+		var rooms = {
+			x: this.pAptManager.tenants_matrix[tnt_index].room_x,
+			y: this.pAptManager.tenants_matrix[tnt_index].room_y
+		};
 
 		if (this.pAptManager.tenants_matrix.length >= 2)
 		{
@@ -544,12 +585,8 @@ GameSCENE.prototype = {
 				y: this.pAptManager.tenants_matrix[tnt_index].room_y
 			};
 		}
-			if(boss_type == "BOSSKID")
-			this.varToTest = "" + rooms.x + "/" + rooms.y;
 
-			var manager = this.pAptManager;
-				this.varToTest = 0;
-
+		var manager = this.pAptManager;
 
 		switch (boss_type)
 		{
@@ -570,9 +607,6 @@ GameSCENE.prototype = {
 		}
 
 		//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
-		
-
-
 		
 		},
 
@@ -598,7 +632,7 @@ GameSCENE.prototype = {
 
 		var buttonTenant;
 		var tenantToAdd;
-
+		var itself = this;
 		switch (type)
 		{
 
@@ -618,7 +652,7 @@ GameSCENE.prototype = {
 
 
 
-				buttonTenant = new Tenant(this.game, 0, 0, type, 0);
+				buttonTenant = new Tenant(this.game, 0, 0, type, 0, itself);
 				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 				buttonTenant.sprite.x = button.x + 485 + 200;
 				buttonTenant.sprite.y = 0 + button.y / 2;
@@ -656,7 +690,7 @@ GameSCENE.prototype = {
 
 					this.hideTenantMenu();
 
-					tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
+					tenantToAdd = new Tenant(this.game, 0, 0, type, 0, itself);
 					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 					tenantToAdd.sprite.x = 0;
 					tenantToAdd.sprite.y = 0;
@@ -703,7 +737,7 @@ GameSCENE.prototype = {
 
 
 
-				buttonTenant = new Tenant(this.game, 0, 0, type, 0);
+				buttonTenant = new Tenant(this.game, 0, 0, type, 0, itself);
 				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 				buttonTenant.sprite.x = button.x + 485 + 200;
 				buttonTenant.sprite.y = 0 + button.y / 2;
@@ -741,7 +775,7 @@ GameSCENE.prototype = {
 
 					this.hideTenantMenu();
 
-					tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
+					tenantToAdd = new Tenant(this.game, 0, 0, type, 0, itself);
 					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 					tenantToAdd.sprite.x = 0;
 					tenantToAdd.sprite.y = 0;

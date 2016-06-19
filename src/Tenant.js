@@ -1,5 +1,5 @@
 // Define the Tenant constructor
-var Tenant = function(game, roomx, roomy, typee, idd) 
+var Tenant = function(game, roomx, roomy, typee, idd, gameScene_ref) 
 {
   this.name = "";
   this.room_x = roomx; // posição do quarto
@@ -46,12 +46,14 @@ var Tenant = function(game, roomx, roomy, typee, idd)
   this.selected_color = randomColor({hue: "blue", luminosity: "light"});
   
   this.game_reference = game;
+
   this.firstClick = null;
   this.drag_tenant = false;
   this.dragPosition = new Phaser.Point(0, 0);
   this.ownAp_reference = null;
   this.aptManager_reference = null;
   this.player_reference = null;
+  this.gameScene_reference = gameScene_ref;
   this.stressBar = null;
   this.damage_force = 0;
   this.heal_force = 0;
@@ -143,10 +145,23 @@ Tenant.prototype.update = function(game)
   // tnt.kill();
   if(this.stress <= 0) this.stress = 0;
   this.updateNeighbors();
+
+  for(var i = 0; i < this.aptManager_reference.apts.children.length; i++)
+    {
+      var app = this.aptManager_reference.apts.children[i];
+      //var afford = this.player_reference.money - movecost;
+      //faz overlap com todos os aps
+      if(Phaser.Rectangle.containsRect(this.sprite,app))
+      {
+        this.isAt = app;
+      } 
+    }
+
 };
 
 Tenant.prototype.onOver = function(sprite, pointer)
 {
+  this.gameScene_reference.playTenantSfx("onOver");
   sprite.tint = this.selected_color;
   this.arrowsVisible(true);
 
@@ -193,73 +208,19 @@ Tenant.prototype.onDragStop = function(sprite, pointer)
       //faz overlap com todos os aps
       if(Phaser.Rectangle.containsRect(sprite,app))
       {
-      // caso ap esteja vago e tenha dinheiro para mover, mova
-        if(app.tenant === null && afford >= 0)
-        {
-          this.game_reference.add.tween(sprite).to(
-          {
-            x: app.x + app.width /2,
-            y: app.y + app.height /2
-          }, 500, "Back.easeOut", true, 100);
-          
-          this.stressBar.x = app.x;
-          this.stressBar.y = app.y + app.height - this.stressBar.height;
-          
-          this.player_reference.money = afford;
-          //this.player_reference.changeMoney(this.player_reference.game_reference, -afford, this.player_reference.th)
-          //this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
-          this.room_x = app.posx;
-          this.room_y = app.posy;
-          app.tenant = this;
-          this.ownAp_reference = app;
-          ap.tenant = null;
-        }
-        else
-        {
-          // caso ap esteja ocupado e tenha dinheiro para mover, de swap nos tenants
-          if(app.tenant !== null && app.tenant != 'aptrans' && afford >= 0)
-          {
-            this.player_reference.money = afford;
-            // this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
-            this.game_reference.add.tween(sprite).to(
-            {
-            x: app.x + app.width /2,
-            y: app.y + app.height /2
-            }, 500, "Back.easeOut", true, 100);
-            
-            this.stressBar.x = app.x;
-          this.stressBar.y = app.y + app.height - this.stressBar.height;
-            
-            this.game_reference.add.tween(app.tenant.sprite).to(
-            {
-            x: ap.x + ap.width /2,
-            y: ap.y + ap.height /2
-            }, 500, "Back.easeOut", true, 100);
-            
-            app.tenant.stressBar.x = ap.x;
-            app.tenant.stressBar.y = ap.y + ap.height - ap.tenant.stressBar.height;
-            ap.tenant = app.tenant;
-            app.tenant.ownAp_reference = ap;
-            app.tenant.room_x = ap.posx;
-            app.tenant.room_y = ap.posy;
-            
-            this.ownAp_reference = app;
-            this.room_x = app.posx;
-            this.room_y = app.posy;
-            app.tenant = this;
-          
-          }// caso aptrans ou sem dinheiro
-          else if(app.tenant === null || app.tenant == 'aptrans' || afford < 0)
-          {
-            this.game_reference.add.tween(sprite).to(
-            {
-            x: ap.x + ap.width /2,
-            y: ap.y + ap.height /2
-            }, 500, "Back.easeOut", true, 100);
-          }
-        }
+          this.moveTenantTo(app,movecost);
+      }
+      else
+      {
+        this.goHome();
       }
     }
+
+
+  }
+  else
+  {
+     this.goHome();
   }
   this.camera.focusOn(sprite);
   this.drag_tenant = false;
@@ -392,7 +353,7 @@ Tenant.prototype.initType = function(game, ap_sprite)
       this.sprite.anchor.setTo(0.5, 0.5);
       //this.invadeAp();
       this.sprite.inputEnabled = true;
-      this.sprite.input.enableDrag();
+      //this.sprite.input.enableDrag();
       this.sprite.events.onInputOver.add(this.onOver, this);
       this.sprite.events.onInputOut.add(this.onOut, this);
       this.sprite.events.onDragStart.add(this.onDragStart, this);
@@ -641,6 +602,86 @@ Tenant.prototype.initBehavior = function(game, ap_sprite)
       break;
   }
   this.arrowsVisible(false);
+};
+
+Tenant.prototype.goHome = function()
+{
+  this.gameScene_reference.playTenantSfx("goHome");
+  var ap = this.ownAp_reference;
+   this.game_reference.add.tween(this.sprite).to(
+            {
+            x: ap.x + ap.width /2,
+            y: ap.y + ap.height /2
+            }, 500, "Back.easeOut", true, 100);
+
+};
+Tenant.prototype.moveTenantTo = function(app, movecost)
+{
+
+  var ap = this.ownAp_reference;
+   var afford = this.player_reference.money - movecost;
+  if(app.tenant === null && afford >= 0)
+        {
+          this.game_reference.add.tween(this.sprite).to(
+          {
+            x: app.x + app.width /2,
+            y: app.y + app.height /2
+          }, 500, "Back.easeOut", true, 100);
+          
+          this.stressBar.x = app.x;
+          this.stressBar.y = app.y + app.height - this.stressBar.height;
+          
+          this.player_reference.money = afford;
+          //this.player_reference.changeMoney(this.player_reference.game_reference, -afford, this.player_reference.th)
+          //this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
+          this.room_x = app.posx;
+          this.room_y = app.posy;
+          app.tenant = this;
+          this.ownAp_reference = app;
+          ap.tenant = null;
+        }
+        else
+        {
+          // caso ap esteja ocupado e tenha dinheiro para mover, de swap nos tenants
+          if(app.tenant !== null && app.tenant != 'aptrans' && app.tenant.isBoss === false && afford >= 0)
+          {
+            this.player_reference.money = afford;
+            // this.game_reference.sweetValueTextChange(this.game_reference.moneyText,movecost,false);
+            this.game_reference.add.tween(this.sprite).to(
+            {
+            x: app.x + app.width /2,
+            y: app.y + app.height /2
+            }, 500, "Back.easeOut", true, 100);
+            
+            this.stressBar.x = app.x;
+          this.stressBar.y = app.y + app.height - this.stressBar.height;
+            
+            this.game_reference.add.tween(app.tenant.sprite).to(
+            {
+            x: ap.x + ap.width /2,
+            y: ap.y + ap.height /2
+            }, 500, "Back.easeOut", true, 100);
+            
+            app.tenant.stressBar.x = ap.x;
+            app.tenant.stressBar.y = ap.y + ap.height - ap.tenant.stressBar.height;
+            ap.tenant = app.tenant;
+            app.tenant.ownAp_reference = ap;
+            app.tenant.room_x = ap.posx;
+            app.tenant.room_y = ap.posy;
+            
+            this.ownAp_reference = app;
+            this.room_x = app.posx;
+            this.room_y = app.posy;
+            app.tenant = this;
+          
+          }// caso aptrans ou sem dinheiro
+          else if(app.tenant === null || app.tenant == 'aptrans' || app.tenant.isBoss === true || afford < 0)
+          {
+            this.goHome();
+          }
+        }
+
+
 };
 
 Tenant.prototype.updateNeighbors = function()
@@ -893,23 +934,41 @@ Tenant.prototype.annoy = function()
 
 Tenant.prototype.invadeAp = function()
 {
+  this.sprite.visible = false;
+  var ap = this.ownAp_reference;
+  var explosion = this.game_reference.add.sprite(this.sprite.x, this.sprite.y, "apExplosion");
+  //explosion.fixedToCamera = true;
+  explosion.anchor.setTo(0.5, 0.5);
+  explosion.scale.setTo(3.5, 3.5);
+  explosion.animations.add('boom');
 
-      this.sprite.scale.x = 10;
-      this.sprite.scale.y = 10;
-      var tweenA = this.game_reference.add.tween(this.sprite.scale).to({ x: 1.0, y: 1.0 }, 700, "Circ", true, 0);
-      
+  var sound = this.game_reference.add.audio("bossComing");
+  sound.play();
+  explosion.animations.play('boom', 10, false, true);
 
-      
-            tweenA.start();
+  var tweenA = this.game_reference.add.tween(this.sprite.scale).to(
+  {
+    x: 1.0,
+    y: 1.0
+  }, 700, "Circ", true, 0);
+
+  this.game_reference.time.events.add(Phaser.Timer.SECOND * 1, function()
+  {
+
+    this.sprite.visible = true;
+    this.sprite.scale.x = 8;
+    this.sprite.scale.y = 8;
+    tweenA.start();
+
+  }, this);
 
 };
-
 // Define the Boss constructor
-function Boss(roomx, roomy, type, id, game) 
+function Boss(roomx, roomy, type, id, game, game_scene) 
 {
   // Call the parent constructor, making sure (using Function#call)
   // that "this" is set correctly during the call
-  Tenant.call(this, roomx, roomy, type, id, game);
+  Tenant.call(this, roomx, roomy, type, id, game, game_scene);
   // Initialize our Boss-specific properties
   this.specialMove = "faco coisas especiais";
 }
