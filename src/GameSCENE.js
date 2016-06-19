@@ -203,7 +203,7 @@ GameSCENE.prototype = {
 		//this.fullscreenButton.fixedToCamera = true;
 
 		this.startBossSpawning("BOSSKID", 5);
-
+		//this.bossTimers.BOSSKID.events[0].delay = 5000;
 		
 
 
@@ -550,85 +550,30 @@ GameSCENE.prototype = {
 			var manager = this.pAptManager;
 				this.varToTest = 0;
 
-			function whichboss(type)
-			{
 
-				this.varToTest++;
-				switch (boss_type)
-				{
-
-					case 'BOSSKID':
-
-
-						manager.deleteTenant(rooms.x, rooms.y);
-
-
-				
-						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
-
-						break;
-
-
-				}
-
-			}
-
-		
-			
-
-
-		//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
-		this.createLoopTimer(timeratio * 1000 , function()
+		switch (boss_type)
 		{
 
-			this.varToTest++;
-			if (this.pAptManager.tenants_matrix.length >= 1)
-			{
-				switch (boss_type)
+			case 'BOSSKID':
+				this.bossTimers.BOSSKID = this.createLoopTimer(timeratio * 1000, function()
 				{
 
-					case 'BOSSKID':
+					//this.varToTest++;
+					if (this.pAptManager.tenants_matrix.length >= 1)
+					{
 
 						manager.deleteTenant(rooms.x, rooms.y);
-
-						//this.varToTest = "" + rooms.x + "/" + rooms.y + "woohoo";
-
 						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
-						break;
-
-					default:
-
-						break;
-				}
-			}
-		}, true, timeratio);
-
-
-			/*
-			var timer = this.game.time.create(false);
-
-
-
-				timer.loop(Phaser.Time.SECOND * timeratio, function(){
-				switch (boss_type)
-				{
-
-					case 'BOSSKID':
-
-						this.pAptManager.deleteTenant(rooms.x, rooms.y);
-
-						this.varToTest = "" + rooms.x + "/" + rooms.y + "woohoo";
-				
-						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
-
-						break;
 					}
-			}, this);
+				}, true, timeratio);
+				break;
+		}
 
-				timer.start();
-			
-			*/
+		//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
+		
 
+
+		
 		},
 
 	createTenantShopButton: function(type)
