@@ -154,6 +154,7 @@ Tenant.prototype.update = function(game)
       if(Phaser.Rectangle.containsRect(this.sprite,app))
       {
         this.isAt = app;
+        this.gameScene_reference.varToTest = app.posx;
       } 
     }
 

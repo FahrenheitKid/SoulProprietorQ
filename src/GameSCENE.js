@@ -93,7 +93,7 @@ GameSCENE.prototype = {
 		
 
 
-		this.startBossSpawning("BOSSKID", 5);
+		this.startBossSpawning("BOSSKID", 150);
 		//this.bossTimers.BOSSKID.events[0].delay = 5000;
 		
 		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
