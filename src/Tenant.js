@@ -69,6 +69,7 @@ var Tenant = function(game, roomx, roomy, typee, idd)
   };
   this.onlyVisual = false;
 
+  this.isBoss = false;
   this.isAt = { roomx: null, roomy: null};
 };
 
@@ -111,6 +112,8 @@ Tenant.prototype.init = function(game, ap_sprite, player, aptManager, onlyVisual
   this.initType(game,ap_sprite);
   //passa pelo switch das setas
   this.initBehavior(game,ap_sprite);
+  if(this.isBoss)
+  this.invadeAp();
   this.damage_force = 3;
   this.heal_force = 2;
   
@@ -362,6 +365,7 @@ Tenant.prototype.initType = function(game, ap_sprite)
       case 'BOSSKID':
 
       // this.type = type;
+      this.isBoss = true;
       sprite_width = game.cache.getImage("bosskid").width;
       sprite_height = game.cache.getImage("bosskid").height;
       this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
@@ -386,6 +390,7 @@ Tenant.prototype.initType = function(game, ap_sprite)
       //this.sprite.animations.add('idle');
       //this.sprite.animations.play('idle', 5, true);
       this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
       this.sprite.inputEnabled = true;
       this.sprite.input.enableDrag();
       this.sprite.events.onInputOver.add(this.onOver, this);
@@ -881,6 +886,24 @@ Tenant.prototype.destroy = function()
    
 };
 
+Tenant.prototype.annoy = function()
+{
+
+};
+
+Tenant.prototype.invadeAp = function()
+{
+
+      this.sprite.scale.x = 10;
+      this.sprite.scale.y = 10;
+      var tweenA = this.game_reference.add.tween(this.sprite.scale).to({ x: 1.0, y: 1.0 }, 700, "Circ", true, 0);
+      
+
+      
+            tweenA.start();
+
+};
+
 // Define the Boss constructor
 function Boss(roomx, roomy, type, id, game) 
 {
@@ -912,3 +935,4 @@ Boss.prototype.annoy = function(roomx, roomy)
 {
  // vou ittirar algum tenant
 };
+

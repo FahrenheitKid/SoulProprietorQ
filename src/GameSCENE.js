@@ -45,6 +45,11 @@ var GameSCENE = function(game)
 	this.tenantToAddParent = null;
 	this.buttonFontStyle = null;
 
+	this.bossTimers = 
+	{
+		BOSSKID: null,
+		GORILLA: null,
+	};
 
 };
 
@@ -152,7 +157,7 @@ GameSCENE.prototype = {
 			this.player.money+= this.pAptManager.getIncome();
 			this.sweetValueTextChange(this.moneyText,this.pAptManager.getIncome(),true);
 			
-		},true);
+		},true, 0);
 		
 		
 		
@@ -164,6 +169,7 @@ GameSCENE.prototype = {
 				this.dayCount = 0;
 				this.monthCount++;
 
+				
 				if (this.monthCount > 11)
 				{
 					this.monthCount = 0;
@@ -174,12 +180,13 @@ GameSCENE.prototype = {
 			}
 
 			this.dayCount++;
+
 			this.dayText.setText("D: " + this.dayCount);
 			this.monthText.setText("M: " + this.monthCount);
 			this.yearText.setText("Y: " + this.yearCount);
 
 
-		}, true);
+		}, true, 0);
     	
 		
 		this.yearText.fixedToCamera = true;
@@ -195,7 +202,10 @@ GameSCENE.prototype = {
 		//this.tenantMenuBg = 
 		//this.fullscreenButton.fixedToCamera = true;
 
-		this.startBossSpawning("BOSSKID", 3);
+		this.startBossSpawning("BOSSKID", 5);
+
+		
+
 
 		
 	},
@@ -495,7 +505,7 @@ GameSCENE.prototype = {
 	 	}
 	},
 
-	createLoopTimer: function(time,ffunction, autostart)
+	createLoopTimer: function(time,ffunction, autostart, delay)
 	{
 
 		var timer = this.game.time.create(false);
@@ -505,7 +515,7 @@ GameSCENE.prototype = {
 		timer.loop(time, ffunction, this);
 
 		if (autostart)
-			timer.start();
+			timer.start(delay);
 
 		return timer;
 	},
@@ -513,30 +523,44 @@ GameSCENE.prototype = {
 	startBossSpawning: function(boss_type, timeratio) // every how much seconds
 		{
 
+			//timeratio*= Phaser.Time.SECOND;
 			var chance = new Chance(Math.random);
-
-			var tnt_index = chance.integer(
-			{
-				min: 0,
-				max: this.pAptManager.tenants_matrix.length - 1
-			});
-			
-			var rooms = {
+			var tnt_index = 0;
+			var rooms= {
 				x: this.pAptManager.tenants_matrix[tnt_index].room_x,
 				y: this.pAptManager.tenants_matrix[tnt_index].room_y
 			};
 
+		if (this.pAptManager.tenants_matrix.length >= 2)
+		{
+			tnt_index = chance.integer(
+			{
+				min: 0,
+				max: this.pAptManager.tenants_matrix.length - 1
+			});
+
+			rooms = {
+				x: this.pAptManager.tenants_matrix[tnt_index].room_x,
+				y: this.pAptManager.tenants_matrix[tnt_index].room_y
+			};
+		}
+			if(boss_type == "BOSSKID")
+			this.varToTest = "" + rooms.x + "/" + rooms.y;
 
 			var manager = this.pAptManager;
+				this.varToTest = 0;
+
 			function whichboss(type)
 			{
 
+				this.varToTest++;
 				switch (boss_type)
 				{
 
 					case 'BOSSKID':
 
-				manager.deleteTenant(rooms.x, rooms.y);
+
+						manager.deleteTenant(rooms.x, rooms.y);
 
 
 				
@@ -549,11 +573,17 @@ GameSCENE.prototype = {
 
 			}
 
+		
 			
 
 
-			//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
-			this.createLoopTimer(Phaser.Time.SECOND * timeratio, function(){
+		//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
+		this.createLoopTimer(timeratio * 1000 , function()
+		{
+
+			this.varToTest++;
+			if (this.pAptManager.tenants_matrix.length >= 1)
+			{
 				switch (boss_type)
 				{
 
@@ -561,14 +591,43 @@ GameSCENE.prototype = {
 
 						manager.deleteTenant(rooms.x, rooms.y);
 
+						//this.varToTest = "" + rooms.x + "/" + rooms.y + "woohoo";
 
+						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
+						break;
+
+					default:
+
+						break;
+				}
+			}
+		}, true, timeratio);
+
+
+			/*
+			var timer = this.game.time.create(false);
+
+
+
+				timer.loop(Phaser.Time.SECOND * timeratio, function(){
+				switch (boss_type)
+				{
+
+					case 'BOSSKID':
+
+						this.pAptManager.deleteTenant(rooms.x, rooms.y);
+
+						this.varToTest = "" + rooms.x + "/" + rooms.y + "woohoo";
 				
 						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
 
 						break;
 					}
-			}, true);
+			}, this);
+
+				timer.start();
 			
+			*/
 
 		},
 
@@ -670,7 +729,7 @@ GameSCENE.prototype = {
 
 					this.tenantToAdd = tenantToAdd;
 					this.tenantToAddParent = holdpixel;
-					this.varToTest = this.tenantToAdd.price;
+					//this.varToTest = this.tenantToAdd.price;
 					//button.removeChildAt(0);
 					//holdpixel.sprite.x = this.game.input.x;
 					//holdpixel.sprite.y = this.game.input.y;
@@ -755,7 +814,7 @@ GameSCENE.prototype = {
 
 					this.tenantToAdd = tenantToAdd;
 					this.tenantToAddParent = holdpixel;
-					this.varToTest = this.tenantToAdd.price;
+					//this.varToTest = this.tenantToAdd.price;
 					//button.removeChildAt(0);
 					//holdpixel.sprite.x = this.game.input.x;
 					//holdpixel.sprite.y = this.game.input.y;
