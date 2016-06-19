@@ -86,6 +86,8 @@ preload.prototype = {
 		
 		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
+
+		this.game.load.image("bosskid", "assets/sprites/bosskid.png");
 /*
 		this.game.load.image("model", "assets/sprites/char00.png");
 		this.game.load.image("model_set", "assets/sprites/model_set.png");
@@ -130,7 +132,7 @@ preload.prototype = {
 		this.game.load.image("latino", "assets/sprites/latino.png");
 		this.game.load.image("latino_set", "assets/sprites/latino_set.png");
 
-		this.game.load.image("bosskid", "assets/sprites/bosskid.png");
+		
 		this.game.load.image("bosskid_set", "assets/sprites/bosskid_set.png");
 	*/
 	},

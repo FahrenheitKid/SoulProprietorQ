@@ -161,7 +161,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
     }
 };
 
-AptManager.prototype.AddTenant = function(game, playerr, tenant_id, tenant_type, roomx, roomy) 
+AptManager.prototype.addTenant = function(game, playerr, tenant_id, tenant_type, roomx, roomy) 
 {
     /*
     var tnt = game.add.sprite((445 * roomx) + 225.5, game.world.height - 187.5 - (375 * roomy), 'soldier_sheet');
@@ -189,6 +189,45 @@ AptManager.prototype.AddTenant = function(game, playerr, tenant_id, tenant_type,
     this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
 };
 
+AptManager.prototype.deleteTenant = function(roomx,roomy)
+{
+    for (var i = 0; i < this.tenants_matrix.length; i++) 
+    {
+        if(this.tenants_matrix[i].room_x == roomx && this.tenants_matrix[i].room_y == roomy)
+        {
+           // deleteProperties(this.tenants_matrix[i]);
+           this.tenants_matrix[i].destroy();
+           deleteProperties(this.tenants_matrix[i]);
+            this.tenants_matrix[i] = {};
+            arraymove(this.tenants_matrix,i,0);
+            this.tenants_matrix.shift();
+            
+        }
+    }
+};
+
+AptManager.prototype.addBoss = function(game, playerr, tenant_id, tenant_type, roomx, roomy)
+{
+
+     var tnt = new Boss( roomx, roomy, tenant_type, tenant_id, game);
+    var spriteref;
+    for (var i = 0; i < this.apts.length; i++) 
+    {
+        if (this.apts.getChildAt(i).posx == roomx && this.apts.getChildAt(i).posy == roomy)
+            spriteref = this.apts.getChildAt(i);
+    }
+    tnt.init(game, spriteref, playerr, this, false);
+
+    this.apts.forEach(function(ap) 
+    {
+        if (ap.posx == roomx && ap.posy == roomy) 
+        {
+            ap.tenant = tnt;
+        }
+    });
+    this.tenants_matrix.push(tnt);
+    this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
+};
 
 AptManager.prototype.update = function(game) 
 {
@@ -211,6 +250,9 @@ AptManager.prototype.update = function(game)
         }
     }
 };
+
+
+
 
 AptManager.prototype.getTenant = function(roomx, roomy)
 {

@@ -44,6 +44,8 @@ var GameSCENE = function(game)
 	this.tenantToAdd = null;
 	this.tenantToAddParent = null;
 	this.buttonFontStyle = null;
+
+
 };
 
 GameSCENE.prototype = {
@@ -84,18 +86,26 @@ GameSCENE.prototype = {
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        this.pAptManager.AddTenant(this.game, this.player, 2, 'SOLDIER', 0, 1);
-        this.pAptManager.AddTenant(this.game, this.player, 2, 'MODEL', 1, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'SOLDIER', 0, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'MODEL', 1, 1);
+         //this.pAptManager.addTenant(this.game, this.player, 2, 'BOSSKID', 0, 0);
+
+         
+        
         
         //this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 	    // Keep original size
 	    // game.scale.fullScreenScaleMode = Phaser.ScaleManager.NO_SCALE;
 	    // Maintain aspect ratio
 	    this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-	     this.tenantMenuBg = this.game.add.sprite(0 - tenantMenuBg_width, this.game.world.height - tenantMenuBg_height, "tenantMenu_bg");
-	    
+	     this.tenantMenuBg = this.game.add.sprite(0, 0, "tenantMenu_bg");
+	     this.tenantMenuBg.x -= this.tenantMenuBg.width;
+	    //this.tenantMenuBg.fixedToCamera = true;
 	    this.tenantMenuBg.scale.x = 0.5;
 	    // Não pode usar keyobard enquanto fullscreen, limitação de browsers
+	    var tenantMenuBgParent = this.game.add.sprite(0,0, "emptyPixel");
+		tenantMenuBgParent.fixedToCamera = true;
+		tenantMenuBgParent.addChild(this.tenantMenuBg);
 	    
 		this.createButton(this.fullscreenButton, "fullscreen_button", 1440 - 32 - 30, 10 + 32 + 16, this.gofull, 0.5, 0.5, true,true);
 		//this.createButton(this.tenantMenuButton, "tenantMenu_button", 60, 60, this.toggleTenantMenu, 0.5, 0.5, false,false);
@@ -103,6 +113,7 @@ GameSCENE.prototype = {
 		this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button", this.toggleTenantMenu, this);
 		this.tenantMenuButton.anchor.setTo(0.5, 0.5);
 		this.tenantMenuButton.fixedToCamera = true;
+
 		
 		this.initShop();
 
@@ -133,41 +144,43 @@ GameSCENE.prototype = {
 		this.monthTimerSeconds = Phaser.Timer.SECOND * 20;
 		this.dayTimerSeconds = this.monthTimerSeconds / 30;
 		
-		this.incomeTimer = this.game.time.create(false);
+
 		
-		this.incomeTimer.loop(this.monthTimerSeconds * this.timerScale, function(){
+
+		this.incomeTimer = this.createLoopTimer(this.monthTimerSeconds * this.timerScale,function(){
 			//this.player.changeMoney(this,this.pAptManager.getIncome(),this.moneyText);
 			this.player.money+= this.pAptManager.getIncome();
 			this.sweetValueTextChange(this.moneyText,this.pAptManager.getIncome(),true);
 			
-		}, this);
+		},true);
 		
-		this.incomeTimer.start();
 		
-    	this.dayTimer.loop(this.dayTimerSeconds * this.timerScale, function(){
-    			
-    			if(this.dayCount > 29)
-    			{
-    				this.dayCount = 0;
-    				this.monthCount++;
-    				
-    				if(this.monthCount > 11)
-    				{
-    					this.monthCount = 0;
-    					this.yearCount++;
-    					
-    					
-    				}
-    			}
-    			
-    			this.dayCount++;
-    			this.dayText.setText("D: " + this.dayCount);
-    			this.monthText.setText("M: " + this.monthCount);
-    			this.yearText.setText("Y: " + this.yearCount);
-    			
-    		
-    	}, this);
-    	this.dayTimer.start();
+		
+		this.dayTimer = this.createLoopTimer(this.dayTimerSeconds * this.timerScale, function()
+		{
+
+			if (this.dayCount > 29)
+			{
+				this.dayCount = 0;
+				this.monthCount++;
+
+				if (this.monthCount > 11)
+				{
+					this.monthCount = 0;
+					this.yearCount++;
+
+
+				}
+			}
+
+			this.dayCount++;
+			this.dayText.setText("D: " + this.dayCount);
+			this.monthText.setText("M: " + this.monthCount);
+			this.yearText.setText("Y: " + this.yearCount);
+
+
+		}, true);
+    	
 		
 		this.yearText.fixedToCamera = true;
 		//this.monthText.fixedToCamera = true;
@@ -182,7 +195,8 @@ GameSCENE.prototype = {
 		//this.tenantMenuBg = 
 		//this.fullscreenButton.fixedToCamera = true;
 
-				
+		this.startBossSpawning("BOSSKID", 3);
+
 		
 	},
 	
@@ -419,19 +433,19 @@ GameSCENE.prototype = {
 	{
 
 
-		if(tenant !== null)
-	 	{
-	 		if(this.game.input.activePointer.isDown)
-	 		{
-	 			//this.tenantToAdd.sprite.x = this.game.input.x;
-	 			//this.tenantToAdd.sprite.y = this.game.input.y;
-	 			tenant.sprite.x = this.game.input.activePointer.x;
-	 			tenant.sprite.y = this.game.input.activePointer.y;
-	 		}
-	 		else
-	 		{
-	 			
-	 			
+		if (tenant !== null)
+		{
+			if (this.game.input.activePointer.isDown)
+			{
+				//this.tenantToAdd.sprite.x = this.game.input.x;
+				//this.tenantToAdd.sprite.y = this.game.input.y;
+				tenant.sprite.x = this.game.input.activePointer.x;
+				tenant.sprite.y = this.game.input.activePointer.y;
+			}
+			else
+			{
+
+
 
 				for (var i = 0; i < this.pAptManager.apts.children.length; i++)
 				{
@@ -445,68 +459,136 @@ GameSCENE.prototype = {
 					//this.game.physics.arcade.enable(tenant.sprite);
 
 
-					
-
-					
-					
 
 					if (app.getBounds().contains(this.game.input.activePointer.x, this.game.input.activePointer.y))
 					{
-							
+
 						// caso ap esteja vago e tenha dinheiro para mover, mova
 						if (app.tenant === null && afford >= 0)
 						{
-							
-							this.pAptManager.AddTenant(this.game,this.player,2,tenant.type,app.posx, app.posy);
-							
-							this.sweetValueTextChange(this.moneyText,cost,false);
+
+							this.pAptManager.addTenant(this.game, this.player, 2, tenant.type, app.posx, app.posy);
+
+							this.sweetValueTextChange(this.moneyText, cost, false);
 							this.player.money = afford;
 							//this.room_x = app.posx;
 							//this.room_y = app.posy;
 							//app.tenant = this;
 							//this.ownAp_reference = app;
 
-							
-							
+
+
 						}
 					}
 				}
 
 				//if(tenant.sprite)
 
-	 			
-	 			tenant.sprite.visible = false;
-	 			tenant.sprite.destroy();
-	 			tenant.stressBar.destroy();
-	 			//this.tenantToAdd.sprite.parent.destroy();
-	 			tenant = null;
-	 			this.tenantToAdd = null;
-	 				
-	 		
 
-
-	 			
+				tenant.sprite.visible = false;
+				tenant.sprite.destroy();
+				tenant.stressBar.destroy();
+				//this.tenantToAdd.sprite.parent.destroy();
+				tenant = null;
+				this.tenantToAdd = null;
 	 		}
 	 	}
 	},
+
+	createLoopTimer: function(time,ffunction, autostart)
+	{
+
+		var timer = this.game.time.create(false);
+
+
+
+		timer.loop(time, ffunction, this);
+
+		if (autostart)
+			timer.start();
+
+		return timer;
+	},
+
+	startBossSpawning: function(boss_type, timeratio) // every how much seconds
+		{
+
+			var chance = new Chance(Math.random);
+
+			var tnt_index = chance.integer(
+			{
+				min: 0,
+				max: this.pAptManager.tenants_matrix.length - 1
+			});
+			
+			var rooms = {
+				x: this.pAptManager.tenants_matrix[tnt_index].room_x,
+				y: this.pAptManager.tenants_matrix[tnt_index].room_y
+			};
+
+
+			var manager = this.pAptManager;
+			function whichboss(type)
+			{
+
+				switch (boss_type)
+				{
+
+					case 'BOSSKID':
+
+				manager.deleteTenant(rooms.x, rooms.y);
+
+
+				
+						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
+
+						break;
+
+
+				}
+
+			}
+
+			
+
+
+			//this.createLoopTimer(Phaser.Time.SECOND * timeratio, whichboss(boss_type), true);
+			this.createLoopTimer(Phaser.Time.SECOND * timeratio, function(){
+				switch (boss_type)
+				{
+
+					case 'BOSSKID':
+
+						manager.deleteTenant(rooms.x, rooms.y);
+
+
+				
+						manager.addTenant(this.game, this.player, 0, boss_type, rooms.x, rooms.y);
+
+						break;
+					}
+			}, true);
+			
+
+		},
 
 	createTenantShopButton: function(type)
 	{
 
 		var button;
 		var char_icon;
-		var coin = this.game.add.sprite(485- 50, 5, "coin");
-				//coin.fixedToCamera = true;
-				coin.animations.add('idle');
+		var coin = this.game.add.sprite(485 - 50, 5, "coin");
+		//coin.fixedToCamera = true;
+		coin.animations.add('idle');
+		coin.animations.play('idle', 30, false);
+		coin.events.onAnimationComplete.add(function()
+		{
+			this.game.time.events.add(Phaser.Timer.SECOND * 3, function()
+			{
 				coin.animations.play('idle', 30, false);
-				coin.events.onAnimationComplete.add(function()
-				{
-					this.game.time.events.add(Phaser.Timer.SECOND * 3, function()
-					{
-						coin.animations.play('idle', 30, false);
-					}, this);
-					//console.log('animation complete');
-				}, this);
+			}, this);
+			//console.log('animation complete');
+		}, this);
 
 		var color;
 
@@ -517,13 +599,12 @@ GameSCENE.prototype = {
 		{
 
 			case "MODEL":
-				
+
 				button = this.game.add.button(0, 227, "model_card", function() {}, this);
 				char_icon = this.game.add.sprite(27, 75, "model_icon");
 
 
 
-				
 				color = randomColor(
 				{
 					hue: "red",
@@ -533,7 +614,7 @@ GameSCENE.prototype = {
 
 
 
-				 buttonTenant = new Tenant(this.game, 0, 0, type, 0);
+				buttonTenant = new Tenant(this.game, 0, 0, type, 0);
 				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 				buttonTenant.sprite.x = button.x + 485 + 200;
 				buttonTenant.sprite.y = 0 + button.y / 2;
@@ -567,35 +648,35 @@ GameSCENE.prototype = {
 				}, this);
 
 				button.events.onInputDown.add(function()
-					{
+				{
 
-						this.hideTenantMenu();
+					this.hideTenantMenu();
 
-						tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
-						tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-						tenantToAdd.sprite.x = 0;
-						tenantToAdd.sprite.y = 0;
-						//tenantToAdd.fixedToCamera = true;
-						tenantToAdd.arrowsVisible(true);
-						//this.game.world.bringToTop(tenantToAdd.sprite);
-						//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
+					tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
+					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
+					tenantToAdd.sprite.x = 0;
+					tenantToAdd.sprite.y = 0;
+					//tenantToAdd.fixedToCamera = true;
+					tenantToAdd.arrowsVisible(true);
+					//this.game.world.bringToTop(tenantToAdd.sprite);
+					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
 
-						//this.coin.addChild(buttonTenant.sprite);
-						var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
-						holdpixel.fixedToCamera = true;
-						holdpixel.addChild(tenantToAdd.sprite);
-						tenantToAdd.sprite.scale.x = 0.5;
-						tenantToAdd.sprite.scale.y = 0.5;
+					//this.coin.addChild(buttonTenant.sprite);
+					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
+					holdpixel.fixedToCamera = true;
+					holdpixel.addChild(tenantToAdd.sprite);
+					tenantToAdd.sprite.scale.x = 0.5;
+					tenantToAdd.sprite.scale.y = 0.5;
 
-						this.tenantToAdd = tenantToAdd;
-						this.tenantToAddParent = holdpixel;
-						this.varToTest = this.tenantToAdd.price;
-						//button.removeChildAt(0);
-						//holdpixel.sprite.x = this.game.input.x;
-						//holdpixel.sprite.y = this.game.input.y;
+					this.tenantToAdd = tenantToAdd;
+					this.tenantToAddParent = holdpixel;
+					this.varToTest = this.tenantToAdd.price;
+					//button.removeChildAt(0);
+					//holdpixel.sprite.x = this.game.input.x;
+					//holdpixel.sprite.y = this.game.input.y;
 
-					}, this);
-					//button.anchor.setTo(0.5,0.5);
+				}, this);
+				//button.anchor.setTo(0.5,0.5);
 
 
 				this.shopButtonsList.push(button);
@@ -604,12 +685,11 @@ GameSCENE.prototype = {
 
 			case "SOLDIER":
 
-			button = this.game.add.button(0, 227, "soldier_card", function() {}, this);
+				button = this.game.add.button(0, 227, "soldier_card", function() {}, this);
 				char_icon = this.game.add.sprite(27, 75, "soldier_icon");
 
 
 
-				
 				color = randomColor(
 				{
 					hue: "green",
@@ -619,7 +699,7 @@ GameSCENE.prototype = {
 
 
 
-				 buttonTenant = new Tenant(this.game, 0, 0, type, 0);
+				buttonTenant = new Tenant(this.game, 0, 0, type, 0);
 				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
 				buttonTenant.sprite.x = button.x + 485 + 200;
 				buttonTenant.sprite.y = 0 + button.y / 2;
@@ -653,41 +733,39 @@ GameSCENE.prototype = {
 				}, this);
 
 				button.events.onInputDown.add(function()
-					{
+				{
 
-						this.hideTenantMenu();
+					this.hideTenantMenu();
 
-						tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
-						tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-						tenantToAdd.sprite.x = 0;
-						tenantToAdd.sprite.y = 0;
-						//tenantToAdd.fixedToCamera = true;
-						tenantToAdd.arrowsVisible(true);
-						//this.game.world.bringToTop(tenantToAdd.sprite);
-						//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
+					tenantToAdd = new Tenant(this.game, 0, 0, type, 0);
+					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
+					tenantToAdd.sprite.x = 0;
+					tenantToAdd.sprite.y = 0;
+					//tenantToAdd.fixedToCamera = true;
+					tenantToAdd.arrowsVisible(true);
+					//this.game.world.bringToTop(tenantToAdd.sprite);
+					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
 
-						//this.coin.addChild(buttonTenant.sprite);
-						var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
-						holdpixel.fixedToCamera = true;
-						holdpixel.addChild(tenantToAdd.sprite);
-						tenantToAdd.sprite.scale.x = 0.5;
-						tenantToAdd.sprite.scale.y = 0.5;
+					//this.coin.addChild(buttonTenant.sprite);
+					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
+					holdpixel.fixedToCamera = true;
+					holdpixel.addChild(tenantToAdd.sprite);
+					tenantToAdd.sprite.scale.x = 0.5;
+					tenantToAdd.sprite.scale.y = 0.5;
 
-						this.tenantToAdd = tenantToAdd;
-						this.tenantToAddParent = holdpixel;
-						this.varToTest = this.tenantToAdd.price;
-						//button.removeChildAt(0);
-						//holdpixel.sprite.x = this.game.input.x;
-						//holdpixel.sprite.y = this.game.input.y;
+					this.tenantToAdd = tenantToAdd;
+					this.tenantToAddParent = holdpixel;
+					this.varToTest = this.tenantToAdd.price;
+					//button.removeChildAt(0);
+					//holdpixel.sprite.x = this.game.input.x;
+					//holdpixel.sprite.y = this.game.input.y;
 
-					}, this);
-					//button.anchor.setTo(0.5,0.5);
+				}, this);
+				//button.anchor.setTo(0.5,0.5);
 
 
 				this.shopButtonsList.push(button);
 				break;
-
-
 		}
 	}
 };
