@@ -93,7 +93,7 @@ GameSCENE.prototype = {
 		
 
 
-		this.startBossSpawning("BOSSKID", 150);
+		this.startBossSpawning("BOSSKID", 10);
 		//this.bossTimers.BOSSKID.events[0].delay = 5000;
 		
 		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
@@ -572,7 +572,17 @@ GameSCENE.prototype = {
 			y: this.pAptManager.tenants_matrix[tnt_index].room_y
 		};
 
-		if (this.pAptManager.tenants_matrix.length >= 2)
+		
+
+		var manager = this.pAptManager;
+
+		switch (boss_type)
+		{
+
+			case 'BOSSKID':
+				this.bossTimers.BOSSKID = this.createLoopTimer(timeratio * 1000, function()
+				{
+					if (this.pAptManager.tenants_matrix.length >= 2)
 		{
 			tnt_index = chance.integer(
 			{
@@ -585,16 +595,7 @@ GameSCENE.prototype = {
 				y: this.pAptManager.tenants_matrix[tnt_index].room_y
 			};
 		}
-
-		var manager = this.pAptManager;
-
-		switch (boss_type)
-		{
-
-			case 'BOSSKID':
-				this.bossTimers.BOSSKID = this.createLoopTimer(timeratio * 1000, function()
-				{
-
+		
 					//this.varToTest++;
 					if (this.pAptManager.tenants_matrix.length >= 1)
 					{
