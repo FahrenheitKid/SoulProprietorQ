@@ -81,6 +81,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
             {
                 //add object to group
                 this.apts.create(445 * j + 50, game.world.height - 375 - (375 * i) - 30, 'ap');
+
                 //modify
                 var ap_ref = this.apts.getTop();
                 ap_ref.posx = j;
@@ -89,6 +90,11 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                 ap_ref.inputEnabled = true;
                 ap_ref.events.onInputDown.add(onInputDown, this);
 
+                 if(i == 0 && j == 0 )
+                 {
+                    ap_ref.tenant = "proprietor";
+                    ap_ref.tint = 0xFF69B4;
+                 }
                 //start apartment matrix ids
                 this.apts_matrix.push(1);
             }
@@ -114,27 +120,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
     {
         if (ap.tenant === null)
         {
-            this.room_clicked_x = ap.posx;
-            this.room_clicked_y = ap.posy;
-
-            if (ap.tint == 0xffffff) 
-            {
-                //untinta diferente apt
-                for(var i = 0; i < this.apts.children.length; i++)
-                {
-                    if(this.apts.children[i].tint == 0xFFFF66)
-                    {
-                        this.apts.children[i].tint = 0xffffff;
-                    }
-                }
-                ap.tint = 0xFFFF66;
-                this.room_clicked = true;
-            }
-            else if (ap.tint == 0xFFFF66) 
-            {
-                ap.tint = 0xffffff;
-                this.room_clicked = false;
-            }
+            
         }
         else if (ap.tenant == 'aptrans') 
         {
