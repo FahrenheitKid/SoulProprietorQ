@@ -20,6 +20,7 @@ var AptManager = function(game, sizex, sizey, gameScene_ref)
     this.tenants_matrix = [];
     this.player_reference = null;
     this.gameScene_reference = gameScene_ref;
+    this.game_reference  =  game;
 };
 
 
@@ -156,8 +157,46 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 			this.apts_matrix[ap.posy * this.apts_sizey + ap.posx] = 1;
             */
 
-            ap.loadTexture('ap');
-            ap.tenant = null;
+            var b1, b2, lulu, lala;
+
+            var xval = (445 * ap.posx) + 225.5
+            var yval =  this.game_reference.world.height - 187.5 - (375 * ap.posy);
+
+            lulu = this.gameScene_reference.createButton(b1, "ap_button", xval - 100,yval,function()
+                {
+                    ap.loadTexture('ap');
+                    ap.tenant = null;
+                    lala.destroy();
+                    lulu.pendingDestroy = true;
+
+                }, 0.5,0.5, true, true, false);
+
+          
+            var gg = this.game_reference;
+            lala = this.gameScene_reference.createButton(b2, "elevator_button", xval + 100,yval,function()
+                {
+                    ap.loadTexture('elevator');
+                     var hold = gg.add.sprite(0,0, "elevatorDoors_sheet");
+                     hold.animations.add('open', [0,1,2,3]);
+                     hold.animations.add('close', [3,2,1,0]);
+                     //hold.animations.play('close', 30, true);
+                     ap.addChild(hold);
+                    ap.tenant = "elevator";
+                    lala.pendingDestroy = true;
+                    lulu.destroy();
+                }, 0.5,0.5, true, true, false);
+
+            
+            //lala.scale.set(0.5,0.5);
+            //lulu.scale.set(0.5,0.5);
+           //var p =  this.game_reference.add.sprite("emptyPixel",0,0);
+            //ap.addChild(lulu);
+           // ap.addChild(lala);
+            //p.addChild(b1);
+              //ap.addChild(b1);
+              //ap.addChild(b2);
+           // ap.loadTexture('ap');
+           // ap.tenant = null;
         }
     }
 };

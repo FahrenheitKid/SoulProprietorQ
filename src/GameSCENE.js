@@ -198,7 +198,7 @@ GameSCENE.prototype = {
 		tenantMenuBgParent.fixedToCamera = true;
 		tenantMenuBgParent.addChild(this.tenantMenuBg);
 	    
-		this.createButton(this.fullscreenButton, "fullscreen_button", 1440 - 32 - 30, 10 + 32 + 16, this.gofull, 0.5, 0.5, true,true);
+		this.createButton(this.fullscreenButton, "fullscreen_button", 1440 - 32 - 30, 10 + 32 + 16, this.gofull, 0.5, 0.5, true,true,true);
 		//this.createButton(this.tenantMenuButton, "tenantMenu_button", 60, 60, this.toggleTenantMenu, 0.5, 0.5, false,false);
 		
 		this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button", this.toggleTenantMenu, this);
@@ -314,10 +314,12 @@ GameSCENE.prototype = {
 
 	},
 
-	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut) // função para criar botões mais rápido
+	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut, fixed) // função para criar botões mais rápido
 	{
 		 button_variable = this.game.add.button(x, y, sprite_key,click_func, this);
 	     button_variable.anchor.setTo(anchorx,anchory);
+
+	     if(fixed)
 	     button_variable.fixedToCamera = true;
 
 	     //this.fullscreenButton.events.onInputOver.add(this.basicButtonOver(this.fullscreenButton),this);

@@ -94,6 +94,10 @@ preload.prototype = {
 		this.game.load.audio("bossComing", "assets/sounds/bossComing.mp3");
 		this.game.load.image("elevator", "assets/sprites/elevatoropen.png");
 		this.game.load.spritesheet("elevatorDoors_sheet", "assets/sprites/elevatordoors.png", 445,375);
+
+		this.game.load.image("ap_button", "assets/sprites/a_button.png");
+		this.game.load.image("elevator_button", "assets/sprites/e_button.png");
+
 /*
 		this.game.load.image("model", "assets/sprites/char00.png");
 		this.game.load.image("model_set", "assets/sprites/model_set.png");
