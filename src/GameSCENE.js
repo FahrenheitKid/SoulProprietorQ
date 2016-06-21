@@ -341,7 +341,7 @@ GameSCENE.prototype = {
 			}, this);
 
 		}
-
+			return button_variable;
 	},
 
 	basicButtonOver: function(button)
