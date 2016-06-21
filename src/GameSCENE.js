@@ -183,7 +183,7 @@ GameSCENE.prototype = {
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
         this.pAptManager.addTenant(this.game, this.player, 2, 'SOLDIER', 0, 1);
-        this.pAptManager.addTenant(this.game, this.player, 2, 'MODEL', 1, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'BOUNCER', 1, 1);
          //this.pAptManager.addTenant(this.game, this.player, 2, 'BOSSKID', 0, 0);
 
          this.bossSfx.BOSSKID = this.game.add.audio("bossComing");

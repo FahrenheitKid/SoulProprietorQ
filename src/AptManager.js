@@ -94,6 +94,14 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
                  {
                     ap_ref.tenant = "proprietor";
                     ap_ref.tint = 0xFF69B4;
+
+                    var xval = (445 * ap_ref.posx) + 225.5
+            var yval =  this.game_reference.world.height - 187.5 - (375 * ap_ref.posy);
+
+                this.player_reference.sprite = this.game_reference.add.sprite(xval,yval,"proprietor");
+                this.player_reference.sprite.animations.add('idle');
+                this.player_reference.sprite.animations.play('idle', 5, true);
+                this.player_reference.sprite.anchor.setTo(0.5, 0.5);
                  }
                 //start apartment matrix ids
                 this.apts_matrix.push(1);
@@ -120,7 +128,7 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
     {
         if (ap.tenant === null)
         {
-            
+
         }
         else if (ap.tenant == 'aptrans') 
         {
@@ -267,6 +275,8 @@ AptManager.prototype.update = function(game)
         if(this.tenants_matrix[i].stress >= 100)
         {
            // deleteProperties(this.tenants_matrix[i]);
+           this.gameScene_reference.sweetValueTextChange(this.gameScene_reference.moneyText,30,false);
+           this.player_reference.money-=30;
            this.tenants_matrix[i].destroy();
            deleteProperties(this.tenants_matrix[i]);
             this.tenants_matrix[i] = {};

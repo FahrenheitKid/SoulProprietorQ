@@ -5,6 +5,7 @@ var Player = function(game)
     this.score = 0;
     this.money = 100;
     this.game_reference = game;
+    this.sprite = null;
 };
 
 Player.prototype.init = function(game, money)

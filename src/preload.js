@@ -87,16 +87,53 @@ preload.prototype = {
 		this.game.load.spritesheet("up_arrow_red","assets/sprites/up_arrow_red_sheet.png", 200, 200);
 		this.game.load.spritesheet("down_arrow_red","assets/sprites/down_arrow_red_sheet.png", 200, 200);
 		
-		this.game.load.image("proprietor", "assets/sprites/proprietor.png");
+		this.game.load.spritesheet("proprietor", "assets/sprites/proprietor_sheet.png", 207,300);
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
 
-		this.game.load.image("bosskid", "assets/sprites/bosskid.png");
+		this.game.load.spritesheet("bosskid", "assets/sprites/bosskididle.png", 158, 187);
 		this.game.load.audio("bossComing", "assets/sounds/bossComing.mp3");
 		this.game.load.image("elevator", "assets/sprites/elevatoropen.png");
 		this.game.load.spritesheet("elevatorDoors_sheet", "assets/sprites/elevatordoors.png", 445,375);
 
 		this.game.load.image("ap_button", "assets/sprites/a_button.png");
 		this.game.load.image("elevator_button", "assets/sprites/e_button.png");
+
+		this.game.load.spritesheet("bouncer", "assets/sprites/bouncerIdle.png", 71.5, 171);
+		this.game.load.image("bouncer_icon", "assets/sprites/bouncer_icon.png");
+		this.game.load.image("bouncer_card", "assets/sprites/cardBouncer.png");
+
+		this.game.load.spritesheet("hero", "assets/sprites/heroIdle.png", 100, 158);
+		this.game.load.image("hero_icon", "assets/sprites/hero_icon.png");
+		this.game.load.image("hero_card", "assets/sprites/cardHero.png");
+
+		this.game.load.spritesheet("florist", "assets/sprites/floristIdle.png", 93.83, 179);
+		this.game.load.image("florist_icon", "assets/sprites/florist_icon.png");
+		this.game.load.image("florist_card", "assets/sprites/cardFlorist.png");
+
+
+		this.game.load.spritesheet("kunoichi", "assets/sprites/kunoichiIdle.png", 91, 170);
+		this.game.load.image("kunoichi_icon", "assets/sprites/kunoichi_icon.png");
+		this.game.load.image("kunoichi_card", "assets/sprites/cardKunoichi.png");
+
+		this.game.load.spritesheet("medic", "assets/sprites/medicIdle.png", 71.4, 170);
+		this.game.load.image("medic_icon", "assets/sprites/medic_icon.png");
+		this.game.load.image("medic_card", "assets/sprites/cardMedic.png");
+
+		this.game.load.spritesheet("ninja", "assets/sprites/ninjaIdle.png", 105.3, 157);
+		this.game.load.image("ninja_icon", "assets/sprites/ninja_icon.png");
+		this.game.load.image("ninja_card", "assets/sprites/cardNinja.png");
+
+		this.game.load.spritesheet("princess", "assets/sprites/princessIdle.png", 97.5, 164);
+		this.game.load.image("princess_icon", "assets/sprites/princess_icon.png");
+		this.game.load.image("princess_card", "assets/sprites/cardPrincess.png");
+
+		this.game.load.spritesheet("teacher", "assets/sprites/teacherIdle.png", 98, 158);
+		this.game.load.image("teacher_icon", "assets/sprites/teacher_icon.png");
+		this.game.load.image("teacher_card", "assets/sprites/cardTeacher.png");
+
+		this.game.load.spritesheet("vampire", "assets/sprites/vampireIdle.png", 244, 226);
+		this.game.load.image("vampire_icon", "assets/sprites/vampire_icon.png");
+		this.game.load.image("vampire_card", "assets/sprites/cardVampire.png");
 
 /*
 		this.game.load.image("model", "assets/sprites/char00.png");
