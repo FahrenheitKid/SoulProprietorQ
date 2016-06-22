@@ -19,7 +19,9 @@ var GameSCENE = function(game)
 	this.fullscreenButton = null;
 	this.tenantMenuButton = null;
 	this.tenantMenuBg = null;
-	this.shopTypes = ['MODEL', 'SOLDIER'];
+	this.shopTypes = ['MODEL', 'SOLDIER', 'FLORIST', 'BOUNCER', 'HERO',
+		'KUNOICHI', 'NINJA', 'MEDIC', 'PRINCESS', 'TEACHER', 'VAMPIRE'
+	];
 	this.shopButtonsList = [];
 	this.coin = null;
 	this.moneyText = null;
@@ -30,7 +32,6 @@ var GameSCENE = function(game)
 	this.dayTimerSeconds = null;
 	this.monthTimerSeconds = null;
 	this.incomeTimer = null;
-	
 	this.dayCount = 0;
 	this.monthCount = 0;
 	this.yearCount = 0;
@@ -90,6 +91,8 @@ GameSCENE.prototype = {
 
 		this.initShop();
 
+		this.shopTypes.shift();
+		this.refreshShop();
 		
 
 
@@ -111,6 +114,11 @@ GameSCENE.prototype = {
 	 	this.tenantToAddCollision(this.tenantToAdd);
 
 	 	this.moveCameraOnEdges();
+
+	 	this.game.world.bringToTop(this.tenantMenuBg);
+	 	this.game.world.bringToTop(this.tenantMenuButton);
+	 	this.tenantMenuBg.bringToTop();
+	 	this.tenantMenuButton.bringToTop();
 	 	
 	},
 	
@@ -182,8 +190,8 @@ GameSCENE.prototype = {
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        this.pAptManager.addTenant(this.game, this.player, 2, 'SOLDIER', 0, 1);
-        this.pAptManager.addTenant(this.game, this.player, 2, 'BOUNCER', 1, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'KUNOICHI', 0, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'NINJA', 1, 1);
          //this.pAptManager.addTenant(this.game, this.player, 2, 'BOSSKID', 0, 0);
 
          this.bossSfx.BOSSKID = this.game.add.audio("bossComing");
@@ -443,6 +451,20 @@ GameSCENE.prototype = {
 			
 		
 	},
+
+	refreshShop: function()
+	{
+		for(var i = 0; i < this.shopButtonsList.length; i++)
+			{
+			this.shopButtonsList[i].destroy();
+			arraymove(this.shopButtonsList,i,0);
+            this.shopButtonsList.shift();
+
+			}
+
+			this.initShop();
+
+	},
 	
 	initMusic: function(game)
 	{
@@ -529,6 +551,11 @@ GameSCENE.prototype = {
 							//app.tenant = this;
 							//this.ownAp_reference = app;
 
+			//each 2 false +15 no custo, each 2 true + 25
+      //each 1 false + 7 no custo, each 1 true + 13
+
+      //each 2 false +9 no income each 2 true + 10
+      //each 1 false + 5 no income, each 1 true + 4
 
 
 						}
@@ -636,15 +663,90 @@ GameSCENE.prototype = {
 		var buttonTenant;
 		var tenantToAdd;
 		var itself = this;
+
+		var game = this.game;
+		var manager = this.pAptManager;
+		var player = this.player;
+		var gamesc = this;
+		function switchsetup()
+		{
+			buttonTenant = new Tenant(game, 0, 0, type, 0, itself);
+				buttonTenant.init(game, manager.apts.children[0], player, manager, true);
+				buttonTenant.sprite.x = button.x + 485 + 200;
+				buttonTenant.sprite.y = 0 + button.y / 2;
+
+				var init_x = button.x + 485 + 200;
+				var init_y = 0 + button.y / 2;
+				buttonTenant.arrowsVisible(true);
+				button.addChild(buttonTenant.sprite);
+				button.addChild(char_icon);
+				button.addChild(coin);
+
+				button.children[0].visible = false;
+
+
+				button.events.onInputOver.add(function()
+				{
+
+					button.children[0].visible = true;
+					//var buttonTenant = this.game.add
+
+				}, this);
+
+
+
+				button.events.onInputOut.add(function()
+				{
+
+					button.children[0].visible = false;
+					//var buttonTenant = this.game.add
+
+				}, this);
+
+				button.events.onInputDown.add(function()
+				{
+
+					gamesc.hideTenantMenu();
+
+					tenantToAdd = new Tenant(game, 0, 0, type, 0, itself);
+					tenantToAdd.init(game, manager.apts.children[0], player, manager, true);
+					tenantToAdd.sprite.x = 0;
+					tenantToAdd.sprite.y = 0;
+					//tenantToAdd.fixedToCamera = true;
+					tenantToAdd.arrowsVisible(true);
+					//this.game.world.bringToTop(tenantToAdd.sprite);
+					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
+
+					//this.coin.addChild(buttonTenant.sprite);
+					var holdpixel = game.add.sprite(0, 0, "emptyPixel");
+					holdpixel.fixedToCamera = true;
+					holdpixel.addChild(tenantToAdd.sprite);
+					tenantToAdd.sprite.scale.x = 0.5;
+					tenantToAdd.sprite.scale.y = 0.5;
+
+					gamesc.tenantToAdd = tenantToAdd;
+					gamesc.tenantToAddParent = holdpixel;
+					//this.varToTest = this.tenantToAdd.price;
+					//button.removeChildAt(0);
+					//holdpixel.sprite.x = this.game.input.x;
+					//holdpixel.sprite.y = this.game.input.y;
+
+				}, this);
+				//button.anchor.setTo(0.5,0.5);
+
+
+				gamesc.shopButtonsList.push(button);
+
+		}
+
+		var inity = 100;
 		switch (type)
 		{
 
 			case "MODEL":
 
-				button = this.game.add.button(0, 227, "model_card", function() {}, this);
+				button = this.game.add.button(0, inity, "model_card", function() {}, this);
 				char_icon = this.game.add.sprite(27, 75, "model_icon");
-
-
 
 				color = randomColor(
 				{
@@ -653,83 +755,14 @@ GameSCENE.prototype = {
 				});
 				button.tint = parseInt(color.substr(1), 16);
 
-
-
-				buttonTenant = new Tenant(this.game, 0, 0, type, 0, itself);
-				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-				buttonTenant.sprite.x = button.x + 485 + 200;
-				buttonTenant.sprite.y = 0 + button.y / 2;
-
-				var init_x = button.x + 485 + 200;
-				var init_y = 0 + button.y / 2;
-				buttonTenant.arrowsVisible(true);
-				button.addChild(buttonTenant.sprite);
-				button.addChild(char_icon);
-				button.addChild(coin);
-
-				button.children[0].visible = false;
-
-
-				button.events.onInputOver.add(function()
-				{
-
-					button.children[0].visible = true;
-					//var buttonTenant = this.game.add
-
-				}, this);
-
-
-
-				button.events.onInputOut.add(function()
-				{
-
-					button.children[0].visible = false;
-					//var buttonTenant = this.game.add
-
-				}, this);
-
-				button.events.onInputDown.add(function()
-				{
-
-					this.hideTenantMenu();
-
-					tenantToAdd = new Tenant(this.game, 0, 0, type, 0, itself);
-					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-					tenantToAdd.sprite.x = 0;
-					tenantToAdd.sprite.y = 0;
-					//tenantToAdd.fixedToCamera = true;
-					tenantToAdd.arrowsVisible(true);
-					//this.game.world.bringToTop(tenantToAdd.sprite);
-					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
-
-					//this.coin.addChild(buttonTenant.sprite);
-					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
-					holdpixel.fixedToCamera = true;
-					holdpixel.addChild(tenantToAdd.sprite);
-					tenantToAdd.sprite.scale.x = 0.5;
-					tenantToAdd.sprite.scale.y = 0.5;
-
-					this.tenantToAdd = tenantToAdd;
-					this.tenantToAddParent = holdpixel;
-					//this.varToTest = this.tenantToAdd.price;
-					//button.removeChildAt(0);
-					//holdpixel.sprite.x = this.game.input.x;
-					//holdpixel.sprite.y = this.game.input.y;
-
-				}, this);
-				//button.anchor.setTo(0.5,0.5);
-
-
-				this.shopButtonsList.push(button);
+				switchsetup();
 
 				break;
 
 			case "SOLDIER":
 
-				button = this.game.add.button(0, 227, "soldier_card", function() {}, this);
+				button = this.game.add.button(0, inity, "soldier_card", function() {}, this);
 				char_icon = this.game.add.sprite(27, 75, "soldier_icon");
-
-
 
 				color = randomColor(
 				{
@@ -738,75 +771,145 @@ GameSCENE.prototype = {
 				});
 				button.tint = parseInt(color.substr(1), 16);
 
-
-
-				buttonTenant = new Tenant(this.game, 0, 0, type, 0, itself);
-				buttonTenant.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-				buttonTenant.sprite.x = button.x + 485 + 200;
-				buttonTenant.sprite.y = 0 + button.y / 2;
-
-				var init_x = button.x + 485 + 200;
-				var init_y = 0 + button.y / 2;
-				buttonTenant.arrowsVisible(true);
-				button.addChild(buttonTenant.sprite);
-				button.addChild(char_icon);
-				button.addChild(coin);
-
-				button.children[0].visible = false;
-
-
-				button.events.onInputOver.add(function()
-				{
-
-					button.children[0].visible = true;
-					//var buttonTenant = this.game.add
-
-				}, this);
-
-
-
-				button.events.onInputOut.add(function()
-				{
-
-					button.children[0].visible = false;
-					//var buttonTenant = this.game.add
-
-				}, this);
-
-				button.events.onInputDown.add(function()
-				{
-
-					this.hideTenantMenu();
-
-					tenantToAdd = new Tenant(this.game, 0, 0, type, 0, itself);
-					tenantToAdd.init(this.game, this.pAptManager.apts.children[0], this.player, this.pAptManager, true);
-					tenantToAdd.sprite.x = 0;
-					tenantToAdd.sprite.y = 0;
-					//tenantToAdd.fixedToCamera = true;
-					tenantToAdd.arrowsVisible(true);
-					//this.game.world.bringToTop(tenantToAdd.sprite);
-					//tenantToAdd.sprite.anchor.setTo(0.5,0.5);
-
-					//this.coin.addChild(buttonTenant.sprite);
-					var holdpixel = this.game.add.sprite(0, 0, "emptyPixel");
-					holdpixel.fixedToCamera = true;
-					holdpixel.addChild(tenantToAdd.sprite);
-					tenantToAdd.sprite.scale.x = 0.5;
-					tenantToAdd.sprite.scale.y = 0.5;
-
-					this.tenantToAdd = tenantToAdd;
-					this.tenantToAddParent = holdpixel;
-					//this.varToTest = this.tenantToAdd.price;
-					//button.removeChildAt(0);
-					//holdpixel.sprite.x = this.game.input.x;
-					//holdpixel.sprite.y = this.game.input.y;
-
-				}, this);
-				//button.anchor.setTo(0.5,0.5);
-
-
-				this.shopButtonsList.push(button);
+				switchsetup();
 				break;
+
+				case "BOUNCER":
+
+				button = this.game.add.button(0, inity, "bouncer_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "bouncer_icon");
+
+				color = randomColor(
+				{
+					hue: "black",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "FLORIST":
+
+				button = this.game.add.button(0, inity, "florist_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "florist_icon");
+
+				color = randomColor(
+				{
+					hue: "pink",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "HERO":
+
+				button = this.game.add.button(0, inity, "hero_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "hero_icon");
+
+				color = randomColor(
+				{
+					hue: "red",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "KUNOICHI":
+
+				button = this.game.add.button(0, inity, "kunoichi_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "kunoichi_icon");
+
+				color = randomColor(
+				{
+					hue: "violet",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "NINJA":
+
+				button = this.game.add.button(0, inity, "ninja_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "ninja_icon");
+
+				color = randomColor(
+				{
+					hue: "gray",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "MEDIC":
+
+				button = this.game.add.button(0, inity, "medic_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "medic_icon");
+
+				color = randomColor(
+				{
+					hue: "green",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "PRINCESS":
+
+				button = this.game.add.button(0, inity, "princess_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "princess_icon");
+
+				color = randomColor(
+				{
+					hue: "yellow",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "TEACHER":
+
+				button = this.game.add.button(0, inity, "teacher_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "teacher_icon");
+
+				color = randomColor(
+				{
+					hue: "blue",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+				case "VAMPIRE":
+
+				button = this.game.add.button(0, inity, "vampire_card", function() {}, this);
+				char_icon = this.game.add.sprite(27, 75, "vampire_icon");
+
+				color = randomColor(
+				{
+					hue: "red",
+					luminosity: "light"
+				});
+				button.tint = parseInt(color.substr(1), 16);
+
+				switchsetup();
+				break;
+
+
 		}
 	}
 };

@@ -402,23 +402,23 @@ Tenant.prototype.initType = function(game, ap_sprite)
       game.physics.arcade.enable(this);
       break;
 
-      case 'BOUNCER':
+      case 'FLORIST':
 
       // this.type = type;
       //this.isBoss = true;
-      sprite_width = game.cache.getImage("bosskid").width;
-      sprite_height = game.cache.getImage("bosskid").height;
-      this.behavior.upleft = 'VOID'; // VOID = 0, TRUE = +hp, FALSE = -hp
-      this.behavior.up = 'VOID';
-      this.behavior.upright = 'VOID';
-      this.behavior.right = 'VOID';
-      this.behavior.downright = 'VOID';
-      this.behavior.down = 'FALSE';
-      this.behavior.downleft = 'VOID';
-      this.behavior.left = 'VOID';
+      sprite_width = game.cache.getImage("florist").width;
+      sprite_height = game.cache.getImage("florist").height;
+      this.behavior.upleft = 'TRUE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'TRUE';
+      this.behavior.upright = 'TRUE';
+      this.behavior.right = 'TRUE';
+      this.behavior.downright = 'TRUE';
+      this.behavior.down = 'TRUE';
+      this.behavior.downleft = 'TRUE';
+      this.behavior.left = 'TRUE';
       
-      this.price = 7;
-      this.income = 5;
+      this.price = 100;
+      this.income = 40;
       // msm q ap so que com width e heights do sprite
       //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
       //this.sprite = game.add.sprite( 472, 3510, "model");
@@ -426,7 +426,281 @@ Tenant.prototype.initType = function(game, ap_sprite)
       tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
       tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
       
-      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "bouncer");
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "florist");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+      case 'HERO':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("hero").width;
+      sprite_height = game.cache.getImage("hero").height;
+      this.behavior.upleft = 'TRUE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'VOID';
+      this.behavior.upright = 'TRUE';
+      this.behavior.right = 'TRUE';
+      this.behavior.downright = 'TRUE';
+      this.behavior.down = 'VOID';
+      this.behavior.downleft = 'TRUE';
+      this.behavior.left = 'TRUE';
+      
+      this.price = 75;
+      this.income = 30;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "hero");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+      case 'KUNOICHI':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("kunoichi").width;
+      sprite_height = game.cache.getImage("kunoichi").height;
+      this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'FALSE';
+      this.behavior.upright = 'VOID';
+      this.behavior.right = 'FALSE';
+      this.behavior.downright = 'FALSE';
+      this.behavior.down = 'FALSE';
+      this.behavior.downleft = 'VOID';
+      this.behavior.left = 'FALSE';
+      
+      this.price = 45;
+      this.income = 27;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "kunoichi");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+      case 'NINJA':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("ninja").width;
+      sprite_height = game.cache.getImage("ninja").height;
+      this.behavior.upleft = 'VOID'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'FALSE';
+      this.behavior.upright = 'FALSE';
+      this.behavior.right = 'FALSE';
+      this.behavior.downright = 'VOID';
+      this.behavior.down = 'FALSE';
+      this.behavior.downleft = 'FALSE';
+      this.behavior.left = 'FALSE';
+      
+      this.price = 45;
+      this.income = 27;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "ninja");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+      case 'MEDIC':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("medic").width;
+      sprite_height = game.cache.getImage("medic").height;
+      this.behavior.upleft = 'VOID'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'TRUE';
+      this.behavior.upright = 'VOID';
+      this.behavior.right = 'TRUE';
+      this.behavior.downright = 'VOID';
+      this.behavior.down = 'TRUE';
+      this.behavior.downleft = 'VOID';
+      this.behavior.left = 'TRUE';
+      
+      this.price = 50;
+      this.income = 20;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "medic");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+       case 'PRINCESS':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("princess").width;
+      sprite_height = game.cache.getImage("princess").height;
+      this.behavior.upleft = 'VOID'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'FALSE';
+      this.behavior.upright = 'VOID';
+      this.behavior.right = 'FALSE';
+      this.behavior.downright = 'VOID';
+      this.behavior.down = 'FALSE';
+      this.behavior.downleft = 'VOID';
+      this.behavior.left = 'FALSE';
+      
+      this.price = 30;
+      this.income = 18;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "princess");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+
+      case 'TEACHER':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("teacher").width;
+      sprite_height = game.cache.getImage("teacher").height;
+      this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'TRUE';
+      this.behavior.upright = 'FALSE';
+      this.behavior.right = 'TRUE';
+      this.behavior.downright = 'FALSE';
+      this.behavior.down = 'TRUE';
+      this.behavior.downleft = 'FALSE';
+      this.behavior.left = 'TRUE';
+      
+      this.price = 80;
+      this.income = 38;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "teacher");
+      this.sprite.animations.add('idle');
+      this.sprite.animations.play('idle', 5, true);
+      this.sprite.anchor.setTo(0.5, 0.5);
+      //this.invadeAp();
+      this.sprite.inputEnabled = true;
+      this.sprite.input.enableDrag();
+      this.sprite.events.onInputOver.add(this.onOver, this);
+      this.sprite.events.onInputOut.add(this.onOut, this);
+      this.sprite.events.onDragStart.add(this.onDragStart, this);
+      this.sprite.events.onDragStop.add(this.onDragStop, this);
+      
+      game.physics.arcade.enable(this);
+      break;
+
+      case 'VAMPIRE':
+
+      // this.type = type;
+      //this.isBoss = true;
+      sprite_width = game.cache.getImage("vampire").width;
+      sprite_height = game.cache.getImage("vampire").height;
+      this.behavior.upleft = 'FALSE'; // VOID = 0, TRUE = +hp, FALSE = -hp
+      this.behavior.up = 'VOID';
+      this.behavior.upright = 'TRUE';
+      this.behavior.right = 'TRUE';
+      this.behavior.downright = 'TRUE';
+      this.behavior.down = 'VOID';
+      this.behavior.downleft = 'FALSE';
+      this.behavior.left = 'FALSE';
+      
+      this.price = 60;
+      this.income = 28;
+      // msm q ap so que com width e heights do sprite
+      //this.sprite = game.add.sprite((room_x * 445) + (445 / 2) - (111 / 2), game.world.height - (room_y * 375) - (24 + 230), "model");
+      //this.sprite = game.add.sprite( 472, 3510, "model");
+      
+      tempxx = (this.room_x * apwidth) + (apwidth / 2) - (sprite_height / 2) + 300;
+      tempyy = game.world.height - (this.room_y * apheight) - (24 + sprite_height);
+      
+      this.sprite = game.add.sprite((445 * this.room_x) + 225.5, game.world.height - 187.5 - (375 * this.room_y), "vampire");
       this.sprite.animations.add('idle');
       this.sprite.animations.play('idle', 5, true);
       this.sprite.anchor.setTo(0.5, 0.5);
