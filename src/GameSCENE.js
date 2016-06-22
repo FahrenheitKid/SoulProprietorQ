@@ -19,7 +19,7 @@ var GameSCENE = function(game)
 	this.fullscreenButton = null;
 	this.tenantMenuButton = null;
 	this.tenantMenuBg = null;
-	this.shopTypes = ['MODEL', 'SOLDIER', 'FLORIST', 'BOUNCER', 'HERO',
+	this.shopTypes = [ 'SOLDIER', 'FLORIST', 'BOUNCER', 'HERO',
 		'KUNOICHI', 'NINJA', 'MEDIC', 'PRINCESS', 'TEACHER', 'VAMPIRE'
 	];
 	this.shopButtonsList = [];
@@ -99,7 +99,7 @@ GameSCENE.prototype = {
 
 
 		this.startBossSpawning("BOSSKID", 10);
-		//this.bossTimers.BOSSKID.events[0].delay = 5000;
+		this.bossTimers.BOSSKID.events[0].delay = 60000;
 		
 		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
 		this.varToTest = this.game.input.activePointer.x;
@@ -602,6 +602,7 @@ function MouseWheelHandler(e) {
 
 	refreshShop: function()
 	{
+		/*
 		for(var i = 0; i < this.shopButtonsList.length; i++)
 			{
 			this.shopButtonsList[i].destroy();
@@ -611,7 +612,7 @@ function MouseWheelHandler(e) {
 			}
 
 			this.initShop();
-
+		*/
 	},
 	
 	initMusic: function(game)
