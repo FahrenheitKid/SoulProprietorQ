@@ -36,6 +36,7 @@ var GameSCENE = function(game)
 	this.monthCount = 0;
 	this.yearCount = 0;
 	this.timerScale = 1.0;
+	this.toScale = 1.0;
 	this.music =
 	{
 		normal: null,
@@ -94,12 +95,16 @@ GameSCENE.prototype = {
 		this.shopTypes.shift();
 		this.refreshShop();
 		
+		
 
 
 		this.startBossSpawning("BOSSKID", 10);
 		//this.bossTimers.BOSSKID.events[0].delay = 5000;
 		
 		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
+		this.varToTest = this.game.input.activePointer.x;
+
+		
 
 		
 	},
@@ -119,7 +124,33 @@ GameSCENE.prototype = {
 	 	this.game.world.bringToTop(this.tenantMenuButton);
 	 	this.tenantMenuBg.bringToTop();
 	 	this.tenantMenuButton.bringToTop();
+
+
 	 	
+
+	 	var tenants = this.pAptManager.tenants_matrix;
+	 	var aps = this.pAptManager.apts; // group
+
+/*
+	 	for(var i = 0; i < aps.children.length; i ++)
+	 	{
+	 		aps.children[i].scale.x = this.toScale;
+	 		aps.children[i].scale.y = this.toScale;
+	 	}
+
+	 	for(var i = 0; i < tenants.length; i ++)
+	 	{
+	 		tenants[i].sprite.scale.x = this.toScale;
+	 		tenants[i].sprite.scale.x = this.toScale;
+
+	 	}
+	 	*/
+	 	if(this.player.money < 0)
+	 	{
+	 		this.music.normal.stop();
+		this.game.state.start("GameOver",true,false,8000);
+		}
+
 	},
 	
 	render: function()
@@ -147,6 +178,43 @@ GameSCENE.prototype = {
 		}
 	},
 
+	scrollShopList: function()
+	{
+
+		this.tenantMenuBg.events.onInputOver.add(function(){
+
+			
+
+		//this.varToTest++;
+	 	if(this.game.input.activePointer.y <= 50)
+	 	{
+	 		//this.varToTest =2;
+	 		for(var i = 0; i < this.shopButtonsList.length; i++)
+			{
+				var hold = this.shopButtonsList[i];
+				hold.y -= 10;
+				//hold.scale.y = this.tenantMenuBg.scale.x;
+
+				//this.tenantMenuBg.addChild(hold);
+			}
+	 	}
+	 	if(this.game.input.activePointer.y >= 850)
+	 	{
+
+	 		//this.varToTest =3;
+	 		for(var i = 0; i < this.shopButtonsList.length; i++)
+			{
+				var hold = this.shopButtonsList[i];
+				hold.y += 10;
+			}
+	 	}
+		
+
+		},this);
+		
+		
+
+	},
 
 	playTenantSfx: function(soundkey)
 	{
@@ -212,6 +280,7 @@ GameSCENE.prototype = {
 		this.tenantMenuButton = this.game.add.button(60, 60, "tenantMenu_button", this.toggleTenantMenu, this);
 		this.tenantMenuButton.anchor.setTo(0.5, 0.5);
 		this.tenantMenuButton.fixedToCamera = true;
+		//this.tenantMenuBg.inputEnabled = true;
 
 		this.coin = this.game.add.sprite(1150, 30, "coin");
 		this.coin.fixedToCamera = true;
@@ -230,6 +299,52 @@ GameSCENE.prototype = {
 
 		this.coin.addChild(this.moneyText);
 
+/*
+		mouseWheel = function(event)
+		{
+			
+			if (event.wheelDelta > 0)
+			{
+				//text.setText(" UP ");
+
+				if (this.toScale <= 2.1)
+					this.toScale += 0.1;
+			}
+			else
+			{
+				text.setText(" Down ");
+
+				if (this.toScale >= 1.1)
+					this.toScale -= 0.1;
+			}
+
+
+
+		};
+
+		var element = document.getElementById('gameDiv');
+
+		//http://www.sitepoint.com/html5-javascript-mouse-wheel/
+    // IE9, Chrome, Safari, Opera
+    element.addEventListener("mousewheel", MouseWheelHandler, false);
+    // Firefox
+    element.addEventListener("DOMMouseScroll", MouseWheelHandler, false)
+
+
+var scrollStep = 0.05;
+
+var game_sc = this;
+function MouseWheelHandler(e) {
+
+    // cross-browser wheel delta
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    game_sc.pAptManager.apts.children[0].scale.x += delta *scrollStep;
+    game_sc.pAptManager.apts.children[0].scale.y += delta *scrollStep;
+
+    return false;
+}
+*/
+		//this.scrollShopList();
     },
 
     initDayTimers: function() // inicializa os textos e timers dos dias
@@ -303,23 +418,53 @@ GameSCENE.prototype = {
 	moveCameraOnEdges: function()
 	{
 
-		if(this.game.input.activePointer.x >= 1350)
-	 	{
-	 		this.game.camera.x+=15;
-	 	}
-	 	if(this.game.input.activePointer.x <= 50)
-	 	{
-	 		this.game.camera.x-=15;
-	 	}
-	 	if(this.game.input.activePointer.y <= 50)
-	 	{
-	 		this.game.camera.y-=15;
-	 	}
-	 	if(this.game.input.activePointer.y >= 850)
-	 	{
-	 		this.game.camera.y+=15;
-	 	}
+		if (this.tenantMenuBg.x < 0)
+		{
+			if (this.game.input.activePointer.x >= 1350)
+			{
+				this.game.camera.x += 15;
+			}
+			if (this.game.input.activePointer.x <= 50)
+			{
+				this.game.camera.x -= 15;
+			}
+			if (this.game.input.activePointer.y <= 50)
+			{
+				this.game.camera.y -= 15;
+			}
+			if (this.game.input.activePointer.y >= 850)
+			{
+				this.game.camera.y += 15;
+			}
+		}
+		if (this.tenantMenuBg.x >= 0)
+		{
+			if (this.game.input.activePointer.x <= 300)
+			{
+				if (this.game.input.activePointer.y <= 50)
+				{
+					//this.varToTest =2;
+					for (var i = 0; i < this.shopButtonsList.length; i++)
+					{
+						var hold = this.shopButtonsList[i];
+						hold.y += 10;
+						//hold.scale.y = this.tenantMenuBg.scale.x;
 
+						//this.tenantMenuBg.addChild(hold);
+					}
+				}
+				if (this.game.input.activePointer.y >= 850)
+				{
+
+					//this.varToTest =3;
+					for (var i = 0; i < this.shopButtonsList.length; i++)
+					{
+						var hold = this.shopButtonsList[i];
+						hold.y -= 10;
+					}
+				}
+			}
+		}
 	},
 
 	createButton: function(button_variable, sprite_key, x,y,click_func, anchorx,anchory, setBasicOver, setBasicOut, fixed) // função para criar botões mais rápido
@@ -445,8 +590,11 @@ GameSCENE.prototype = {
 				var hold = this.shopButtonsList[i];
 				hold.y = this.shopButtonsList[0].y + i * 130;
 				hold.scale.y = this.tenantMenuBg.scale.x;
+
 				this.tenantMenuBg.addChild(hold);
 			}
+
+			
 			
 			
 		
@@ -689,6 +837,7 @@ GameSCENE.prototype = {
 				{
 
 					button.children[0].visible = true;
+					gamesc.playTenantSfx("onOver");
 					//var buttonTenant = this.game.add
 
 				}, this);

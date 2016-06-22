@@ -131,7 +131,7 @@ preload.prototype = {
 		this.game.load.image("teacher_icon", "assets/sprites/teacher_icon.png");
 		this.game.load.image("teacher_card", "assets/sprites/cardTeacher.png");
 
-		this.game.load.spritesheet("vampire", "assets/sprites/vampireIdle.png", 244, 226);
+		this.game.load.spritesheet("vampire", "assets/sprites/vampire_sheet.png", 244, 226);
 		this.game.load.image("vampire_icon", "assets/sprites/vampire_icon.png");
 		this.game.load.image("vampire_card", "assets/sprites/cardVampire.png");
 
