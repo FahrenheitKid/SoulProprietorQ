@@ -6,6 +6,14 @@ var Player = function(game)
     this.money = 100;
     this.game_reference = game;
     this.sprite = null;
+    this.spriteSelected = false;
+    this.posx =  0;
+    this.posy = 0;
+    this.destination = {
+        x: null,
+        y: null
+    }
+    
 };
 
 Player.prototype.init = function(game, money)
@@ -13,6 +21,24 @@ Player.prototype.init = function(game, money)
     
     this.money = money;
     this.game_reference = game;
+};
+
+Player.prototype.update = function()
+{
+    if(this.sprite != null)
+    {
+        if(this.spriteSelected)
+        {
+        this.sprite.tint = 0xDDB435;
+        
+         }
+        else
+        {
+         this.sprite.tint = 0xffffff;
+        }
+    }
+    
+    
 };
 
 Player.prototype.changeMoney = function(game,value, text)

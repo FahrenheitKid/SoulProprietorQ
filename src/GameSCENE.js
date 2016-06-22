@@ -154,7 +154,15 @@ GameSCENE.prototype = {
 	 		this.music.normal.stop();
 		this.game.state.start("GameOver",true,false,8000);
 		}
-
+		
+		this.player.update();
+		
+		if(this.player.sprite !== null)
+		this.varToTest = this.player.sprite.x;
+		else
+		{
+			this.varToTest = 8000;
+		}
 	},
 	
 	render: function()

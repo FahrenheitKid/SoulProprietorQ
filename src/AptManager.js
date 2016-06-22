@@ -97,11 +97,27 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
 
                     var xval = (445 * ap_ref.posx) + 225.5
             var yval =  this.game_reference.world.height - 187.5 - (375 * ap_ref.posy);
-
+                
+                var sprite = this.player_reference.sprite;
+                var pl = this.player_reference;
                 this.player_reference.sprite = this.game_reference.add.sprite(xval,yval,"proprietor");
                 this.player_reference.sprite.animations.add('idle');
                 this.player_reference.sprite.animations.play('idle', 5, true);
                 this.player_reference.sprite.anchor.setTo(0.5, 0.5);
+                this.player_reference.sprite.inputEnabled = true;
+                this.player_reference.sprite.events.onInputDown.add(function(){
+                    
+                    /*
+                    if(pl.spriteSelected)
+                    pl.spriteSelected = false;
+                    else pl.spriteSelected = true;
+                    */
+                    
+                    pl.spriteSelected = (pl.spriteSelected === false) ? true : false;
+                    
+                    
+                }, this);
+                
                  }
                 //start apartment matrix ids
                 this.apts_matrix.push(1);
@@ -192,7 +208,16 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
            // ap.loadTexture('ap');
            // ap.tenant = null;
         }
+        
+        if(ap.tenant !== "aptrans")
+    {
+        this.player_reference.destination.x = ap.posx;
+        this.player_reference.destination.y = ap.posy;
     }
+    
+    }
+    
+    
 };
 
 AptManager.prototype.addTenant = function(game, playerr, tenant_id, tenant_type, roomx, roomy) 
@@ -304,9 +329,6 @@ AptManager.prototype.update = function(game)
         }
     }
 };
-
-
-
 
 AptManager.prototype.getTenant = function(roomx, roomy)
 {
