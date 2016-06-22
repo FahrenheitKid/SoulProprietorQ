@@ -1,6 +1,6 @@
 /*global Phaser*/
 
-var Player = function(game)
+var Player = function(game, apt, gamesc)
 {
     this.score = 0;
     this.money = 100;
@@ -14,6 +14,8 @@ var Player = function(game)
         y: null
     }
     
+    this.aptManager_reference = apt;
+    this.gameScene_reference = gamesc;
 };
 
 Player.prototype.init = function(game, money)
@@ -34,8 +36,15 @@ Player.prototype.update = function()
          }
         else
         {
+        this.destination.x = null;
+        this.destination.y = null;
          this.sprite.tint = 0xffffff;
         }
+    }
+    
+    if(this.destination.x !== null)
+    {
+        
     }
     
     

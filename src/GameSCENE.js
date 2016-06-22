@@ -253,7 +253,7 @@ GameSCENE.prototype = {
 		this.game.world.setBounds(0, 0, (4 * 445), (5 * 375));
 		this.game.camera.setPosition(0, 5 * 375);
 
-		this.player = new Player(this.game);
+		this.player = new Player(this.game, this.pAptManager, itself);
 		this.player.init(this.game, 100);
 
 		this.tenantSfx.onOver = this.game.add.audio("tenant_onOver");
