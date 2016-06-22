@@ -90,7 +90,7 @@ preload.prototype = {
 		this.game.load.spritesheet("proprietor", "assets/sprites/proprietor_sheet.png", 207,300);
 		this.game.load.image("proprietor_selected", "assets/sprites/proprietorselected.png");
 
-		this.game.load.spritesheet("bosskid", "assets/sprites/bosskididle.png", 158, 187);
+		this.game.load.spritesheet("bosskid", "assets/sprites/bosskidIdle.png", 158, 187);
 		this.game.load.audio("bossComing", "assets/sounds/bossComing.mp3");
 		this.game.load.image("elevator", "assets/sprites/elevatoropen.png");
 		this.game.load.spritesheet("elevatorDoors_sheet", "assets/sprites/elevatordoors.png", 445,375);

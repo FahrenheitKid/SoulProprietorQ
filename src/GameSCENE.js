@@ -102,8 +102,8 @@ GameSCENE.prototype = {
 		
 
 
-		this.startBossSpawning("BOSSKID", 10);
-		this.bossTimers.BOSSKID.events[0].delay = 60000;
+		this.startBossSpawning("BOSSKID", 20);
+		this.bossTimers.BOSSKID.events[0].delay = 90000;
 		
 		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
 		this.varToTest = this.game.input.activePointer.x;
@@ -263,8 +263,8 @@ GameSCENE.prototype = {
 		//set initial size
         this.pAptManager.CreateApt(this.game, 2, 2);
         //add tenant to manager game/id/type/roomx/roomy
-        this.pAptManager.addTenant(this.game, this.player, 2, 'KUNOICHI', 0, 1);
-        this.pAptManager.addTenant(this.game, this.player, 2, 'NINJA', 1, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'MEDIC', 0, 1);
+        this.pAptManager.addTenant(this.game, this.player, 2, 'BOUNCER', 1, 1);
          //this.pAptManager.addTenant(this.game, this.player, 2, 'BOSSKID', 0, 0);
 
          this.bossSfx.BOSSKID = this.game.add.audio("bossComing");
