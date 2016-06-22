@@ -62,6 +62,10 @@ var GameSCENE = function(game)
 		onOver: null,
 		goHome: null,
 	};
+	this.gameSfx = {
+
+		chaching: null,
+	};
 };
 
 GameSCENE.prototype = {
@@ -246,6 +250,7 @@ GameSCENE.prototype = {
 
 		this.tenantSfx.onOver = this.game.add.audio("tenant_onOver");
 		this.tenantSfx.goHome = this.game.add.audio("tenant_goHome");
+		this.gameSfx.chaching = this.game.add.audio("chaching");
 
 		this.background = this.game.add.tileSprite(0, 0, 1440, 900, 'city_dusk');
 		this.background.animations.add('run');
@@ -636,6 +641,8 @@ function MouseWheelHandler(e) {
     style.fill = "#0be57d";
     sweetText.setStyle(style);
     tweenvalue = 100;
+
+    this.gameSfx.chaching.play();
     }
     else
     {

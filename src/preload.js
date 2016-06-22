@@ -135,6 +135,8 @@ preload.prototype = {
 		this.game.load.image("vampire_icon", "assets/sprites/vampire_icon.png");
 		this.game.load.image("vampire_card", "assets/sprites/cardVampire.png");
 
+		this.game.load.audio("chaching","assets/sounds/chaching.mp3");
+
 /*
 		this.game.load.image("model", "assets/sprites/char00.png");
 		this.game.load.image("model_set", "assets/sprites/model_set.png");
