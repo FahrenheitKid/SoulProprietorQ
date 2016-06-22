@@ -262,6 +262,24 @@ AptManager.prototype.addBoss = function(game, playerr, tenant_id, tenant_type, r
     this.tenants_matrix.push(tnt);
     this.apts_matrix[roomy * this.apts_sizey + roomx] = tenant_id;
 };
+AptManager.prototype.toggleArrows =function(on)
+{
+
+    if (on)
+    {
+        for (var i = 0; i < this.tenants_matrix.length; i++)
+        {
+            this.tenants_matrix[i].arrowsVisible(true);
+        }
+    }
+    else
+    {
+        for (var i = 0; i < this.tenants_matrix.length; i++)
+        {
+            this.tenants_matrix[i].arrowsVisible(false);
+        }
+    }
+}
 
 AptManager.prototype.update = function(game) 
 {

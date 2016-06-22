@@ -415,8 +415,7 @@ function MouseWheelHandler(e) {
 		//this.game.world.bringToTop(this.tenantMenu_Bg);
 		//this.game.world.bringToTop(this.tenantMenuButton);
 		this.tweenTenantMenu();
-			
-
+		
 
 	},
 
@@ -537,6 +536,8 @@ function MouseWheelHandler(e) {
 			if(this.tenantMenuOn === false)
 			{
 					this.tenantMenuOn = true;
+					this.pAptManager.toggleArrows(true);
+
 					//tweenTint(this.tenantMenuButton, 0xFFFFFF, 0x000000, 250);
 					this.tenantMenuButton.tint ='black';
 					//tweenA.start();
@@ -558,7 +559,8 @@ function MouseWheelHandler(e) {
 			{
 				
 				this.hideTenantMenu();
-				
+				this.pAptManager.toggleArrows(false);
+
 			}
 
 	},
