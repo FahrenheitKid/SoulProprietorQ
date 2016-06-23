@@ -9,10 +9,9 @@ var Player = function(game, apt, gamesc)
     this.spriteSelected = false;
     this.posx =  0;
     this.posy = 0;
-    this.destination = {
-        x: null,
-        y: null
-    }
+    this.destination = null;
+    this.speed = 8;
+    this.isMoving = false;
     
     this.aptManager_reference = apt;
     this.gameScene_reference = gamesc;
@@ -27,6 +26,9 @@ Player.prototype.init = function(game, money)
 
 Player.prototype.update = function()
 {
+    
+    
+    
     if(this.sprite != null)
     {
         if(this.spriteSelected)
@@ -36,15 +38,29 @@ Player.prototype.update = function()
          }
         else
         {
-        this.destination.x = null;
-        this.destination.y = null;
+        this.destination = null;
+       
          this.sprite.tint = 0xffffff;
         }
     }
     
-    if(this.destination.x !== null)
+    
+    if(this.destination !== null)
     {
-        
+        //if(this.destination.posx == this.posx && this.destination.posy == this.posy)
+        //this.isMoving = false;
+    
+        if(this.posy == this.destination.posy && this.isMoving === false) // mesmo andar
+        {
+            this.isMoving = true;
+            var distance = Math.abs(this.destination.posx - this.posx);
+            	var tweenA = this.game_reference.add.tween(this.sprite).to({ 
+            	    x: this.destination.x + this.destination.width / 2, y : this.destination.y + this.destination.height / 2 }, 250 * distance, "Linear", true, 0);
+			    
+			
+						tweenA.start()
+           
+             }
     }
     
     

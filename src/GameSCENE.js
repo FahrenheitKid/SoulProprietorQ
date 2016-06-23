@@ -105,8 +105,8 @@ GameSCENE.prototype = {
 		this.startBossSpawning("BOSSKID", 20);
 		this.bossTimers.BOSSKID.events[0].delay = 90000;
 		
-		this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
-		this.varToTest = this.game.input.activePointer.x;
+		//this.varToTest = this.pAptManager.tenants_matrix[0].isAt.posx;
+		//this.varToTest = this.game.input.activePointer.x;
 
 		
 
@@ -157,12 +157,7 @@ GameSCENE.prototype = {
 		
 		this.player.update();
 		
-		if(this.player.sprite !== null)
-		this.varToTest = this.player.sprite.x;
-		else
-		{
-			this.varToTest = 8000;
-		}
+		this.varToTest = this.player.isMoving;
 	},
 	
 	render: function()
