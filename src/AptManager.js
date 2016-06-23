@@ -211,8 +211,8 @@ AptManager.prototype.CreateApt = function(game, size_x_init, size_y_init)
         
         if(ap.tenant !== "aptrans")
     {
-        this.player_reference.destination = ap;
-        
+        this.player_reference.destination.x = ap.posx;
+        this.player_reference.destination.y = ap.posy;
     }
     
     }
@@ -340,16 +340,4 @@ AptManager.prototype.getTenant = function(roomx, roomy)
     }
     
 };
-
-AptManager.prototype.getAp = function(roomx, roomy)
-{
-    for(var i = 0; i < this.apts.children.length; i ++)
-    {
-        if(this.apts.children[i].posx == roomx && this.apts.children[i].posy == roomy)
-        {
-            return this.apts.children[i];
-        }
-    }
-    
-}
 
